@@ -69,16 +69,20 @@
                 </div>
             </div>
         </section>
-        @if($account == Session::get('account'))
-            <form class="text-center" action="{{ route('img/store') }}" method="post" enctype="multipart/form-data">
-                @csrf
-                <input type="file" name="my_img">
-                <input type="submit" name="submit_img" value="上傳">
-            </form>
-        @endif
 
         <div class="album py-5 bg-body-tertiary">
             <div class="container">
+                @if($account == Session::get('account'))
+                    <div class="my-3 p-3 bg-body rounded shadow-sm">
+                        <form class="text-center" action="{{ route('img.store') }}" method="post" enctype="multipart/form-data">
+                            @csrf
+                            <div class="input-group">
+                                <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="my_img">
+                                <button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon04">上傳</button>
+                            </div>
+                        </form>
+                    </div>
+                @endif
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                     <?php $img_id=0; ?>
                     @foreach($user_spaces as $user_space)

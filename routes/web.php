@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MsgController;
 use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\ImageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,7 @@ Route::get('/', function () {
 Route::resource('/msg', MsgController::class);
 // Route::get('/msg', [MsgController::class, 'search'])->name('member.search');
 Route::resource('/reply', ReplyController::class);
+Route::resource('/img', memberController::class);
 // Route::get('/reply/{id}', [ReplyController::class, 'index'])->name('reply.index');
 
 // Route::resource('/member', MemberController::class);
@@ -37,5 +39,5 @@ Route::post('/member/login', [MemberController::class, 'login'])->name('member.l
 Route::get('/member/logout', [MemberController::class, 'logout'])->name('member.logout');
 Route::get('/member/space/{id}', [MemberController::class, 'space'])->name('member.space');
 Route::get('/member/{id}', [MemberController::class, 'show'])->name('member.show');
-Route::resource('/member', memberController::class);
-Route::resource('/img', memberController::class);
+Route::resource('/member', MemberController::class);
+Route::resource('/img', ImageController::class);

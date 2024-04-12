@@ -45,102 +45,106 @@
     @endif
 
     <div class="col-lg-8 mx-auto p-4 py-md-5 bg-body-tertiary">
-        <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
-            <a href="{{ route('member.space', $message_content[0]->user_account) }}" class="d-flex align-items-center text-body-emphasis text-decoration-none">
-                <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-                <span class="fs-4">作者：{{$message_content[0]->user_name}}</span>
-            </a>
-        </header>
-        <main>
-            @if ($message_content[0]->is_del == 0)
-                <h1 class="text-body-emphasis">{{$message_content[0]->title}}</h1><br>
-                <div style="word-break: break-all;" >
-                    <pre style="white-space: pre-wrap;" class="fs-5">{{$message_content[0]->content}}</pre>
-                </div>
-                @if(Session::has('account'))
-                    @if(Session::get('account') == $message_content[0]->user_account)
-                        <div class="mb-5">
-                            <a href="{{ route('msg.edit',$message_content[0]->id) }}" class="btn btn-primary btn-lg px-4">修改</a>
-                        </div>
-                    @endif
-                @endif
-                <small class="d-block text-end mt-3">
-                    <span>建立日期：{{$message_content[0]->created_at}}</span> |
-                    <span>修改日期：{{$message_content[0]->update_at}}</span>
-                </small>
-            @else
-                <h1 class="text-body-emphasis">留言已刪除</h1></h1><br>
-                <small class="d-block text-end mt-3">
-                    <span>建立日期：{{$message_content[0]->update_at}}</span>
-                </small>
-            @endif
-        <div class="wrap">
-            @for($i = 0 ; $i < count($message_reply) ; $i++)
-
-                <div class="d-flex align-items-center p-3 my-3 text-white rounded shadow-sm" style="background-color: #89009b;">
-                    <div class="lh-1">
-                        <div class="check_box">
-                            <h1 class="h6 mb-0 text-white lh-1">{{ $i+1 }}樓</h1>
-                            @if(!($message_content[0]->is_del) && !($message_reply[$i]->is_del))
-                                @if(Session::has('account'))
-                                    @if(Session::get('account') == $message_reply[$i]->user_account)
-                                        <input type="checkbox" id="check_box{{ $i+1 }}" value="{{ $i+1 }}">
-                                        <label for="check_box{{ $i+1 }}">修改</label>
-                                    @endif
-                                @endif
-                            @endif
-                        </div>
+            <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+                <a href="{{ route('member.space', $message_content->user_account) }}" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                    <span class="fs-4">作者：{{$message_content->user_name}}</span>
+                </a>
+            </header>
+            <main>
+                @if ($message_content->is_del == 0)
+                    <h1 class="text-body-emphasis">{{$message_content->title}}</h1><br>
+                    <div style="word-break: break-all;" >
+                        <pre style="white-space: pre-wrap;" class="fs-5">{{$message_content->content}}</pre>
                     </div>
-                </div>
-                <div class="my-3 p-3 bg-body rounded shadow-sm">
-                    @if(!($message_reply[$i]->is_del))
-                        <a class="account_font" href="{{ route('member.space', $message_reply[$i]->user_account) }}">
-                            <h6 class="border-bottom pb-2 mb-0">{{$message_reply[$i]->user_name}}</h6>
-                        </a>
-                    @else
-                        <h6 class="border-bottom pb-2 mb-0">無</h6>
-                    @endif
-                    <div style="overflow:hidden; white-space: nowrap; text-overflow: ellipsis;">
-                        @if(!($message_reply[$i]->is_del))
-                            <pre type="text" id="text_reply{{ $i+1 }}" style="white-space: pre-wrap;">{{$message_reply[$i]->user_reply}}</pre>
-                            <form style="width: 250px;" id="form_del{{ $i+1 }}" action="{{ route('reply.destroy', $message_reply[$i]->id) }}" method="post">
-                                @csrf
-                                @method('DELETE')
-                                <input type="hidden" name="msg_id" value="{{$message_content[0]->id}}"/>
-                            </form>
-                            <form style="width: 250px;" id="form_sub{{ $i+1 }}" action="{{ route('reply.update', $message_reply[$i]->id) }}" method="post">
-                                @csrf
-                                @method('PUT')
-                                <input type="hidden" name="msg_id" value="{{$message_content[0]->id}}"/>
-                                <?php $line_count = substr_count($message_reply[$i]->user_reply, "\n");
-                                    if($line_count < 2){
-                                        $line_count = 2;
-                                } ?>
-                                <textarea id="text_reply_modify{{ $i+1 }}" name="reply" rows="{{$line_count}}" cols="50" hidden>{{$message_reply[$i]->user_reply}}</textarea>
-                            </form>
-                            <button class="btn btn-outline-secondary" type="button" id="btn_delete{{ $i+1 }}" onclick="del({{ $i+1 }})" hidden>刪除</button>
-                            <button class="btn btn-outline-secondary" type="button" id="btn_reply_update{{ $i+1 }}" onclick="sub({{ $i+1 }})" hidden>更新</button>
-                        @else
-                            回覆已刪除
+                    @if(Session::has('account'))
+                        @if(Session::get('account') == $message_content->user_account)
+                            <div class="mb-5">
+                                <a href="{{ route('msg.edit',$message_content->id) }}" class="btn btn-primary btn-lg px-4">修改</a>
+                            </div>
                         @endif
-                    </div>
+                    @endif
                     <small class="d-block text-end mt-3">
-                        @if(!($message_reply[$i]->is_del))
-                            <span>回覆日期：{{$message_reply[$i]->reply_time}}</span> |
-                            <span>修改日期：{{$message_reply[$i]->update_time}}</span>
-                        @else
-                            <span>刪除日期：{{$message_reply[$i]->update_time}}</span>
-                        @endif
+                        <span>建立日期：{{$message_content->created_at}}</span> |
+                        <span>修改日期：{{$message_content->update_at}}</span>
                     </small>
-                </div>
-            @endfor
-        </main>
-        @if(!($message_content[0]->is_del))
+                @else
+                    <h1 class="text-body-emphasis">留言已刪除</h1></h1><br>
+                    <small class="d-block text-end mt-3">
+                        <span>建立日期：{{$message_content->update_at}}</span>
+                    </small>
+                @endif
+                @for($i = 0 ; $i < count($message_reply) ; $i++)
+                    <div class="accordion" id="accordionExample">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne{{ $i+1 }}" aria-expanded="true" aria-controls="collapseOne{{ $i+1 }}">
+                                    <h1 class="h6 mb-0 lh-1">{{ $i+1 }}樓</h1>
+                                </button>
+                            </h2>
+                            <div id="collapseOne{{ $i+1 }}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    @if(!($message_content->is_del) && !($message_reply[$i]->is_del))
+                                        @if(Session::has('account'))
+                                            @if(Session::get('account') == $message_reply[$i]->user_account)
+                                                <input type="checkbox" id="check_box{{ $i+1 }}" value="{{ $i+1 }}">
+                                                <label for="check_box{{ $i+1 }}">修改</label>
+                                            @endif
+                                        @endif
+                                    @endif
+                                    <div class="my-3 p-3 bg-body rounded shadow-sm">
+                                        @if(!($message_reply[$i]->is_del))
+                                            <a class="account_font" href="{{ route('member.space', $message_reply[$i]->user_account) }}">
+                                                <h6 class="border-bottom pb-2 mb-0">{{$message_reply[$i]->user_name}}</h6>
+                                            </a>
+                                        @else
+                                            <h6 class="border-bottom pb-2 mb-0">無</h6>
+                                        @endif
+                                        <div style="overflow:hidden; white-space: nowrap; text-overflow: ellipsis;">
+                                            @if(!($message_reply[$i]->is_del))
+                                                <pre type="text" id="text_reply{{ $i+1 }}" style="white-space: pre-wrap;">{{$message_reply[$i]->user_reply}}</pre>
+                                                <form style="width: 250px;" id="form_del{{ $i+1 }}" action="{{ route('reply.destroy', $message_reply[$i]->id) }}" method="post">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <input type="hidden" name="msg_id" value="{{$message_content->id}}"/>
+                                                </form>
+                                                <form style="width: 250px;" id="form_sub{{ $i+1 }}" action="{{ route('reply.update', $message_reply[$i]->id) }}" method="post">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <input type="hidden" name="msg_id" value="{{$message_content->id}}"/>
+                                                    <?php $line_count = substr_count($message_reply[$i]->user_reply, "\n");
+                                                        if($line_count < 2){
+                                                            $line_count = 2;
+                                                    } ?>
+                                                    <textarea id="text_reply_modify{{ $i+1 }}" name="reply" rows="{{$line_count}}" cols="50" hidden>{{$message_reply[$i]->user_reply}}</textarea>
+                                                </form>
+                                                <button class="btn btn-outline-secondary" type="button" id="btn_delete{{ $i+1 }}" onclick="del({{ $i+1 }})" hidden>刪除</button>
+                                                <button class="btn btn-outline-secondary" type="button" id="btn_reply_update{{ $i+1 }}" onclick="sub({{ $i+1 }})" hidden>更新</button>
+                                            @else
+                                                回覆已刪除
+                                            @endif
+                                        </div>
+                                        <small class="d-block text-end mt-3">
+                                            @if(!($message_reply[$i]->is_del))
+                                                <span>回覆日期：{{$message_reply[$i]->reply_time}}</span> |
+                                                <span>修改日期：{{$message_reply[$i]->update_time}}</span>
+                                            @else
+                                                <span>刪除日期：{{$message_reply[$i]->update_time}}</span>
+                                            @endif
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endfor
+            </main>
+        @if(!($message_content->is_del))
             <form class="align-items-center p-3 my-3 rounded shadow-sm" action="{{ route('reply.store') }}" method="post">
                 @csrf
-                <input type="hidden" name="msg_id" value="{{$message_content[0]->id}}"/>
+                <input type="hidden" name="msg_id" value="{{$message_content->id}}"/>
+                <textarea  class="form-control" type="text" id="reply" name="reply" rows="10" required></textarea><br>
                 <p><button class="btn btn-outline-secondary" type="submit">回覆</button></p>
-                <textarea  class="form-control" type="text" id="reply" name="reply" rows="10" required></textarea>
             </from>
         @endif
     </div>

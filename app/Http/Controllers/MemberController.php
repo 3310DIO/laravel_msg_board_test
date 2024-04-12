@@ -41,7 +41,7 @@ class MemberController extends Controller
             return redirect()->route('member.create')->with('error', $message);
         }else{
             if($user_account == '' || $user_name == '' || $user_password == ''){
-                $message = '禁止輸入空字元';
+                $message = '請輸入修改內容';
                 return redirect()->route('member.create')->with('error', $message);
             }else{
                 if(!(preg_match('/^[a-zA-Z0-9]{8,20}$/', $user_account) && preg_match('/^.{2,20}$/', $user_name))){

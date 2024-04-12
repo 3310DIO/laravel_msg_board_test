@@ -50,7 +50,7 @@ class ReplyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, string $id)
     {
         $view = 'reply/reply';
         $model_content = array();
@@ -59,6 +59,11 @@ class ReplyController extends Controller
         
         // $users = DB::select('select * from message_board ');
         $message_content = MsgReply::find_content($id);
+        if($message_content == null){
+            $message = "留言不存在";
+
+            return redirect()->route('msg.index')->with('error', $message);
+        }
         $model_content['message_content'] = $message_content;
         $message_reply = MsgReply::find_reply($id);
         $model_reply['message_reply'] = $message_reply;

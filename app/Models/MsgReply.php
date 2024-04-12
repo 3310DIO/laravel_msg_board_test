@@ -17,8 +17,8 @@ class MsgReply extends Model
                  ->join('member AS mem', 'm.user_account', '=', 'mem.user_account')
                  ->select('m.id', 'm.user_account', 'm.title', 'm.content', 'm.created_at', 'm.update_at', 'm.is_del', 'mem.user_name')
                  ->where('m.id', $id)
-                //  ->paginate(10);
-                ->get();
+                 //  ->paginate(10);
+                 ->first();
         return $msg;
                  
     }
