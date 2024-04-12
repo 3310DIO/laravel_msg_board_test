@@ -38,3 +38,4 @@ Route::get('/member/logout', [MemberController::class, 'logout'])->name('member.
 Route::get('/member/space/{id}', [MemberController::class, 'space'])->name('member.space');
 Route::get('/member/{id}', [MemberController::class, 'show'])->name('member.show');
 Route::resource('/member', memberController::class);
+Route::resource('/img', memberController::class);

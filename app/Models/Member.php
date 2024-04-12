@@ -27,7 +27,7 @@ class Member extends Model
     }
     public static function member_space($user_account){
         $img = DB::table('img_upload')
-                 ->select('id', 'img_url', 'width_height')
+                 ->select('id', 'img_url', 'width_height', 'is_del')
                  ->where('user_account', '=', "$user_account")
                  ->get();
         return $img;
