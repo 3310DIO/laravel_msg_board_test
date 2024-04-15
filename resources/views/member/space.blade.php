@@ -130,7 +130,7 @@
                                                     <button type="button" class="btn btn-sm btn-outline-secondary" id="btn_delete" onclick="del({{ $img_id }})">刪除</button>
                                                 @endif
                                             </div>
-                                            <small class="text-body-secondary">9 mins</small>
+                                            <small class="text-body-secondary">時間：(未完成)</small>
                                         </div>
                                     </div>
                                 </div>

@@ -83,7 +83,9 @@
                         <h6 class="border-bottom pb-2 mb-0">標題：{{ $message_board->title }}</h6>
                     </a>
                     <div class="d-flex text-body-secondary pt-3">
-                        <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>{{ $message_board->user_name }}</title><rect width="100%" height="100%" fill="#007bff"></rect></svg>
+                        <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false">
+                            <rect width="100%" height="100%" fill="#007bff"></rect>
+                        </svg>
                         <p class="pb-3 mb-0 small lh-sm border-bottom">
                             <strong class="d-block text-gray-dark">{{ $message_board->user_name }}</strong>
                         </p>

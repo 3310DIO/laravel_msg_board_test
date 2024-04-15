@@ -56,7 +56,9 @@
     <div class="col-lg-8 mx-auto p-4 py-md-5 bg-body-tertiary">
             <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
                 <a href="{{ route('member.space', $message_content->user_account) }}" class="d-flex align-items-center text-body-emphasis text-decoration-none">
-                    <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-hexagon-half" viewBox="0 0 16 16">
+                        <path d="M14 4.577v6.846L8 15V1zM8.5.134a1 1 0 0 0-1 0l-6 3.577a1 1 0 0 0-.5.866v6.846a1 1 0 0 0 .5.866l6 3.577a1 1 0 0 0 1 0l6-3.577a1 1 0 0 0 .5-.866V4.577a1 1 0 0 0-.5-.866z"/>
+                    </svg>
                     <span class="fs-4">作者：{{$message_content->user_name}}</span>
                 </a>
             </header>
@@ -83,6 +85,9 @@
                         <span>建立日期：{{$message_content->update_at}}</span>
                     </small>
                 @endif
+                <p>
+                    <button class="btn btn-outline-secondary control-all">全部展開</button>
+                </p>
                 @for($i = 0 ; $i < count($message_reply) ; $i++)
                     <div class="accordion" id="accordionExample{{ $i+1 }}">
                         <div class="accordion-item">
@@ -160,6 +165,41 @@
 
 </body>
 <script>
+    var control_all = document.querySelector("button.control-all");
+    control_all.addEventListener("click", function() {
+        if (this.getAttribute("data-lastState") === "0") {
+            document.querySelectorAll('.accordion-collapse').forEach(function(collapse) {
+                collapse.classList.remove('show');
+            });
+            document.querySelectorAll('.accordion-button').forEach(function(collapsed) {
+                collapsed.classList.add('collapsed');
+            });
+            this.setAttribute("data-lastState", "1");
+            this.textContent = "全部展開";
+        } else {
+            document.querySelectorAll('.accordion-collapse').forEach(function(collapse) {
+                collapse.classList.add('show');
+            });
+            document.querySelectorAll('.accordion-button').forEach(function(collapsed) {
+                collapsed.classList.remove('collapsed');
+            });
+            this.setAttribute("data-lastState", "0");
+            this.textContent = "全部關閉";
+        }
+    });
+    // var control_all = document.querySelector("button.control-all");
+    // var panel_collapse = document.querySelector(".panel-collapse");
+
+    // control_all.addEventListener("click", function() {
+    //     if (panel_collapse.getAttribute("aria-expanded") === "true") {
+    //         // 关闭折叠元素
+    //         panel_collapse.setAttribute("aria-expanded", "false");
+    //     } else {
+    //         // 展开折叠元素
+    //         panel_collapse.setAttribute("aria-expanded", "true");
+    //     }
+    // });
+
     var checkboxes = document.querySelectorAll("input[type='checkbox']");
 
     checkboxes.forEach(function(checkbox){
