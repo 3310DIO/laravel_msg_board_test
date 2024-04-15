@@ -23,7 +23,7 @@ Route::get('/', function () {
 Route::resource('/msg', MsgController::class);
 // Route::get('/msg', [MsgController::class, 'search'])->name('member.search');
 Route::resource('/reply', ReplyController::class);
-Route::resource('/img', memberController::class);
+// Route::resource('/img', memberController::class);
 // Route::get('/reply/{id}', [ReplyController::class, 'index'])->name('reply.index');
 
 // Route::resource('/member', MemberController::class);
