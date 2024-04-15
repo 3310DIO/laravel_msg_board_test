@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class MsgReply extends Model
 {
     protected $table = 'msg_reply';
-    protected $fillable = ['user_account', 'msg_id', 'user_reply',];
+    protected $fillable = ['user_account', 'msg_id', 'user_reply'];
     public $primaryKey = 'id';
     public $timestamps = false;
     public static function find_content($id){
@@ -30,6 +30,15 @@ class MsgReply extends Model
                  ->orderBy('r.reply_time', 'ASC')
                 //  ->paginate(10);
                 ->get();
+        return $msg;
+                 
+    }
+    public static function find_one_reply($id){
+        $msg = DB::table('msg_reply')
+                 ->select('id', 'msg_id', 'user_account', 'user_reply', 'reply_time', 'update_time', 'is_del')
+                 ->where('id', '=', $id)
+                //  ->paginate(10);
+                ->first();
         return $msg;
                  
     }

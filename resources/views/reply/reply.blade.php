@@ -43,6 +43,15 @@
             </button>
         </div>
     @endif
+    @if (Session::has('error'))
+        <div class="alert alert-danger text-center" role="alert">
+            {{ Session::get('error') }}
+            <button class="btn btn-outline-primary rounded-circle p-2 lh-1" type="button" data-bs-dismiss="alert" aria-label="Close">
+                <span class="bi" width="16" height="16">&times;</span>
+                <span class="visually-hidden">Dismiss</span>
+            </button>
+        </div>
+    @endif
 
     <div class="col-lg-8 mx-auto p-4 py-md-5 bg-body-tertiary">
             <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
@@ -75,14 +84,14 @@
                     </small>
                 @endif
                 @for($i = 0 ; $i < count($message_reply) ; $i++)
-                    <div class="accordion" id="accordionExample">
+                    <div class="accordion" id="accordionExample{{ $i+1 }}">
                         <div class="accordion-item">
                             <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne{{ $i+1 }}" aria-expanded="true" aria-controls="collapseOne{{ $i+1 }}">
+                                <button class="accordion-button collapsed" type="button" style="background-color: #3ff8ff;" data-bs-toggle="collapse" data-bs-target="#collapseOne{{ $i+1 }}" aria-expanded="true" aria-controls="collapseOne{{ $i+1 }}">
                                     <h1 class="h6 mb-0 lh-1">{{ $i+1 }}樓</h1>
                                 </button>
                             </h2>
-                            <div id="collapseOne{{ $i+1 }}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                            <div id="collapseOne{{ $i+1 }}" class="accordion-collapse collapse" data-bs-parent="#accordionExample{{ $i+1 }}">
                                 <div class="accordion-body">
                                     @if(!($message_content->is_del) && !($message_reply[$i]->is_del))
                                         @if(Session::has('account'))

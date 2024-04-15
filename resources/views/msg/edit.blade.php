@@ -46,14 +46,14 @@
                 <!-- <hr class="my-4"> -->
                 <div class="row g-5">
                     <div class="row g-3">
-                        <form class="needs-validation" id="form_sub" action="{{ route('msg.update', $msg_edit[0]->id) }}" method="post">
+                        <form class="needs-validation" id="form_sub" action="{{ route('msg.update', $msg_edit->id) }}" method="post">
                             @csrf
                             @method('PUT')
-                            <!-- <input type="hidden" id="msg_id" name="msg_id" value="{{ $msg_edit[0]->id }}"/> -->
-                            <!-- <input type="hidden" id="account" name="account" value="{{ $msg_edit[0]->user_account }}"/> -->
+                            <!-- <input type="hidden" id="msg_id" name="msg_id" value="{{ $msg_edit->id }}"/> -->
+                            <!-- <input type="hidden" id="account" name="account" value="{{ $msg_edit->user_account }}"/> -->
                             <div class="col-12">
                                 <label for="title" class="form-label">標題：</label>
-                                <input type="text" class="form-control" id="title" name="title" value="{{ $msg_edit[0]->title }}" required>
+                                <input type="text" class="form-control" id="title" name="title" value="{{ $msg_edit->title }}" required>
                                 <div class="invalid-feedback">
                                     請輸入標題
                                 </div>
@@ -62,14 +62,14 @@
                             <div class="col-12">
                                 <label for="content" class="form-label">留言：</label><br>
                                 <!-- <input type="text" class="form-control" id="content" placeholder="1234 Main St" required=""> -->
-                                <textarea class="form-control" id="content" name="content" rows="15" required>{{ $msg_edit[0]->content }}</textarea>
+                                <textarea class="form-control" id="content" name="content" rows="15" required>{{ $msg_edit->content }}</textarea>
                                 <div class="invalid-feedback">
                                     請輸入內容
                                 </div>
                             </div>
                             <hr class="my-4">
                         </form>
-                        <form class="needs-validation" id="form_del" action="{{ route('msg.destroy', $msg_edit[0]->id) }}" method="post">
+                        <form class="needs-validation" id="form_del" action="{{ route('msg.destroy', $msg_edit->id) }}" method="post">
                             @csrf
                             @method('DELETE')
                         </form>

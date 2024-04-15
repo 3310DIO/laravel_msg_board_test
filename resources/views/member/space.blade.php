@@ -53,6 +53,24 @@
             </div>
         </div>
     </nav>
+    @if (Session::has('message'))
+        <div class="alert alert-success text-center" role="alert">
+            {{ Session::get('message') }}
+            <button class="btn btn-outline-primary rounded-circle p-2 lh-1" type="button" data-bs-dismiss="alert" aria-label="Close">
+                <span class="bi" width="16" height="16">&times;</span>
+                <span class="visually-hidden">Dismiss</span>
+            </button>
+        </div>
+    @endif
+    @if (Session::has('error'))
+        <div class="alert alert-danger text-center" role="alert">
+            {{ Session::get('error') }}
+            <button class="btn btn-outline-primary rounded-circle p-2 lh-1" type="button" data-bs-dismiss="alert" aria-label="Close">
+                <span class="bi" width="16" height="16">&times;</span>
+                <span class="visually-hidden">Dismiss</span>
+            </button>
+        </div>
+    @endif
 
     <main>
         <section class="py-5 text-center container">
@@ -62,7 +80,7 @@
                     <p class="lead text-body-secondary">寫一些東西........</p>
                     <p>
                         @if($account == Session::get('account'))
-                            <a href="{{ route('member.show', Session::get('account')) }}" class="btn btn-primary my-2">修改帳號</a>
+                            <a href="{{ route('member.show', Session::get('account')) }}" class="btn btn-primary my-2">帳號設定</a>
                             <a href="#" class="btn btn-secondary my-2">還沒想到的功能2</a>
                         @endif
                     </p>
@@ -103,15 +121,17 @@
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="btn-group">
                                                 @if($account == Session::get('account'))
+                                                    <form class="msg" id="form_del_{{ $img_id }}" action="{{ route('img.destroy', $user_space->id) }}" method="post"> <?php // 刪除留言 ?>
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <input type="hidden" name="btn_delete_id" value="{{ $user_space->id }}"/>
+                                                    </form>
                                                     <button type="button" class="btn btn-sm btn-outline-secondary">查看(未設計)</button>
                                                     <button type="button" class="btn btn-sm btn-outline-secondary" id="btn_delete" onclick="del({{ $img_id }})">刪除</button>
                                                 @endif
                                             </div>
                                             <small class="text-body-secondary">9 mins</small>
                                         </div>
-                                        <form class="msg" id="form_del_{{ $img_id }}" action="config_img.php?method=img_del" method="post"> <?php // 刪除留言 ?>
-                                            <input type="hidden" name="btn_delete_id" value="{{ $user_space->id }}"/>
-                                        </form>
                                     </div>
                                 </div>
                             </div>

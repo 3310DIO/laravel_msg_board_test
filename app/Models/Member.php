@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class Member extends Model
 {
     protected $table = 'member';
-    protected $fillable = ['user_account', 'user_name', 'user_password',];
+    protected $fillable = ['user_account', 'user_name', 'user_password'];
     public $primaryKey = 'user_id';
     public $timestamps = false;
     public static function new_member(){

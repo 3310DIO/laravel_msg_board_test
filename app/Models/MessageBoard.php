@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class MessageBoard extends Model
 {
     protected $table = 'msg';
-    protected $fillable = ['user_account', 'title', 'content',];
+    protected $fillable = ['user_account', 'title', 'content'];
     public $primaryKey = 'id';
     public $timestamps = false;
     public static function find_msg(){
@@ -37,7 +37,7 @@ class MessageBoard extends Model
                  ->select('m.id', 'm.user_account', 'm.title', 'm.content', 'm.created_at', 'm.update_at', 'm.is_del', 'mem.user_name')
                  ->where('m.id', '=', "$id")
                 //  ->paginate(10);
-                 ->get();
+                 ->first();
         return $msg;
     }
     public static function find_update($id, $title, $content){
