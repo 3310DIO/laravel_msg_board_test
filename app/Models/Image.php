@@ -16,10 +16,18 @@ class Image extends Model
     public static function find_img($id)
     {
         $msg = DB::table('img_upload')
-                 ->select('user_account', 'img_url')
+                 ->select('user_account', 'img_url', 'img_content', 'is_del')
                  ->where('id', '=' , "$id")
                 //  ->update(['is_del' => 1]);
                  ->first();
+        return $msg;
+    }
+    public static function img_update($id, $content)
+    {
+        $msg = DB::table('img_upload')
+                 ->where('id', '=' , "$id")
+                 ->update(['img_content' => $content]);
+                //  ->get();
         return $msg;
     }
     public static function img_del($id)

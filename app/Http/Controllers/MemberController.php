@@ -82,7 +82,7 @@ class MemberController extends Controller
      */
     public function show(string $id)
     {
-        return View('member/edit_user');
+        //
     }
 
     /**
@@ -90,7 +90,7 @@ class MemberController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return View('member/edit_user');
     }
 
     /**
@@ -193,9 +193,10 @@ class MemberController extends Controller
         $user_account = array();
 
         $view = 'member/space';
-        $sql = Member::member_space($account);
-        $model['user_spaces'] = $sql;
-        $user_account['account'] = $account;
+        $img = Member::member_space($account);
+        $model['user_spaces'] = $img;
+        $user_introduce = Member::member_introduce($account);
+        $user_account['account'] = $user_introduce;
         $img_id['img_id'] = 0;
         // dd($account);
         return View($view, $model, $user_account, $img_id);

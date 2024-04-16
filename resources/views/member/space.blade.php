@@ -5,83 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <title>{{ $account }}的個人空間</title>
-    <style>
-        /* .img_size img{
-            width: 100%;
-            height: auto;
-        } */
-        /* body {
-            flex-wrap: wrap;
-        }
-        li {
-            text-align: -webkit-match-parent;
-        } */
-        /* .img_box{
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 200px));
-            grid-gap: 10px;
-        } */
-    </style>
-
+    <title>{{ $account->user_account }}的個人空間</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-md bg-dark sticky-top border-bottom" data-bs-theme="dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{{ route('msg.index') }}">返回首頁</a>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                @if(Session::has('account'))
-                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                        <li class="nav-item">
-                            <a class="btn btn-outline-light me-2" aria-current="page" href="{{ route('member.space', Session::get('account')) }}">{{ Session::get('name') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <span class="nav-link active" aria-current="page">您好</span>
-                        </li>
-                    </ul>
-                    <a class="btn btn-outline-light me-2" href="{{ route('msg.create') }}">新增留言</a>
-                    <a class="btn btn-outline-light me-2" href="{{ route('member.logout') }}">登出</a>
-                @else
-                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                        <li class="nav-item">
-                            <span class="nav-link active" aria-current="page">請登錄</span>
-                        </li>
-                    </ul>
-                    <a class="btn btn-outline-light me-2" href="{{ route('member.index') }}">登錄</a>
-                    <a class="btn btn-warning" href="{{ route('member.create') }}">註冊</a>
-                @endif
-            </div>
-        </div>
-    </nav>
-    @if (Session::has('message'))
-        <div class="alert alert-success text-center" role="alert">
-            {{ Session::get('message') }}
-            <button class="btn btn-outline-primary rounded-circle p-2 lh-1" type="button" data-bs-dismiss="alert" aria-label="Close">
-                <span class="bi" width="16" height="16">&times;</span>
-                <span class="visually-hidden">Dismiss</span>
-            </button>
-        </div>
-    @endif
-    @if (Session::has('error'))
-        <div class="alert alert-danger text-center" role="alert">
-            {{ Session::get('error') }}
-            <button class="btn btn-outline-primary rounded-circle p-2 lh-1" type="button" data-bs-dismiss="alert" aria-label="Close">
-                <span class="bi" width="16" height="16">&times;</span>
-                <span class="visually-hidden">Dismiss</span>
-            </button>
-        </div>
-    @endif
+    @include('top_box')
+    @include('message_box')
 
     <main>
         <section class="py-5 text-center container">
             <div class="row py-lg-5">
                 <div class="col-lg-6 col-md-8 mx-auto">
-                    <h1 class="fw-light">{{ $account }}的空間</h1>
-                    <p class="lead text-body-secondary">寫一些東西........</p>
+                    <h1 class="fw-light">{{ $account->user_name }}的空間</h1>
+                    <p class="lead text-body-secondary">{{ $account->user_introduce }}</p>
                     <p>
-                        @if($account == Session::get('account'))
-                            <a href="{{ route('member.show', Session::get('account')) }}" class="btn btn-primary my-2">帳號設定</a>
-                            <a href="#" class="btn btn-secondary my-2">還沒想到的功能2</a>
+                        @if($account->user_account == Session::get('account'))
+                            <a href="{{ route('member.edit', Session::get('account')) }}" class="btn btn-primary my-2">帳號設定</a>
+                            <a href="#" class="btn btn-secondary my-2">修改簡介(未設定)</a>
                         @endif
                     </p>
                 </div>
@@ -90,7 +29,7 @@
 
         <div class="album py-5 bg-body-tertiary">
             <div class="container">
-                @if($account == Session::get('account'))
+                @if($account->user_account == Session::get('account'))
                     <div class="my-3 p-3 bg-body rounded shadow-sm">
                         <form class="text-center" action="{{ route('img.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
@@ -102,41 +41,62 @@
                     </div>
                 @endif
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                    <?php $img_id=0; ?>
+                    <?php $img_id = 0; ?>
                     @foreach($user_spaces as $user_space)
-                        <?php //if($user_space->width_height){
-                            //$img_w = "width: 100%;";
-                            //$img_h = "height: 225;";
-                        //}else{
-                            //$img_w = "width: 359;";
-                            //$img_h = "height: 100%;";
-                        //} ?>
                         @if(!($user_space->is_del))
                             <div class="col">
                                 <div class="card shadow-sm">
                                     <!-- <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg> -->
                                     <img class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false" id="img_id_{{ ++$img_id }}" src="{{ URL('/storage/upload/img/' . $user_space->img_url) }}"></img>
                                     <div class="card-body">
-                                        <p class="card-text">(圖片說明)This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                                        <p class="card-text">圖片{{ $img_id }}</p>
+                                        <p class="card-text fw-bold">{{ $user_space->img_content }}</p>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="btn-group">
-                                                @if($account == Session::get('account'))
-                                                    <form class="msg" id="form_del_{{ $img_id }}" action="{{ route('img.destroy', $user_space->id) }}" method="post"> <?php // 刪除留言 ?>
+                                                @if($account->user_account == Session::get('account'))
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-imgNo="{{ $img_id }}" data-bs-whatever="{{ $user_space->id }}" data-bs-content="{{ $user_space->img_content }}">修改介紹</button>
+                                                    <form class="msg" id="form_del_{{ $img_id }}" action="{{ route('img.destroy', $user_space->id) }}" method="post">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <input type="hidden" name="btn_delete_id" value="{{ $user_space->id }}"/>
                                                     </form>
-                                                    <button type="button" class="btn btn-sm btn-outline-secondary">查看(未設計)</button>
                                                     <button type="button" class="btn btn-sm btn-outline-secondary" id="btn_delete" onclick="del({{ $img_id }})">刪除</button>
                                                 @endif
                                             </div>
-                                            <small class="text-body-secondary">時間：(未完成)</small>
+                                            <small class="text-body-secondary">上傳時間：{{ date("Y-m-d", strtotime($user_space->created_at)) }}</small>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         @endif
                     @endforeach
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">修改內容</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="form_sub" action="{{ route('img.update', 0) }}" method="post">
+                                        @csrf
+                                        @method('PUT')
+                                        <div class="mb-3 modal-id_use">
+                                            <!-- <label for="recipient-name" class="col-form-label">Recipient:</label> -->
+                                            <input type="hidden" class="form-control" id="recipient-name" name="img_id"/>
+                                        </div>
+                                        <div class="mb-3 modal-content_use">
+                                            <label for="message-text" class="col-form-label">圖片簡介(限200個字)</label>
+                                            <input class="form-control" id="message-text" name="img_content" rows="7" col="8" required/>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+                                    <button type="button" class="btn btn-primary" onclick="sub()">修改</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -144,6 +104,26 @@
 
 </body>
 <script>
+    var exampleModal = document.getElementById('exampleModal');
+    exampleModal.addEventListener('show.bs.modal', function(event){
+        // Button that triggered the modal
+        var button = event.relatedTarget;
+        // Extract info from data-bs-* attributes
+        var img_no = button.getAttribute('data-bs-imgNo');
+        var recipient = button.getAttribute('data-bs-whatever');
+        var content = button.getAttribute('data-bs-content');
+        // If necessary, you could initiate an AJAX request here
+        // and then do the updating in a callback.
+        //
+        // Update the modal's content.
+        var modalTitle = exampleModal.querySelector('.modal-title');
+        var modalBodyInput = exampleModal.querySelector('.modal-id_use input');
+        var modalBodyInputContent = exampleModal.querySelector('.modal-content_use input');
+
+        modalTitle.textContent = '修改圖片 ' + img_no;
+        modalBodyInput.value = recipient;
+        modalBodyInputContent.value = content;
+    });
     // 確認刪除圖片
     function del(id){
         if(!confirm('要刪除圖片嗎？')){
@@ -151,6 +131,9 @@
         }else{
             document.getElementById("form_del_"+id).submit();
         }
+    }
+    function sub(){
+        document.getElementById("form_sub").submit();
     }
 </script>
 </html>

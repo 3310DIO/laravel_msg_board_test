@@ -8,58 +8,19 @@
     <title>留言板</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-md bg-dark sticky-top border-bottom" data-bs-theme="dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{{ route('msg.index') }}">返回首頁</a>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                @if(Session::has('account'))
-                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                        <li class="nav-item">
-                            <a class="btn btn-outline-light me-2" aria-current="page" href="{{ route('member.space', Session::get('account')) }}">{{ Session::get('name') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <span class="nav-link active" aria-current="page">您好</span>
-                        </li>
-                    </ul>
-                    <a class="btn btn-outline-light me-2" href="{{ route('msg.create') }}">新增留言</a>
-                    <a class="btn btn-outline-light me-2" href="{{ route('member.logout') }}">登出</a>
-                @else
-                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                        <li class="nav-item">
-                            <span class="nav-link active" aria-current="page">請登錄</span>
-                        </li>
-                    </ul>
-                    <a class="btn btn-outline-light me-2" href="{{ route('member.index') }}">登錄</a>
-                    <a class="btn btn-warning" href="{{ route('member.create') }}">註冊</a>
-                @endif
-            </div>
-        </div>
-    </nav>
-    @if (Session::has('message'))
-        <div class="alert alert-success text-center" role="alert">
-            {{ Session::get('message') }}
-            <button class="btn btn-outline-primary rounded-circle p-2 lh-1" type="button" data-bs-dismiss="alert" aria-label="Close">
-                <span class="bi" width="16" height="16">&times;</span>
-                <span class="visually-hidden">Dismiss</span>
-            </button>
-        </div>
-    @endif
-    @if (Session::has('error'))
-        <div class="alert alert-danger text-center" role="alert">
-            {{ Session::get('error') }}
-            <button class="btn btn-outline-primary rounded-circle p-2 lh-1" type="button" data-bs-dismiss="alert" aria-label="Close">
-                <span class="bi" width="16" height="16">&times;</span>
-                <span class="visually-hidden">Dismiss</span>
-            </button>
-        </div>
-    @endif
+    @include('top_box')
+    @include('message_box')
 
     <section class="py-5 text-center container">
         <div class="row py-lg-5">
             <div class="col-lg-6 col-md-8 mx-auto">
-                <h1 class="fw-light">留言板</h1>
+                @if($search == '')
+                    <h1 class="fw-light">留言板</h1>
+                @else
+                    <h1 class="fw-light">搜尋：{{ $search }}</h1>
+                @endif
                 <div>
-                    <form action="{{ route('msg.show', '0') }}">
+                    <form action="{{ route('msg.index') }}"> <?php // 可以不寫action ?>
                         @csrf
                         <input class="form-control" type="text" id="site-search" name="search" placeholder="輸入標題" value="{{ $search }}"></label>
                         <button class="btn btn-primary my-2">Search</button>
@@ -70,50 +31,50 @@
     </section>
     
     <main class="container">
-    {{ $message_boards->onEachSide(2)->links('vendor.pagination.bootstrap-5') }}
-        @foreach ($message_boards as $message_board)
-            @if($message_board->is_del == 0)
-                <div class="d-flex align-items-center p-3 my-3 text-white rounded shadow-sm" style="background-color: #6f42c1;">
-                    <div class="lh-1">
-                        <h1 class="h6 mb-0 text-white lh-1">樓：{{ $message_board->id }}</h1>
+        {{ $message_boards->onEachSide(2)->links('vendor.pagination.bootstrap-5') }}
+            @foreach($message_boards as $message_board)
+                @if($message_board->is_del == 0)
+                    <div class="d-flex align-items-center p-3 my-3 text-white rounded shadow-sm" style="background-color: #6f42c1;">
+                        <div class="lh-1">
+                            <h1 class="h6 mb-0 text-white lh-1">樓：{{ $message_board->id }}</h1>
+                        </div>
                     </div>
-                </div>
-                <div class="my-3 p-3 bg-body rounded shadow-sm">
-                    <a href="{{ route('reply.show', $message_board->id) }}">
-                        <h6 class="border-bottom pb-2 mb-0">標題：{{ $message_board->title }}</h6>
-                    </a>
-                    <div class="d-flex text-body-secondary pt-3">
-                        <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false">
-                            <rect width="100%" height="100%" fill="#007bff"></rect>
-                        </svg>
-                        <p class="pb-3 mb-0 small lh-sm border-bottom">
-                            <strong class="d-block text-gray-dark">{{ $message_board->user_name }}</strong>
-                        </p>
+                    <div class="my-3 p-3 bg-body rounded shadow-sm">
+                        <a href="{{ route('reply.show', $message_board->id) }}">
+                            <h6 class="border-bottom pb-2 mb-0">標題：{{ $message_board->title }}</h6>
+                        </a>
+                        <div class="d-flex text-body-secondary pt-3">
+                            <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false">
+                                <rect width="100%" height="100%" fill="#007bff"></rect>
+                            </svg>
+                            <p class="pb-3 mb-0 small lh-sm border-bottom">
+                                <strong class="d-block text-gray-dark">{{ $message_board->user_name }}</strong>
+                            </p>
+                        </div>
+                        <div style="overflow:hidden; white-space: nowrap; text-overflow: ellipsis;">
+                            <pre style="overflow:hidden; white-space: nowrap; text-overflow: ellipsis;">{{ $message_board->content }}</pre>
+                        </div>
+                        <small class="d-block text-end mt-3">
+                            <span>建立日期：{{ $message_board->created_at }}</span> |
+                            <span>修改日期：{{ $message_board->update_at }}</span>
+                        </small>
                     </div>
-                    <div style="overflow:hidden; white-space: nowrap; text-overflow: ellipsis;">
-                        <pre style="overflow:hidden; white-space: nowrap; text-overflow: ellipsis;">{{ $message_board->content }}</pre>
+                @else
+                    <div class="d-flex align-items-center p-3 my-3 text-white rounded shadow-sm" style="background-color: #6f42c1;">
+                        <div class="lh-1">
+                            <h1 class="h6 mb-0 text-white lh-1">樓：{{ $message_board->id }}</h1>
+                        </div>
                     </div>
-                    <small class="d-block text-end mt-3">
-                        <span>建立日期：{{ $message_board->created_at }}</span> |
-                        <span>修改日期：{{ $message_board->update_at }}</span>
-                    </small>
-                </div>
-            @else
-                <div class="d-flex align-items-center p-3 my-3 text-white rounded shadow-sm" style="background-color: #6f42c1;">
-                    <div class="lh-1">
-                        <h1 class="h6 mb-0 text-white lh-1">樓：{{ $message_board->id }}</h1>
+                    <div class="my-3 p-3 bg-body rounded shadow-sm">
+                        <a href="{{ route('reply.show', $message_board->id) }}">
+                            <h6 class="border-bottom pb-2 mb-0">留言已刪除</h6>
+                        </a>
+                        <small class="d-block text-end mt-3">
+                            <span>刪除日期：{{ $message_board->update_at }}</span>
+                        </small>
                     </div>
-                </div>
-                <div class="my-3 p-3 bg-body rounded shadow-sm">
-                    <a href="{{ route('reply.show', $message_board->id) }}">
-                        <h6 class="border-bottom pb-2 mb-0">留言已刪除</h6>
-                    </a>
-                    <small class="d-block text-end mt-3">
-                        <span>刪除日期：{{ $message_board->update_at }}</span>
-                    </small>
-                </div>
-            @endif
-        @endforeach
+                @endif
+            @endforeach
         {{ $message_boards->onEachSide(2)->links('vendor.pagination.bootstrap-5') }}
     </main>
 </body>

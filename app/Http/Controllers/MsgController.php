@@ -12,17 +12,26 @@ class MsgController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $view = 'msg/index';
         $model = array();
+        $search = $request->input('search', '');
+
+        $patterns = ['/%/', '/_/'];
+        // $patterns[1] = '/_/';
+        // $replacements = array();
+        $replacements = ['\%', '\_'];
+        // $replacements[1] = '\_';
+        $search_term_replace = preg_replace($patterns, $replacements, $search);
         
         // $users = DB::select('select * from message_board ');
-        $message_boards = MessageBoard::find_msg();
+        $message_boards = MessageBoard::find_msg($search_term_replace);
+        $message_boards->appends($request->all());
         $model['message_boards'] = $message_boards;
-        $search_name['search'] = '';
+        $model['search'] = $search;
         // dd($users);
-        return View($view, $model, $search_name);
+        return View($view, $model);
     }
 
     /**
@@ -30,7 +39,7 @@ class MsgController extends Controller
      */
     public function create()
     {
-        return View('msg/newMsg');
+        return redirect()->route('msg.edit', 0);
     }
 
     /**
@@ -72,50 +81,37 @@ class MsgController extends Controller
      */
     public function show(Request $request, string $id) // 
     {
-        $view = 'msg/index';
-        $model = array();
-        $search = $request->input('search');
-        $patterns = array();
-        // dd($search);
-        if($search == null){
-            return redirect()->route('msg.index');
-        }
-        $patterns[0] = '/%/';
-        $patterns[1] = '/_/';
-        $replacements = array();
-        $replacements[0] = '\%';
-        $replacements[1] = '\_';
-        $search_term_replace = preg_replace($patterns, $replacements, $search);
-        $search_name['search'] = $search;
-        // $users = DB::select('select * from message_board ');
-        $message_boards = MessageBoard::search_msg($search_term_replace);
-        $message_boards->appends($request->all());
-        $model['message_boards'] = $message_boards;
-        // dd($users);
-        return View($view, $model, $search_name);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request, string $id)
     {
-        $view = 'msg/edit';
+        $view = 'msg/newAndEditMsg';
         $model = array();
+        $user_account = $request->session()->get('account');
         
-        if($id){
+        if(isset($id) && $id != 0){
             $msg_edit = MessageBoard::find_edit($id);
-        }
-        // dd($msg_edit);
-        if($msg_edit == null){ // 判斷是否有輸入值輸入，沒有則返回首頁
-            $message = "非法操作";
-            return redirect()->route('msg.index')->with('error', $message);
+            if($msg_edit == null || $user_account != $msg_edit->user_account){ // 判斷是否有輸入值輸入，沒有則返回首頁
+                $message = "非法操作";
+                return redirect()->route('msg.index')->with('error', $message);
+            }else{
+                // $users = DB::select('select * from message_board ');
+                $model['msg_edit'] = $msg_edit;
+                // dd($users);
+            }
         }else{
-            // $users = DB::select('select * from message_board ');
+            $msg_edit = new MessageBoard;
+            $msg_edit->user_account = $user_account;
+            $msg_edit->title = "";
+            $msg_edit->content = "";
             $model['msg_edit'] = $msg_edit;
-            // dd($users);
-            return View($view, $model);
         }
+        $model['id'] = $id;
+        return View($view, $model);
     }
 
     /**

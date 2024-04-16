@@ -9,51 +9,8 @@
 
 </head>
 <body>
-    <nav class="navbar navbar-expand-md bg-dark sticky-top border-bottom" data-bs-theme="dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{{ route('msg.index') }}">返回首頁</a>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                @if(Session::has('account'))
-                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                        <li class="nav-item">
-                            <a class="btn btn-outline-light me-2" aria-current="page" href="{{ route('member.space', Session::get('account')) }}">{{ Session::get('name') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <span class="nav-link active" aria-current="page">您好</span>
-                        </li>
-                    </ul>
-                    <a class="btn btn-outline-light me-2" href="{{ route('msg.create') }}">新增留言</a>
-                    <a class="btn btn-outline-light me-2" href="{{ route('member.logout') }}">登出</a>
-                @else
-                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                        <li class="nav-item">
-                            <span class="nav-link active" aria-current="page">請登錄</span>
-                        </li>
-                    </ul>
-                    <a class="btn btn-outline-light me-2" href="{{ route('member.index') }}">登錄</a>
-                    <a class="btn btn-warning" href="{{ route('member.create') }}">註冊</a>
-                @endif
-            </div>
-        </div>
-    </nav>
-    @if (Session::has('message'))
-        <div class="alert alert-success text-center" role="alert">
-            {{ Session::get('message') }}
-            <button class="btn btn-outline-primary rounded-circle p-2 lh-1" type="button" data-bs-dismiss="alert" aria-label="Close">
-                <span class="bi" width="16" height="16">&times;</span>
-                <span class="visually-hidden">Dismiss</span>
-            </button>
-        </div>
-    @endif
-    @if (Session::has('error'))
-        <div class="alert alert-danger text-center" role="alert">
-            {{ Session::get('error') }}
-            <button class="btn btn-outline-primary rounded-circle p-2 lh-1" type="button" data-bs-dismiss="alert" aria-label="Close">
-                <span class="bi" width="16" height="16">&times;</span>
-                <span class="visually-hidden">Dismiss</span>
-            </button>
-        </div>
-    @endif
+    @include('top_box')
+    @include('message_box')
     <div class="d-flex align-items-center py-4 bg-body-tertiary">
         <div class="container col-xl-10 px-4 py-5">
             <div class="row align-items-center g-lg-5 py-5">
@@ -90,7 +47,7 @@
                         <hr class="my-4">
                         <!-- <small class="text-body-secondary">點選「登錄」即表示您同意使用條款。</small> -->
                         <div class="text-center">
-                            <a class="btn btn-outline-dark me-2" href="{{ route('msg.index') }}">返回首頁</a>
+                            <a class="btn btn-outline-dark me-2" href="{{ route('member.space', Session::get('account')) }}">返回個人空間</a>
                         </div>
                     </form>
                 </div>

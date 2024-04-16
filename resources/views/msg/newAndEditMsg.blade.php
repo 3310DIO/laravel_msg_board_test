@@ -8,50 +8,36 @@
 
 </head>
 <body>
-    <nav class="navbar navbar-expand-md bg-dark sticky-top border-bottom" data-bs-theme="dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{{ route('msg.index') }}">返回首頁</a>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                @if(Session::has('account'))
-                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                        <li class="nav-item">
-                            <a class="btn btn-outline-light me-2" aria-current="page" href="{{ route('member.space', Session::get('account')) }}">{{ Session::get('name') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <span class="nav-link active" aria-current="page">您好</span>
-                        </li>
-                    </ul>
-                    <a class="btn btn-outline-light me-2" href="{{ route('msg.create') }}">新增留言</a>
-                    <a class="btn btn-outline-light me-2" href="{{ route('member.logout') }}">登出</a>
-                @else
-                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                        <li class="nav-item">
-                            <span class="nav-link active" aria-current="page">請登錄</span>
-                        </li>
-                    </ul>
-                    <a class="btn btn-outline-light me-2" href="{{ route('member.index') }}">登錄</a>
-                    <a class="btn btn-warning" href="{{ route('member.create') }}">註冊</a>
-                @endif
-            </div>
-        </div>
-    </nav>
+    @include('top_box')
+    @include('message_box')
     <div class="my-3 p-3 bg-body rounded shadow-sm">
         <div class="container">
             <main>
                 <div class="py-5 text-center">
                     <!-- <img class="d-block mx-auto mb-4" src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> -->
-                    <h2>編輯留言</h2>
+                    @if($id != 0)
+                        <h2>編輯留言</h2>
+                    @else
+                        <h2>新增留言</h2>
+                    @endif
                 </div>
                 <!-- <a class="btn btn-primary" href="{{ route('msg.index') }}" >返回首頁</a> -->
                 <!-- <hr class="my-4"> -->
                 <div class="row g-5">
                     <div class="row g-3">
-                        <form class="needs-validation" id="form_sub" action="{{ route('msg.update', $msg_edit->id) }}" method="post">
+                        @if($id != 0)
+                            <form class="needs-validation" id="form_sub" action="{{ route('msg.update', $msg_edit->id) }}" method="post">
+                        @else
+                            <form class="needs-validation" id="form_sub" action="{{ route('msg.store') }}" method="post">
+                        @endif
                             @csrf
-                            @method('PUT')
+                            @if($id != 0)
+                                @method('PUT')
+                            @endif
                             <!-- <input type="hidden" id="msg_id" name="msg_id" value="{{ $msg_edit->id }}"/> -->
                             <!-- <input type="hidden" id="account" name="account" value="{{ $msg_edit->user_account }}"/> -->
                             <div class="col-12">
+                                <label for="account" class="form-label">名字：{{ Session::get('name') }}</label><br>
                                 <label for="title" class="form-label">標題：</label>
                                 <input type="text" class="form-control" id="title" name="title" value="{{ $msg_edit->title }}" required>
                                 <div class="invalid-feedback">
@@ -69,12 +55,18 @@
                             </div>
                             <hr class="my-4">
                         </form>
-                        <form class="needs-validation" id="form_del" action="{{ route('msg.destroy', $msg_edit->id) }}" method="post">
-                            @csrf
-                            @method('DELETE')
-                        </form>
-                        <button class="w-100 btn btn-primary btn-lg" id="btn_submit" type="button" onclick="sub()">更新</button>
-                        <button class="w-100 btn btn-warning btn-lg" id="btn_delete" type="button" onclick="del()">刪除</button>
+                        <div class="text-center">
+                            @if($id != 0)
+                                <button class="mx-2 w-25 btn btn-primary btn-lg" id="btn_submit" type="button" onclick="edit()">更新</button>
+                                <button class="mx-2 w-25 btn btn-warning btn-lg" id="btn_delete" type="button" onclick="del()">刪除</button>
+                                <form class="needs-validation" id="form_del" action="{{ route('msg.destroy', $msg_edit->id) }}" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                            @else
+                                <button class="mx-2 w-25 btn btn-primary btn-lg" id="btn_submit" type="button" onclick="sub()">送出</button>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </main>
@@ -83,7 +75,14 @@
         
 </body>
 <script>
-    function sub(){
+    function sub(){ // 若刪除則送出表單
+        if(!confirm('要發佈嗎？')){
+            return false;
+        }else{
+            document.getElementById("form_sub").submit();
+        }
+    }
+    function edit(){
         document.getElementById("form_sub").submit();
     }
     function del(){ // 若刪除則送出表單

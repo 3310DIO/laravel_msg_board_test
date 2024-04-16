@@ -27,9 +27,16 @@ class Member extends Model
     }
     public static function member_space($user_account){
         $img = DB::table('img_upload')
-                 ->select('id', 'img_url', 'width_height', 'is_del')
+                 ->select('id', 'img_url', 'img_content', 'width_height', 'is_del', 'created_at')
                  ->where('user_account', '=', "$user_account")
                  ->get();
+        return $img;
+    }
+    public static function member_introduce($user_account){
+        $img = DB::table('member')
+                 ->select('user_id', 'user_account', 'user_name', 'user_introduce')
+                 ->where('user_account', '=', "$user_account")
+                 ->first();
         return $img;
     }
     public static function name_update($user_account, $user_name){

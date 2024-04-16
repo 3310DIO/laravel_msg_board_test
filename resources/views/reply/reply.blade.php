@@ -7,51 +7,8 @@
     <title>留言</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-md bg-dark sticky-top border-bottom" data-bs-theme="dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{{ route('msg.index') }}">返回首頁</a>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                @if(Session::has('account'))
-                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                        <li class="nav-item">
-                            <a class="btn btn-outline-light me-2" aria-current="page" href="{{ route('member.space', Session::get('account')) }}">{{ Session::get('name') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <span class="nav-link active" aria-current="page">您好</span>
-                        </li>
-                    </ul>
-                    <a class="btn btn-outline-light me-2" href="{{ route('msg.create') }}">新增留言</a>
-                    <a class="btn btn-outline-light me-2" href="{{ route('member.logout') }}">登出</a>
-                @else
-                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                        <li class="nav-item">
-                            <span class="nav-link active" aria-current="page">請登錄</span>
-                        </li>
-                    </ul>
-                    <a class="btn btn-outline-light me-2" href="{{ route('member.index') }}">登錄</a>
-                    <a class="btn btn-warning" href="{{ route('member.create') }}">註冊</a>
-                @endif
-            </div>
-        </div>
-    </nav>
-    @if (Session::has('message'))
-        <div class="alert alert-success text-center" role="alert">
-            {{ Session::get('message') }}
-            <button class="btn btn-outline-primary rounded-circle p-2 lh-1" type="button" data-bs-dismiss="alert" aria-label="Close">
-                <span class="bi" width="16" height="16">&times;</span>
-                <span class="visually-hidden">Dismiss</span>
-            </button>
-        </div>
-    @endif
-    @if (Session::has('error'))
-        <div class="alert alert-danger text-center" role="alert">
-            {{ Session::get('error') }}
-            <button class="btn btn-outline-primary rounded-circle p-2 lh-1" type="button" data-bs-dismiss="alert" aria-label="Close">
-                <span class="bi" width="16" height="16">&times;</span>
-                <span class="visually-hidden">Dismiss</span>
-            </button>
-        </div>
-    @endif
+    @include('top_box')
+    @include('message_box')
 
     <div class="col-lg-8 mx-auto p-4 py-md-5 bg-body-tertiary">
             <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
@@ -59,14 +16,14 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-hexagon-half" viewBox="0 0 16 16">
                         <path d="M14 4.577v6.846L8 15V1zM8.5.134a1 1 0 0 0-1 0l-6 3.577a1 1 0 0 0-.5.866v6.846a1 1 0 0 0 .5.866l6 3.577a1 1 0 0 0 1 0l6-3.577a1 1 0 0 0 .5-.866V4.577a1 1 0 0 0-.5-.866z"/>
                     </svg>
-                    <span class="fs-4">作者：{{$message_content->user_name}}</span>
+                    <span class="fs-4">作者：{{ $message_content->user_name }}</span>
                 </a>
             </header>
             <main>
                 @if ($message_content->is_del == 0)
-                    <h1 class="text-body-emphasis">{{$message_content->title}}</h1><br>
+                    <h1 class="text-body-emphasis">{{ $message_content->title }}</h1><br>
                     <div style="word-break: break-all;" >
-                        <pre style="white-space: pre-wrap;" class="fs-5">{{$message_content->content}}</pre>
+                        <pre style="white-space: pre-wrap;" class="fs-5">{{ $message_content->content }}</pre>
                     </div>
                     @if(Session::has('account'))
                         @if(Session::get('account') == $message_content->user_account)
@@ -76,17 +33,17 @@
                         @endif
                     @endif
                     <small class="d-block text-end mt-3">
-                        <span>建立日期：{{$message_content->created_at}}</span> |
-                        <span>修改日期：{{$message_content->update_at}}</span>
+                        <span>建立日期：{{ $message_content->created_at }}</span> |
+                        <span>修改日期：{{ $message_content->update_at }}</span>
                     </small>
                 @else
                     <h1 class="text-body-emphasis">留言已刪除</h1></h1><br>
                     <small class="d-block text-end mt-3">
-                        <span>建立日期：{{$message_content->update_at}}</span>
+                        <span>建立日期：{{ $message_content->update_at }}</span>
                     </small>
                 @endif
                 <p>
-                    <button class="btn btn-outline-secondary control-all">全部展開</button>
+                    <button class="btn btn-outline-secondary control-all ">全部展開</button>
                 </p>
                 @for($i = 0 ; $i < count($message_reply) ; $i++)
                     <div class="accordion" id="accordionExample{{ $i+1 }}">
@@ -109,28 +66,28 @@
                                     <div class="my-3 p-3 bg-body rounded shadow-sm">
                                         @if(!($message_reply[$i]->is_del))
                                             <a class="account_font" href="{{ route('member.space', $message_reply[$i]->user_account) }}">
-                                                <h6 class="border-bottom pb-2 mb-0">{{$message_reply[$i]->user_name}}</h6>
+                                                <h6 class="border-bottom pb-2 mb-0">{{ $message_reply[$i]->user_name }}</h6>
                                             </a>
                                         @else
                                             <h6 class="border-bottom pb-2 mb-0">無</h6>
                                         @endif
                                         <div style="overflow:hidden; white-space: nowrap; text-overflow: ellipsis;">
                                             @if(!($message_reply[$i]->is_del))
-                                                <pre type="text" id="text_reply{{ $i+1 }}" style="white-space: pre-wrap;">{{$message_reply[$i]->user_reply}}</pre>
+                                                <pre type="text" id="text_reply{{ $i+1 }}" style="white-space: pre-wrap;">{{ $message_reply[$i]->user_reply }}</pre>
                                                 <form style="width: 250px;" id="form_del{{ $i+1 }}" action="{{ route('reply.destroy', $message_reply[$i]->id) }}" method="post">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <input type="hidden" name="msg_id" value="{{$message_content->id}}"/>
+                                                    <input type="hidden" name="msg_id" value="{{ $message_content->id }}"/>
                                                 </form>
                                                 <form style="width: 250px;" id="form_sub{{ $i+1 }}" action="{{ route('reply.update', $message_reply[$i]->id) }}" method="post">
                                                     @csrf
                                                     @method('PUT')
-                                                    <input type="hidden" name="msg_id" value="{{$message_content->id}}"/>
+                                                    <input type="hidden" name="msg_id" value="{{ $message_content->id }}"/>
                                                     <?php $line_count = substr_count($message_reply[$i]->user_reply, "\n");
                                                         if($line_count < 2){
                                                             $line_count = 2;
                                                     } ?>
-                                                    <textarea id="text_reply_modify{{ $i+1 }}" name="reply" rows="{{$line_count}}" cols="50" hidden>{{$message_reply[$i]->user_reply}}</textarea>
+                                                    <textarea id="text_reply_modify{{ $i+1 }}" name="reply" rows="{{ $line_count }}" cols="50" hidden>{{ $message_reply[$i]->user_reply }}</textarea>
                                                 </form>
                                                 <button class="btn btn-outline-secondary" type="button" id="btn_delete{{ $i+1 }}" onclick="del({{ $i+1 }})" hidden>刪除</button>
                                                 <button class="btn btn-outline-secondary" type="button" id="btn_reply_update{{ $i+1 }}" onclick="sub({{ $i+1 }})" hidden>更新</button>
@@ -140,10 +97,10 @@
                                         </div>
                                         <small class="d-block text-end mt-3">
                                             @if(!($message_reply[$i]->is_del))
-                                                <span>回覆日期：{{$message_reply[$i]->reply_time}}</span> |
-                                                <span>修改日期：{{$message_reply[$i]->update_time}}</span>
+                                                <span>回覆日期：{{ $message_reply[$i]->reply_time }}</span> |
+                                                <span>修改日期：{{ $message_reply[$i]->update_time }}</span>
                                             @else
-                                                <span>刪除日期：{{$message_reply[$i]->update_time}}</span>
+                                                <span>刪除日期：{{ $message_reply[$i]->update_time }}</span>
                                             @endif
                                         </small>
                                     </div>
@@ -156,7 +113,7 @@
         @if(!($message_content->is_del))
             <form class="align-items-center p-3 my-3 rounded shadow-sm" action="{{ route('reply.store') }}" method="post">
                 @csrf
-                <input type="hidden" name="msg_id" value="{{$message_content->id}}"/>
+                <input type="hidden" name="msg_id" value="{{ $message_content->id }}"/>
                 <textarea  class="form-control" type="text" id="reply" name="reply" rows="10" required></textarea><br>
                 <p><button class="btn btn-outline-secondary" type="submit">回覆</button></p>
             </from>
@@ -166,39 +123,32 @@
 </body>
 <script>
     var control_all = document.querySelector("button.control-all");
-    control_all.addEventListener("click", function() {
-        if (this.getAttribute("data-lastState") === "0") {
-            document.querySelectorAll('.accordion-collapse').forEach(function(collapse) {
+    control_all.addEventListener("click", function(){
+        if(this.getAttribute("data-lastState") === "0"){
+            document.querySelectorAll('.accordion-collapse').forEach(function(collapse){
                 collapse.classList.remove('show');
             });
-            document.querySelectorAll('.accordion-button').forEach(function(collapsed) {
+            document.querySelectorAll('.accordion-button').forEach(function(collapsed){
                 collapsed.classList.add('collapsed');
+                collapsed.setAttribute("aria-expanded", "false");
             });
             this.setAttribute("data-lastState", "1");
             this.textContent = "全部展開";
-        } else {
-            document.querySelectorAll('.accordion-collapse').forEach(function(collapse) {
+        }else{
+            document.querySelectorAll('.accordion-collapse').forEach(function(collapse){
+                // collapse.classList.remove('collapse');
+                // collapse.classList.add('collapsing');
+                // collapse.classList.remove('collapsing');
                 collapse.classList.add('show');
             });
-            document.querySelectorAll('.accordion-button').forEach(function(collapsed) {
+            document.querySelectorAll('.accordion-button').forEach(function(collapsed){
                 collapsed.classList.remove('collapsed');
+                collapsed.setAttribute("aria-expanded", "true");
             });
             this.setAttribute("data-lastState", "0");
             this.textContent = "全部關閉";
         }
     });
-    // var control_all = document.querySelector("button.control-all");
-    // var panel_collapse = document.querySelector(".panel-collapse");
-
-    // control_all.addEventListener("click", function() {
-    //     if (panel_collapse.getAttribute("aria-expanded") === "true") {
-    //         // 关闭折叠元素
-    //         panel_collapse.setAttribute("aria-expanded", "false");
-    //     } else {
-    //         // 展开折叠元素
-    //         panel_collapse.setAttribute("aria-expanded", "true");
-    //     }
-    // });
 
     var checkboxes = document.querySelectorAll("input[type='checkbox']");
 

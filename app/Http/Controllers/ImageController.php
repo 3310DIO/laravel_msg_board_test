@@ -111,7 +111,35 @@ class ImageController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $id_img = $request->input('img_id');
+        $user_account = $request->session()->get('account');
+        $content = $request->input('img_content');
+
+        if($content==''){ // 判斷是否有輸入值輸入，沒有則返回首頁
+            $message = "非法操作1";
+            return redirect()->route('msg.index')->with('error', $message);
+        }else{
+            if(mb_strlen($content) > 200){ // 判斷輸入值是否超過上限
+                $message = "輸入超過200個字";
+                return redirect()->route('msg.index')->with('error', $message);
+            }else{
+                $img_data = Image::find_img($id_img);
+                
+                // dd($id_img);
+
+                if($user_account != $img_data->user_account || $img_data == null){ // 判斷是否是發佈者進行的修改
+                    $message = "非法操作2";
+                    return redirect()->route('msg.index')->with('error', $message);
+                }else{
+                    // $sql = "UPDATE msg SET title = ? , content = ? WHERE id = ? ";
+                    // $stmt = $pdo->prepare($sql);
+                    // $stmt->execute(["$title", "$content", "$id"]);
+                    Image::img_update($id_img, $content);
+                    $message = "修改成功";
+                    return redirect()->route('member.space', $user_account)->with('message', $message);
+                }
+            }
+        }
     }
 
     /**
@@ -120,6 +148,7 @@ class ImageController extends Controller
     public function destroy(Request $request, string $id)
     {
         $id_msg = $id;
+        // dd("測試");
         $user_account = $request->session()->get('account');
         $reply_data = Image::find_img($id_msg);
         if($user_account != $reply_data->user_account || $reply_data == null){ // 判斷是否是發佈者進行的修改
