@@ -32,27 +32,35 @@ class ReplyController extends Controller
     {
         $msg = new MsgReply();
         $user_account = $request->session()->get('account','');
-        $msg_id = $request->input("msg_id");
-        $user_reply = $request->input("reply");
+        
+        $request->validate([
+            'reply' => 'required|max:1500',
+            'msg_id' => 'required',
+        ]);
+
         if($user_account == ''){
             $message = "請登錄再回復";
 
             return redirect()->route('reply.show', $request->input("msg_id"))->with('message', $message);
         }else{
-            if(mb_strlen($user_reply) > 1500){ // 判斷輸入值是否超過上限
-                $message = "輸入字元超過1500上限";
+            // if(mb_strlen($user_reply) > 1500){ // 判斷輸入值是否超過上限
+            //     $message = "輸入字元超過1500上限";
 
-                return redirect()->route('reply.show', $request->input("msg_id"))->with('error', $message);
-            }else{
-                $msg->user_account = $user_account;
-                $msg->msg_id = $msg_id;
-                $msg->user_reply = $user_reply;
-                // dd($msg);
-                $msg->save();
-                $message = "回覆成功";
+            //     return redirect()->route('reply.show', $request->input("msg_id"))->with('error', $message);
+            // }else{
 
-                return redirect()->route('reply.show', $msg_id)->with('message', $message);
-            }
+            $msg_id = $request->input("msg_id");
+            $user_reply = $request->input("reply");
+
+            $msg->user_account = $user_account;
+            $msg->msg_id = $msg_id;
+            $msg->user_reply = $user_reply;
+            // dd($msg);
+            $msg->save();
+            $message = "回覆成功";
+
+            return redirect()->route('reply.show', $msg_id)->with('message', $message);
+            // }
         }
     }
 
@@ -62,9 +70,7 @@ class ReplyController extends Controller
     public function show(Request $request, string $id)
     {
         $view = 'reply/reply';
-        $model_content = array();
-        $model_reply = array();
-        $floor_id['floor_id'] = 0;
+        $model = array();
         
         // $users = DB::select('select * from message_board ');
         $message_content = MsgReply::find_content($id);
@@ -73,14 +79,15 @@ class ReplyController extends Controller
 
             return redirect()->route('msg.index')->with('error', $message);
         }
-        $model_content['message_content'] = $message_content;
+        $model['message_content'] = $message_content;
         $message_reply = MsgReply::find_reply($id);
-        $model_reply['message_reply'] = $message_reply;
+        $model['message_reply'] = $message_reply;
+        // dd($model_reply);
         // dd($model_content);
         // dd($model_reply);
         // dd($id);
         // dd($users);
-        return View($view, $model_content, $model_reply, $floor_id);
+        return View($view, $model);
     }
 
     /**
@@ -96,28 +103,32 @@ class ReplyController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $msg_id = $id;
+        $request->validate([
+            'reply' => 'required|max:1500',
+        ]);
+
         $reply = $request->input('reply');
         $user_account = $request->session()->get('account');
+        // if(mb_strlen($reply) > 1500){ // 判斷輸入值是否超過上限
+        //     $message = "輸入字元超過上限";
 
-        if(mb_strlen($reply) > 1500){ // 判斷輸入值是否超過上限
-            $message = "輸入字元超過上限";
+        //     return redirect()->route('reply.show', $request->input("msg_id"))->with('message', $message);
+        // }else{
+        $reply_data = MsgReply::find($id);
+        // dd($reply_data);
+        if($user_account != $reply_data->user_account){ // 判斷是否為發布者進行的修改
+            $message = "非法操作";
+
+            return redirect()->route('reply.show', $request->input("msg_id"))->with('error', $message);
+        }else{
+            $reply_data->reply = $reply;
+            $reply_data->save();
+            // MsgReply::find_update($msg_id, $reply);
+            $message = "修改成功";
 
             return redirect()->route('reply.show', $request->input("msg_id"))->with('message', $message);
-        }else{
-            $reply_data = MsgReply::find_one_reply($msg_id);
-            // dd($reply_data);
-            if($user_account != $reply_data->user_account){ // 判斷是否為發布者進行的修改
-                $message = "非法操作";
-
-                return redirect()->route('reply.show', $request->input("msg_id"))->with('error', $message);
-            }else{
-                MsgReply::find_update($msg_id, $reply);
-                $message = "修改成功";
-
-                return redirect()->route('reply.show', $request->input("msg_id"))->with('message', $message);
-            }
         }
+        // }
     }
 
     /**
@@ -125,9 +136,8 @@ class ReplyController extends Controller
      */
     public function destroy(Request $request, string $id)
     {
-        $id_msg = $id;
         $user_account = $request->session()->get('account');
-        $reply_data = MsgReply::find_one_reply($id_msg);
+        $reply_data = MsgReply::find($id);
         if($user_account != $reply_data->user_account || $reply_data == null){ // 判斷是否是發佈者進行的修改
             $message = "非法操作";
             return redirect()->route('msg.index')->with('error', $message);
@@ -135,7 +145,9 @@ class ReplyController extends Controller
             // $sql = "UPDATE msg SET title = ? , content = ? WHERE id = ? ";
             // $stmt = $pdo->prepare($sql);
             // $stmt->execute(["$title", "$content", "$id"]);
-            MsgReply::del_reply($id_msg);
+            $reply_data->is_del = 1;
+            $reply_data->save();
+            // MsgReply::del_reply($id);
             $message = "刪除成功";
 
             return redirect()->route('reply.show', $request->input("msg_id"))->with('message', $message);

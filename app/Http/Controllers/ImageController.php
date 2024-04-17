@@ -111,34 +111,36 @@ class ImageController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $request->validate([
+            'img_content' => 'required|max:200',
+        ]);
         $id_img = $request->input('img_id');
         $user_account = $request->session()->get('account');
         $content = $request->input('img_content');
-
         if($content==''){ // 判斷是否有輸入值輸入，沒有則返回首頁
-            $message = "非法操作1";
+            $message = "非法操作";
             return redirect()->route('msg.index')->with('error', $message);
         }else{
-            if(mb_strlen($content) > 200){ // 判斷輸入值是否超過上限
-                $message = "輸入超過200個字";
+            // if(mb_strlen($content) > 200){ // 判斷輸入值是否超過上限
+            //     $message = "輸入超過200個字";
+            //     return redirect()->route('msg.index')->with('error', $message);
+            // }else{
+            $img_data = Image::find($id_img);
+            // dd($id_img);
+            if($user_account != $img_data->user_account || $img_data == null){ // 判斷是否是發佈者進行的修改
+                $message = "非法操作";
                 return redirect()->route('msg.index')->with('error', $message);
             }else{
-                $img_data = Image::find_img($id_img);
-                
-                // dd($id_img);
-
-                if($user_account != $img_data->user_account || $img_data == null){ // 判斷是否是發佈者進行的修改
-                    $message = "非法操作2";
-                    return redirect()->route('msg.index')->with('error', $message);
-                }else{
-                    // $sql = "UPDATE msg SET title = ? , content = ? WHERE id = ? ";
-                    // $stmt = $pdo->prepare($sql);
-                    // $stmt->execute(["$title", "$content", "$id"]);
-                    Image::img_update($id_img, $content);
-                    $message = "修改成功";
-                    return redirect()->route('member.space', $user_account)->with('message', $message);
-                }
+                // $sql = "UPDATE msg SET title = ? , content = ? WHERE id = ? ";
+                // $stmt = $pdo->prepare($sql);
+                // $stmt->execute(["$title", "$content", "$id"]);
+                $img_data->img_content = $content;
+                $img_data->save();
+                // Image::img_update($id_img, $content);
+                $message = "修改成功";
+                return redirect()->route('member.space', $user_account)->with('message', $message);
             }
+            // }
         }
     }
 
@@ -147,20 +149,21 @@ class ImageController extends Controller
      */
     public function destroy(Request $request, string $id)
     {
-        $id_msg = $id;
         // dd("測試");
         $user_account = $request->session()->get('account');
-        $reply_data = Image::find_img($id_msg);
-        if($user_account != $reply_data->user_account || $reply_data == null){ // 判斷是否是發佈者進行的修改
+        $img_data = Image::find($id);
+        if($user_account != $img_data->user_account || $img_data == null){ // 判斷是否是發佈者進行的修改
             $message = "非法操作";
             return redirect()->route('msg.index')->with('error', $message);
         }else{
-            $new_img_name = $reply_data->img_url; // 產生一個隨機名稱加上原本的副檔名
+            $new_img_name = $img_data->img_url;
             $img_upload_path = 'public/upload/img/'.$new_img_name;
             $img_del_path = 'public/upload/del_img/'.$new_img_name;
             // dd(URL($img_upload_path),URL($img_del_path));
             Storage::move($img_upload_path, $img_del_path); // 將上傳檔案複製進指定資料夾
-            Image::img_del($id_msg);
+            $img_data->is_del = 1;
+            $img_data->save();
+            // Image::img_del($id);
             $message = "刪除成功";
 
             return redirect()->route('member.space', $user_account)->with('message', $message);

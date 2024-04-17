@@ -45,62 +45,60 @@
                 <p>
                     <button class="btn btn-outline-secondary control-all ">全部展開</button>
                 </p>
-                @for($i = 0 ; $i < count($message_reply) ; $i++)
-                    <div class="accordion" id="accordionExample{{ $i+1 }}">
+                @foreach($message_reply as $msg_reply)
+                    <div class="accordion" id="accordionExample{{ $loop->iteration }}">
                         <div class="accordion-item">
                             <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" style="background-color: #3ff8ff;" data-bs-toggle="collapse" data-bs-target="#collapseOne{{ $i+1 }}" aria-expanded="true" aria-controls="collapseOne{{ $i+1 }}">
-                                    <h1 class="h6 mb-0 lh-1">{{ $i+1 }}樓</h1>
+                                <button class="accordion-button collapsed" type="button" style="background-color: #3ff8ff;" data-bs-toggle="collapse" data-bs-target="#collapseOne{{ $loop->iteration }}" aria-expanded="true" aria-controls="collapseOne{{ $loop->iteration }}">
+                                    <h1 class="h6 mb-0 lh-1">{{ $loop->iteration }}樓</h1>
                                 </button>
                             </h2>
-                            <div id="collapseOne{{ $i+1 }}" class="accordion-collapse collapse" data-bs-parent="#accordionExample{{ $i+1 }}">
+                            <div id="collapseOne{{ $loop->iteration }}" class="accordion-collapse collapse" data-bs-parent="#accordionExample{{ $loop->iteration }}">
                                 <div class="accordion-body">
-                                    @if(!($message_content->is_del) && !($message_reply[$i]->is_del))
+                                    @if(!($message_content->is_del) && !($msg_reply->is_del))
                                         @if(Session::has('account'))
-                                            @if(Session::get('account') == $message_reply[$i]->user_account)
-                                                <input type="checkbox" id="check_box{{ $i+1 }}" value="{{ $i+1 }}">
-                                                <label for="check_box{{ $i+1 }}">修改</label>
+                                            @if(Session::get('account') == $msg_reply->user_account)
+                                                <input type="checkbox" id="check_box{{ $loop->iteration }}" value="{{ $loop->iteration }}">
+                                                <label for="check_box{{ $loop->iteration }}">修改</label>
                                             @endif
                                         @endif
                                     @endif
                                     <div class="my-3 p-3 bg-body rounded shadow-sm">
-                                        @if(!($message_reply[$i]->is_del))
-                                            <a class="account_font" href="{{ route('member.space', $message_reply[$i]->user_account) }}">
-                                                <h6 class="border-bottom pb-2 mb-0">{{ $message_reply[$i]->user_name }}</h6>
+                                        @if(!($msg_reply->is_del))
+                                            <a class="account_font" href="{{ route('member.space', $msg_reply->user_account) }}">
+                                                <h6 class="border-bottom pb-2 mb-0">{{ $msg_reply->user_name }}</h6>
                                             </a>
-                                        @else
-                                            <h6 class="border-bottom pb-2 mb-0">無</h6>
                                         @endif
-                                        <div style="overflow:hidden; white-space: nowrap; text-overflow: ellipsis;">
-                                            @if(!($message_reply[$i]->is_del))
-                                                <pre type="text" id="text_reply{{ $i+1 }}" style="white-space: pre-wrap;">{{ $message_reply[$i]->user_reply }}</pre>
-                                                <form style="width: 250px;" id="form_del{{ $i+1 }}" action="{{ route('reply.destroy', $message_reply[$i]->id) }}" method="post">
+                                        <div  style="word-break: break-all;">
+                                            @if(!($msg_reply->is_del))
+                                                <pre type="text" id="text_reply{{ $loop->iteration }}" style="white-space: pre-wrap;">{{ $msg_reply->user_reply }}</pre>
+                                                <form style="width: 250px;" id="form_del{{ $loop->iteration }}" action="{{ route('reply.destroy', $msg_reply->id) }}" method="post">
                                                     @csrf
                                                     @method('DELETE')
                                                     <input type="hidden" name="msg_id" value="{{ $message_content->id }}"/>
                                                 </form>
-                                                <form style="width: 250px;" id="form_sub{{ $i+1 }}" action="{{ route('reply.update', $message_reply[$i]->id) }}" method="post">
+                                                <form style="width: 250px;" id="form_sub{{ $loop->iteration }}" action="{{ route('reply.update', $msg_reply->id) }}" method="post">
                                                     @csrf
                                                     @method('PUT')
                                                     <input type="hidden" name="msg_id" value="{{ $message_content->id }}"/>
-                                                    <?php $line_count = substr_count($message_reply[$i]->user_reply, "\n");
-                                                        if($line_count < 2){
-                                                            $line_count = 2;
+                                                    <?php $line_count = substr_count($msg_reply->user_reply, "\n")+1;
+                                                        if($line_count < 3){
+                                                            $line_count = 3;
                                                     } ?>
-                                                    <textarea id="text_reply_modify{{ $i+1 }}" name="reply" rows="{{ $line_count }}" cols="50" hidden>{{ $message_reply[$i]->user_reply }}</textarea>
+                                                    <textarea id="text_reply_modify{{ $loop->iteration }}" name="reply" rows="{{ $line_count }}" cols="50" hidden>{{ $msg_reply->user_reply }}</textarea>
                                                 </form>
-                                                <button class="btn btn-outline-secondary" type="button" id="btn_delete{{ $i+1 }}" onclick="del({{ $i+1 }})" hidden>刪除</button>
-                                                <button class="btn btn-outline-secondary" type="button" id="btn_reply_update{{ $i+1 }}" onclick="sub({{ $i+1 }})" hidden>更新</button>
+                                                <button class="btn btn-outline-secondary" type="button" id="btn_delete{{ $loop->iteration }}" onclick="del({{ $loop->iteration }})" hidden>刪除</button>
+                                                <button class="btn btn-outline-secondary" type="button" id="btn_reply_update{{ $loop->iteration }}" onclick="sub({{ $loop->iteration }})" hidden>更新</button>
                                             @else
                                                 回覆已刪除
                                             @endif
                                         </div>
                                         <small class="d-block text-end mt-3">
-                                            @if(!($message_reply[$i]->is_del))
-                                                <span>回覆日期：{{ $message_reply[$i]->reply_time }}</span> |
-                                                <span>修改日期：{{ $message_reply[$i]->update_time }}</span>
+                                            @if(!($msg_reply->is_del))
+                                                <span>回覆日期：{{ $msg_reply->reply_time }}</span> |
+                                                <span>修改日期：{{ $msg_reply->update_time }}</span>
                                             @else
-                                                <span>刪除日期：{{ $message_reply[$i]->update_time }}</span>
+                                                <span>刪除日期：{{ $msg_reply->update_time }}</span>
                                             @endif
                                         </small>
                                     </div>
@@ -108,7 +106,7 @@
                             </div>
                         </div>
                     </div>
-                @endfor
+                @endforeach
             </main>
         @if(!($message_content->is_del))
             <form class="align-items-center p-3 my-3 rounded shadow-sm" action="{{ route('reply.store') }}" method="post">

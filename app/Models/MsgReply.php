@@ -33,32 +33,32 @@ class MsgReply extends Model
         return $msg;
                  
     }
-    public static function find_one_reply($id){
-        $msg = DB::table('msg_reply')
-                 ->select('id', 'msg_id', 'user_account', 'user_reply', 'reply_time', 'update_time', 'is_del')
-                 ->where('id', '=', $id)
-                //  ->paginate(10);
-                ->first();
-        return $msg;
+    // public static function find_one_reply($id){
+    //     $msg = DB::table('msg_reply')
+    //              ->select('id', 'msg_id', 'user_account', 'user_reply', 'reply_time', 'update_time', 'is_del')
+    //              ->where('id', '=', $id)
+    //             //  ->paginate(10);
+    //             ->first();
+    //     return $msg;
                  
-    }
-    public static function find_update($id, $reply){
-        $msg = DB::table('msg_reply')
-                //  ->select('title', 'content')
-                 ->where('id', '=', "$id")
+    // }
+    // public static function find_update($id, $reply){
+    //     $msg = DB::table('msg_reply')
+    //             //  ->select('title', 'content')
+    //              ->where('id', '=', "$id")
                  
-                //  ->paginate(10);
-                 ->update(['user_reply' => $reply]);
-        return $msg;
+    //             //  ->paginate(10);
+    //              ->update(['user_reply' => $reply]);
+    //     return $msg;
                  
-    }
-    public static function del_reply($id){
-        $msg = DB::table('msg_reply')
-                //  ->select('id')
-                 ->where('id', '=', "$id")
-                //  ->paginate(10);
-                 ->update(['is_del' => 1]);
-        return $msg;
+    // }
+    // public static function del_reply($id){
+    //     $msg = DB::table('msg_reply')
+    //             //  ->select('id')
+    //              ->where('id', '=', "$id")
+    //             //  ->paginate(10);
+    //              ->update(['is_del' => 1]);
+    //     return $msg;
                  
-    }
+    // }
 }

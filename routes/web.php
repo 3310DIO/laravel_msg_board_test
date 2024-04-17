@@ -28,7 +28,7 @@ Route::resource('/reply', ReplyController::class);
 
 // Route::resource('/member', MemberController::class);
 // Route::get('/member', [MemberController::class, 'index'])->name('member.index');
-// Route::get('/member/create', [MemberController::class, 'create'])->name('member.create');
+Route::get('/member/create', [MemberController::class, 'create'])->name('member.create');
 // Route::post('/member', [MemberController::class, 'store'])->name('member.store');
 // Route::get('/member/{id}', [MemberController::class, 'show'])->name('member.show');
 // Route::get('/member/{id}/edit', [MemberController::class, 'edit'])->name('member.edit');

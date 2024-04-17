@@ -37,7 +37,7 @@
                             <!-- <input type="hidden" id="msg_id" name="msg_id" value="{{ $msg_edit->id }}"/> -->
                             <!-- <input type="hidden" id="account" name="account" value="{{ $msg_edit->user_account }}"/> -->
                             <div class="col-12">
-                                <label for="account" class="form-label">名字：{{ Session::get('name') }}</label><br>
+                                <p class="form-label">名字：{{ Session::get('name') }}</p>
                                 <label for="title" class="form-label">標題：</label>
                                 <input type="text" class="form-control" id="title" name="title" value="{{ $msg_edit->title }}" required>
                                 <div class="invalid-feedback">

@@ -47,33 +47,41 @@ class MsgController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'title' => 'required|max:256',
+            'content' => 'required|max:5000',
+        ]);
+
         $msg = new MessageBoard();
-        $title = $request->input("title");
+        $title = $request->input("title", '');
         $user_account = $request->session()->get('account');
-        $content = $request->input("content");
+        $content = $request->input("content", '');
         
         // dd($title);
 
-        if($title == null || $content == null){ // 判斷是否有輸入值輸入，沒有則返回首頁
+        // $validatedData = $request->validate([
+        // dd($validatedData);
+        // if($title == '' || $content == ''){ // 判斷是否有輸入值輸入，沒有則返回首頁
 
-            $message = "非法操作";
-            return redirect()->route('msg.index')->with('error', $message);
-        }else{
-            if(mb_strlen($title) > 256 || mb_strlen($content) > 5000){ // 判斷輸入值是否超過上限
+        //     $message = "非法操作";
+        //     return redirect()->route('msg.index')->with('error', $message);
+        // }else{
+        //     if(mb_strlen($title) > 256 || mb_strlen($content) > 5000){ // 判斷輸入值是否超過上限
                 
-                $message = "輸入字元超過上限";
-                return redirect()->route('msg.create')->with('message', $message);
-            }else{
-                $msg->title = $title;
-                $msg->user_account = $user_account;
-                $msg->content = $content;
-                // dd($msg);
-                $msg->save();
-                $message = "新增成功";
-                return redirect()->route('msg.index')->with('message', $message);
-            }
-        }
+        //         $message = "輸入字元超過上限";
+        //         return redirect()->route('msg.create')->with('message', $message);
+        //     }else{
 
+        $msg->title = $title;
+        $msg->user_account = $user_account;
+        $msg->content = $content;
+        // dd($msg);
+        $msg->save();
+
+        $message = "新增成功";
+        return redirect()->route('msg.index')->with('message', $message);
+        //     }
+        // }
     }
 
     /**
@@ -92,10 +100,11 @@ class MsgController extends Controller
         $view = 'msg/newAndEditMsg';
         $model = array();
         $user_account = $request->session()->get('account');
-        
+        // $msg_edit = MessageBoard::find($id);
+        // dd($msg_edit);
         if(isset($id) && $id != 0){
             $msg_edit = MessageBoard::find_edit($id);
-            if($msg_edit == null || $user_account != $msg_edit->user_account){ // 判斷是否有輸入值輸入，沒有則返回首頁
+            if($msg_edit == '' || $msg_edit == null || $user_account != $msg_edit->user_account){ // 判斷是否有輸入值輸入，沒有則返回首頁
                 $message = "非法操作";
                 return redirect()->route('msg.index')->with('error', $message);
             }else{
@@ -119,36 +128,46 @@ class MsgController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $id_msg = $id;
-        $user_account = $request->session()->get('account');
-        $title = $request->input('title');
-        $content = $request->input('content');
+        $request->validate([
+            'title' => 'required|max:256',
+            'content' => 'required|max:5000',
+        ]);
 
-        if($title=='' || $content==''){ // 判斷是否有輸入值輸入，沒有則返回首頁
+        $user_account = $request->session()->get('account');
+        // $title = $request->input('title');
+        // $content = $request->input('content');
+
+        // if($title=='' || $content==''){ // 判斷是否有輸入值輸入，沒有則返回首頁
+        //     $message = "非法操作";
+        //     return redirect()->route('msg.index')->with('error', $message);
+        // }else{
+        //     if(mb_strlen($title) > 256 || mb_strlen($content) > 5000){ // 判斷輸入值是否超過上限
+        //         $message = "輸入標題超過256個字或內容超過5000上限";
+        //         return redirect()->route('msg.index')->with('error', $message);
+        //     }else{
+        // $msg_edit = MessageBoard::find_edit($id_msg);
+        $msg_edit = MessageBoard::find($id);
+        // dd($msg_edit);
+
+        if($user_account != $msg_edit->user_account || $msg_edit == null){ // 判斷是否是發佈者進行的修改
             $message = "非法操作";
             return redirect()->route('msg.index')->with('error', $message);
         }else{
-            if(mb_strlen($title) > 256 || mb_strlen($content) > 5000){ // 判斷輸入值是否超過上限
-                $message = "輸入標題超過256個字或內容超過5000上限";
-                return redirect()->route('msg.index')->with('error', $message);
-            }else{
-                $msg_edit = MessageBoard::find_edit($id_msg);
-                
-                // dd($msg_edit);
+            
+            $msg_edit->title = $request->input('title');
+            $msg_edit->content = $request->input('content');
+            // $sql = "UPDATE msg SET title = ? , content = ? WHERE id = ? ";
+            // $stmt = $pdo->prepare($sql);
+            // $stmt->execute(["$title", "$content", "$id"]);
+            // MessageBoard::find_update($id_msg, $title, $content);
+            $msg_edit->save();
 
-                if($user_account != $msg_edit->user_account || $msg_edit == null){ // 判斷是否是發佈者進行的修改
-                    $message = "非法操作";
-                    return redirect()->route('msg.index')->with('error', $message);
-                }else{
-                    // $sql = "UPDATE msg SET title = ? , content = ? WHERE id = ? ";
-                    // $stmt = $pdo->prepare($sql);
-                    // $stmt->execute(["$title", "$content", "$id"]);
-                    MessageBoard::find_update($id_msg, $title, $content);
-                    $message = "修改成功";
-                    return redirect()->route('msg.index')->with('message', $message);
-                }
-            }
+            $message = "修改成功";
+            return redirect()->route('msg.index')->with('message', $message);
         }
+
+        //     }
+        // }
 
     }
 
@@ -157,9 +176,8 @@ class MsgController extends Controller
      */
     public function destroy(Request $request, string $id)
     {
-        $id_msg = $id;
         $user_account = $request->session()->get('account');
-        $msg_edit = MessageBoard::find_edit($id_msg);
+        $msg_edit = MessageBoard::find($id);
         if($user_account != $msg_edit->user_account || $msg_edit == null){ // 判斷是否是發佈者進行的修改
             $message = "非法操作";
             return redirect()->route('msg.index')->with('error', $message);
@@ -167,7 +185,9 @@ class MsgController extends Controller
             // $sql = "UPDATE msg SET title = ? , content = ? WHERE id = ? ";
             // $stmt = $pdo->prepare($sql);
             // $stmt->execute(["$title", "$content", "$id"]);
-            MessageBoard::del_msg($id);
+            $msg_edit->is_del = 1;
+            $msg_edit->save();
+
             $message = "刪除成功";
 
             return redirect()->route('msg.index')->with('message', $message);

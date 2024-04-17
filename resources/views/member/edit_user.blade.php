@@ -29,11 +29,11 @@
                             <label for="floatingPasswordOld">舊密碼</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control" name="user_password_new" id="floatingPasswordNew" placeholder="輸入新密碼" required>
+                            <input type="password" class="form-control" name="user_password_new" id="floatingPasswordNew" placeholder="輸入新密碼">
                             <label for="floatingPasswordNew">新密碼</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control" name="user_password_check" id="floatingPasswordCheck" placeholder="確認新密碼" required>
+                            <input type="password" class="form-control" name="user_password_check" id="floatingPasswordCheck" placeholder="確認新密碼">
                             <label for="floatingPasswordCheck">新密碼確認</label>
                         </div>
                         <div class="checkbox mb-3">
