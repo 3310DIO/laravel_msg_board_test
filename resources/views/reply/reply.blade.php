@@ -12,7 +12,7 @@
 
     <div class="col-lg-8 mx-auto p-4 py-md-5 bg-body-tertiary">
             <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
-                <a href="{{ route('member.space', $message_content->user_account) }}" class="d-flex align-items-center text-body-emphasis text-decoration-none">
+                <a href="{{ route('member.show', $message_content->user_account) }}" class="d-flex align-items-center text-body-emphasis text-decoration-none">
                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-hexagon-half" viewBox="0 0 16 16">
                         <path d="M14 4.577v6.846L8 15V1zM8.5.134a1 1 0 0 0-1 0l-6 3.577a1 1 0 0 0-.5.866v6.846a1 1 0 0 0 .5.866l6 3.577a1 1 0 0 0 1 0l6-3.577a1 1 0 0 0 .5-.866V4.577a1 1 0 0 0-.5-.866z"/>
                     </svg>
@@ -65,7 +65,7 @@
                                     @endif
                                     <div class="my-3 p-3 bg-body rounded shadow-sm">
                                         @if(!($msg_reply->is_del))
-                                            <a class="account_font" href="{{ route('member.space', $msg_reply->user_account) }}">
+                                            <a class="account_font" href="{{ route('member.show', $msg_reply->user_account) }}">
                                                 <h6 class="border-bottom pb-2 mb-0">{{ $msg_reply->user_name }}</h6>
                                             </a>
                                         @endif
@@ -81,10 +81,12 @@
                                                     @csrf
                                                     @method('PUT')
                                                     <input type="hidden" name="msg_id" value="{{ $message_content->id }}"/>
-                                                    <?php $line_count = substr_count($msg_reply->user_reply, "\n")+1;
-                                                        if($line_count < 3){
-                                                            $line_count = 3;
-                                                    } ?>
+                                                    @php
+                                                        $line_count = substr_count($msg_reply->user_reply, "\n")+1;
+                                                            if($line_count < 3){
+                                                                $line_count = 3;
+                                                        }
+                                                    @endphp
                                                     <textarea id="text_reply_modify{{ $loop->iteration }}" name="reply" rows="{{ $line_count }}" cols="50" hidden>{{ $msg_reply->user_reply }}</textarea>
                                                 </form>
                                                 <button class="btn btn-outline-secondary" type="button" id="btn_delete{{ $loop->iteration }}" onclick="del({{ $loop->iteration }})" hidden>刪除</button>
@@ -112,7 +114,7 @@
             <form class="align-items-center p-3 my-3 rounded shadow-sm" action="{{ route('reply.store') }}" method="post">
                 @csrf
                 <input type="hidden" name="msg_id" value="{{ $message_content->id }}"/>
-                <textarea  class="form-control" type="text" id="reply" name="reply" rows="10" required></textarea><br>
+                <textarea  class="form-control" type="text" id="reply" name="reply" rows="10" style="resize: none;" required></textarea><br>
                 <p><button class="btn btn-outline-secondary" type="submit">回覆</button></p>
             </from>
         @endif

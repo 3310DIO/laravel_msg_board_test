@@ -9,6 +9,7 @@
 @endif
 @if(Session::has('error') || $errors->any())
     <div class="alert alert-danger text-center" role="alert">
+        <h1>錯誤</h1>
         {{ Session::get('error') }}
         @foreach($errors->all() as $error)
             <li>{{ $error }}</li>

@@ -20,7 +20,7 @@
                     <h1 class="fw-light">搜尋：{{ $search }}</h1>
                 @endif
                 <div>
-                    <form action="{{ route('msg.index') }}"> <?php // 可以不寫action ?>
+                    <form action="{{ route('msg.index') }}">
                         @csrf
                         <input class="form-control" type="text" id="site-search" name="search" placeholder="輸入標題" value="{{ $search }}"></label>
                         <button class="btn btn-primary my-2">Search</button>

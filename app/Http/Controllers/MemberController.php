@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use App\Models\Member;
@@ -38,6 +39,16 @@ class MemberController extends Controller
             'user_name' => 'required|between:2,20',
             'user_password' => 'required|regex:/^(?=.*\d)(?=.*[a-zA-Z])(?=.*\W).{8,25}$/',
             'user_password_check' => 'required|same:user_password',
+        ],[
+            'user_account.required' => '請輸入帳號',
+            'user_account.between' => '帳號需在8~20字間',
+            'user_account.alpha_num' => '帳號需由字母或數字構成',
+            'user_name.required' => '請輸入暱稱',
+            'user_name.between' => '暱稱需在2~20字間',
+            'user_password.required' => '請輸入密碼',
+            'user_password.regex' => '密碼須在8~25字之間，並包含大小寫字母及特殊符號',
+            'user_password_check.required' => '請輸入確認密碼',
+            'user_password_check.same' => '密碼與確認密碼不同',
         ]);
 
         $member = new Member();
@@ -72,8 +83,8 @@ class MemberController extends Controller
             $member->user_name = $user_name;
             $member->user_password = $password_hash;
             $member->save();
-            $request->session()->put('account', $user_account);
-            $request->session()->put('name', $user_name);
+            session()->put('account', $user_account);
+            session()->put('name', $user_name);
             // session_start();
             // $_SESSION["user_account"] = $user_account;
             // $_SESSION["user_name"] = $user_name;
@@ -90,16 +101,37 @@ class MemberController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $user_account)
     {
-        //
+        $account = Member::find_member($user_account);
+        if($account == null){
+            $message = "錯誤";
+
+            return redirect()->route('msg.index')->with('error', $message);
+        }
+        
+        $model = array();
+
+        $view = 'member/space';
+        $img = Member::member_space($user_account);
+        $model['user_spaces'] = $img;
+        $user_introduce = Member::member_introduce($user_account);
+        $model['account'] = $user_introduce;
+        $model['img_id'] = 0;
+        // dd($account);
+        return View($view, $model);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $user_account)
     {
+        $sql = Member::find_member($user_account);
+        if($sql == null || session()->get('account') != $user_account){
+            $message = "非法操作";
+            return redirect()->route('msg.index')->with('error', $message);
+        }
         return View('member/edit_user');
     }
 
@@ -108,55 +140,97 @@ class MemberController extends Controller
      */
     public function update(Request $request, string $account)
     {
-        $user_account = $account;
+        // $user_account = session()->get('account');
         // dd($user_account);
-        $user_name_old = $request->session()->get('name');
-        $user_name = $request->input("user_name", '');
-        $user_password_old = $request->input("user_password_old", '');
-        $user_password_new = $request->input("user_password_new", '');
-        $user_password_check = $request->input("user_password_check", '');
-        $sql = Member::find_member($user_account);
+        // dd(Route::currentRouteName());
+        $user_name_old = session()->get('name');
+        $sql = Member::find_member($account);
         // dd($sql);
+        if($sql == null || session()->get('account') != $account){
+            $message = "非法操作";
+            return redirect()->route('msg.index')->with('error', $message);
+        }
         $member_date = Member::find($sql->user_id);
-        if($user_name != '' && $user_name != $user_name_old){
-            $request->validate([
-                'user_name' => 'between:2,20',
-            ]);
-            $member_date->user_name = $user_name;
-            // Member::name_update($user_account, $user_name);
-            $request->session()->put('name', $user_name);
-        }
-        if($user_password_old != '' && $user_password_new != '' && $user_password_check != ''){
-            $request->validate([
-                'user_password_old' => 'regex:/^(?=.*\d)(?=.*[a-zA-Z])(?=.*\W).{8,25}$/',
-                'user_password_new' => 'regex:/^(?=.*\d)(?=.*[a-zA-Z])(?=.*\W).{8,25}$/',
-                'user_password_check' => 'same:user_password_new',
-            ]);
-            $password_hash = password_hash($user_password_new, PASSWORD_DEFAULT);
-            $member_date->user_password = $password_hash;
-            // Member::password_update($user_account, $password_hash);
-        }
-        if(($user_name == '' || $user_name == $user_name_old) && $user_password_old == '' && $user_password_new == '' && $user_password_check == ''){
-            $message = "請輸入修改內容";
 
-            return redirect()->route('member.edit', $request->session()->get('account'))->with('error', $message);
+
+        if(session()->get('page') == 'edit_user'){
+            $user_name = $request->input("user_name", '');
+            $user_password_old = $request->input("user_password_old", '');
+            $user_password_new = $request->input("user_password_new", '');
+            $user_password_check = $request->input("user_password_check", '');
+
+            if($user_name != '' && $user_name != $user_name_old){
+                $request->validate([
+                    'user_name' => 'between:2,20',
+                ],[
+                    'user_name.between' => '暱稱需在2~20字間',
+                ]);
+                $member_date->user_name = $user_name;
+                // Member::name_update($user_account, $user_name);
+                session()->put('name', $user_name);
+            }
+            if($user_password_old != '' && $user_password_new != '' && $user_password_check != ''){
+                if(!($user_password_old == '' || password_verify($user_password_old, $member_date->user_password))){
+                    $message = '舊密碼錯誤，請重新輸入';
+                    return redirect()->route('member.edit', session()->get('account'))->with('error', $message);
+                }else{
+                    $request->validate([
+                        'user_password_new' => 'regex:/^(?=.*\d)(?=.*[a-zA-Z])(?=.*\W).{8,25}$/',
+                        'user_password_check' => 'same:user_password_new',
+                    ],[
+                        'user_password_new.regex' => '密碼須在8~25字之間，並包含大小寫字母及特殊符號',
+                        'user_password_check.regex' => '密碼與確認密碼不同',
+                    ]);
+                }
+
+                $password_hash = password_hash($user_password_new, PASSWORD_DEFAULT);
+                $member_date->user_password = $password_hash;
+                // Member::password_update($user_account, $password_hash);
+            }
+
+            if(($user_name == '' || $user_name == $user_name_old) && $user_password_old == '' && $user_password_new == '' && $user_password_check == ''){
+                $message = "請輸入修改內容";
+
+                return redirect()->route('member.edit', session()->get('account'))->with('error', $message);
+            }
+            $message = "修改成功";
+            $member_date->save();
+            return redirect()->route('msg.index')->with('message', $message);
+
+        }elseif(session()->get('page') == 'space'){
+            $user_introduce = $request->input("user_introduce", '');
+
+            if($user_introduce != '' && $user_introduce != $member_date->user_introduce){
+                $request->validate([
+                    'user_introduce' => 'max:500',
+                ],[
+                    'user_introduce.max' => '簡介需在500字之間',
+                ]);
+                $member_date->user_introduce = $user_introduce;
+            }else{
+                $message = "請輸入修改內容";
+
+                return redirect()->route('member.show', session()->get('account'))->with('error', $message);
+            }
+            $message = "修改成功";
+            $member_date->save();
+            return redirect()->route('member.show', session()->get('account'))->with('message', $message);
         }
-        $message = "修改成功";
-        $member_date->save();
-        return redirect()->route('msg.index')->with('message', $message);
+
+        
 
         // if(!($user_password_old == '' || password_verify($user_password_old, $sql->user_password))){
         //     $message = '舊密碼錯誤，請重新輸入';
-        //     return redirect()->route('member.show', $request->session()->get('account'))->with('error', $message);
+        //     return redirect()->route('member.show', session()->get('account'))->with('error', $message);
         // }else{
         //     if($user_password_new != $user_password_check){
         //         $message = "新密碼與確認密碼不同";
-        //         return redirect()->route('member.show', $request->session()->get('account'))->with('error', $message);
+        //         return redirect()->route('member.show', session()->get('account'))->with('error', $message);
         //     }else{
         //         if($user_name != ''){
         //             if(!(preg_match('/^.{2,20}$/', $user_name))){
         //                 $message = '暱稱需在2~20字間';
-        //                 return redirect()->route('member.show', $request->session()->get('account'))->with('error', $message);
+        //                 return redirect()->route('member.show', session()->get('account'))->with('error', $message);
         //             }else{
         //                 Member::name_update($user_account, $user_name);
         //             }
@@ -164,14 +238,14 @@ class MemberController extends Controller
         //         if($user_password_old != '' &&  $user_password_new != ''){
         //             if(!(preg_match('/^(?=.*\d)(?=.*[a-zA-Z])(?=.*\W).{8,25}$/', $user_password_new))){
         //                 $message = '密碼需在8~25字間，且密碼須包含英文大小寫、數字及特殊符號';
-        //                 return redirect()->route('member.show', $request->session()->get('account'))->with('error', $message);
+        //                 return redirect()->route('member.show', session()->get('account'))->with('error', $message);
         //             }else{
         //                 $password_hash = password_hash($user_password_new, PASSWORD_DEFAULT);
         //                 Member::password_update($user_account, $password_hash);
         //             }
         //         }
         //         $message = "修改成功";
-        //         $request->session()->put('name', $user_name);
+        //         session()->put('name', $user_name);
         
         //         return redirect()->route('msg.index')->with('message', $message);
         //     }
@@ -220,8 +294,8 @@ class MemberController extends Controller
     }
     public function logout(Request $request)
     {
-        $request->session()->flush();
-        // dd($request->session());
+        session()->flush();
+        // dd(session());
         $message = "登出成功";
 
         return redirect()->route('msg.index')->with('message', $message);

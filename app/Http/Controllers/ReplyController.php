@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use App\Models\MsgReply;
+use App\Models\MessageBoard;
 
 class ReplyController extends Controller
 {
@@ -31,11 +32,16 @@ class ReplyController extends Controller
     public function store(Request $request)
     {
         $msg = new MsgReply();
-        $user_account = $request->session()->get('account','');
+        $user_account = session()->get('account','');
+        $msg_id = $request->input('msg_id');
         
         $request->validate([
             'reply' => 'required|max:1500',
             'msg_id' => 'required',
+        ],[
+            'reply.required' => '請輸入回覆內容',
+            'reply.max' => '回覆內容不能超過1500字',
+            'msg_id.required' => '請登錄',
         ]);
 
         if($user_account == ''){
@@ -43,24 +49,25 @@ class ReplyController extends Controller
 
             return redirect()->route('reply.show', $request->input("msg_id"))->with('message', $message);
         }else{
-            // if(mb_strlen($user_reply) > 1500){ // 判斷輸入值是否超過上限
-            //     $message = "輸入字元超過1500上限";
+            $msg_content = MessageBoard::find($msg_id);
+            // dd($msg_id);
+            if($msg_content->is_del){ // 判斷輸入值是否超過上限
+                $message = "該文章已刪除";
 
-            //     return redirect()->route('reply.show', $request->input("msg_id"))->with('error', $message);
-            // }else{
+                return redirect()->route('msg.index')->with('error', $message);
+            }else{
+                // $msg_id = $request->input("msg_id");
+                $user_reply = $request->input("reply");
 
-            $msg_id = $request->input("msg_id");
-            $user_reply = $request->input("reply");
+                $msg->user_account = $user_account;
+                $msg->msg_id = $msg_id;
+                $msg->user_reply = $user_reply;
+                // dd($msg);
+                $msg->save();
+                $message = "回覆成功";
 
-            $msg->user_account = $user_account;
-            $msg->msg_id = $msg_id;
-            $msg->user_reply = $user_reply;
-            // dd($msg);
-            $msg->save();
-            $message = "回覆成功";
-
-            return redirect()->route('reply.show', $msg_id)->with('message', $message);
-            // }
+                return redirect()->route('reply.show', $msg_id)->with('message', $message);
+            }
         }
     }
 
@@ -105,10 +112,13 @@ class ReplyController extends Controller
     {
         $request->validate([
             'reply' => 'required|max:1500',
+        ],[
+            'reply.required' => '請輸入回覆內容',
+            'reply.max' => '回覆內容不能超過1500字',
         ]);
 
         $reply = $request->input('reply');
-        $user_account = $request->session()->get('account');
+        $user_account = session()->get('account');
         // if(mb_strlen($reply) > 1500){ // 判斷輸入值是否超過上限
         //     $message = "輸入字元超過上限";
 
@@ -121,7 +131,7 @@ class ReplyController extends Controller
 
             return redirect()->route('reply.show', $request->input("msg_id"))->with('error', $message);
         }else{
-            $reply_data->reply = $reply;
+            $reply_data->user_reply = $reply;
             $reply_data->save();
             // MsgReply::find_update($msg_id, $reply);
             $message = "修改成功";
@@ -136,7 +146,7 @@ class ReplyController extends Controller
      */
     public function destroy(Request $request, string $id)
     {
-        $user_account = $request->session()->get('account');
+        $user_account = session()->get('account');
         $reply_data = MsgReply::find($id);
         if($user_account != $reply_data->user_account || $reply_data == null){ // 判斷是否是發佈者進行的修改
             $message = "非法操作";

@@ -30,7 +30,7 @@ class ImageController extends Controller
     public function store(Request $request)
     {
         $img_data = $request->file('my_img');
-        $user_account = $request->session()->get('account');
+        $user_account = session()->get('account');
         $img_name = $img_data->getClientOriginalName();
         $img_size = $img_data->getSize();
         $img_tmp_name = $img_data->getPathname();
@@ -47,15 +47,15 @@ class ImageController extends Controller
         }
         if(!($request->hasFile('my_img'))){
             $message = '非法操作';
-            return redirect()->route('member.space', $user_account)->with('error', $message);
+            return redirect()->route('member.show', $user_account)->with('error', $message);
         }else{
             if(!($img_error === 0)){ // 判斷是否有錯誤訊息
                 $message = '未知的錯誤';
-                return redirect()->route('member.space', $user_account)->with('error', $message);
+                return redirect()->route('member.show', $user_account)->with('error', $message);
             }else{
                 if($img_size > 10485760){ // 判斷大小是否超過10MB
                     $message = '上傳影像不能超過10MB';
-                    return redirect()->route('member.space', $user_account)->with('error', $message);
+                    return redirect()->route('member.show', $user_account)->with('error', $message);
                 }else{
                     $img_ex = pathinfo($img_name, PATHINFO_EXTENSION); // 只保留副檔名
                     // echo"$img_ex";
@@ -64,7 +64,7 @@ class ImageController extends Controller
                     $allow_img = array("jpg", "jpeg", "png"); // 允許的圖片格式
                     if(!(in_array($img_ex_lc, $allow_img))){ // 判斷格式是否符合預設條件
                         $message = '不支援的影像格式';
-                        return redirect()->route('member.space', $user_account)->with('error', $message);
+                        return redirect()->route('member.show', $user_account)->with('error', $message);
                     }else{
                         $new_img_name = uniqid("IMG-", true).'.'.$img_ex_lc; // 產生一個隨機名稱加上原本的副檔名
                         $img_upload_path = $request->getSchemeAndHttpHost() . '/upload/img/'.$new_img_name; 
@@ -80,7 +80,7 @@ class ImageController extends Controller
                         // dd($msg);
                         $new_img->save();
                         $message = '上傳成功';
-                        return redirect()->route('member.space', $user_account)->with('message', $message);
+                        return redirect()->route('member.show', $user_account)->with('message', $message);
                     }
                 }
             }
@@ -113,9 +113,12 @@ class ImageController extends Controller
     {
         $request->validate([
             'img_content' => 'required|max:200',
+        ],[
+            'img_content.required' => '請輸入圖片內容',
+            'img_content.max' => '圖片內容須在200字以內',
         ]);
         $id_img = $request->input('img_id');
-        $user_account = $request->session()->get('account');
+        $user_account = session()->get('account');
         $content = $request->input('img_content');
         if($content==''){ // 判斷是否有輸入值輸入，沒有則返回首頁
             $message = "非法操作";
@@ -138,7 +141,7 @@ class ImageController extends Controller
                 $img_data->save();
                 // Image::img_update($id_img, $content);
                 $message = "修改成功";
-                return redirect()->route('member.space', $user_account)->with('message', $message);
+                return redirect()->route('member.show', $user_account)->with('message', $message);
             }
             // }
         }
@@ -150,7 +153,7 @@ class ImageController extends Controller
     public function destroy(Request $request, string $id)
     {
         // dd("測試");
-        $user_account = $request->session()->get('account');
+        $user_account = session()->get('account');
         $img_data = Image::find($id);
         if($user_account != $img_data->user_account || $img_data == null){ // 判斷是否是發佈者進行的修改
             $message = "非法操作";
@@ -166,7 +169,7 @@ class ImageController extends Controller
             // Image::img_del($id);
             $message = "刪除成功";
 
-            return redirect()->route('member.space', $user_account)->with('message', $message);
+            return redirect()->route('member.show', $user_account)->with('message', $message);
         }
     }
 }

@@ -50,11 +50,16 @@ class MsgController extends Controller
         $request->validate([
             'title' => 'required|max:256',
             'content' => 'required|max:5000',
+        ],[
+            'title.required' => '請輸入標題',
+            'title.max' => '標題不能超過256字',
+            'content.required' => '請輸入內容',
+            'content.max' => '內容不能超過5000字',
         ]);
 
         $msg = new MessageBoard();
         $title = $request->input("title", '');
-        $user_account = $request->session()->get('account');
+        $user_account = session()->get('account');
         $content = $request->input("content", '');
         
         // dd($title);
@@ -99,12 +104,12 @@ class MsgController extends Controller
     {
         $view = 'msg/newAndEditMsg';
         $model = array();
-        $user_account = $request->session()->get('account');
+        $user_account = session()->get('account', '');
         // $msg_edit = MessageBoard::find($id);
         // dd($msg_edit);
         if(isset($id) && $id != 0){
             $msg_edit = MessageBoard::find_edit($id);
-            if($msg_edit == '' || $msg_edit == null || $user_account != $msg_edit->user_account){ // 判斷是否有輸入值輸入，沒有則返回首頁
+            if($msg_edit == '' || $msg_edit == null || $user_account != $msg_edit->user_account || $msg_edit->is_del){ // 判斷是否有輸入值輸入，沒有則返回首頁
                 $message = "非法操作";
                 return redirect()->route('msg.index')->with('error', $message);
             }else{
@@ -113,11 +118,16 @@ class MsgController extends Controller
                 // dd($users);
             }
         }else{
-            $msg_edit = new MessageBoard;
-            $msg_edit->user_account = $user_account;
-            $msg_edit->title = "";
-            $msg_edit->content = "";
-            $model['msg_edit'] = $msg_edit;
+            if($user_account != ''){
+                $msg_edit = new MessageBoard;
+                $msg_edit->user_account = $user_account;
+                $msg_edit->title = "";
+                $msg_edit->content = "";
+                $model['msg_edit'] = $msg_edit;
+            }else{
+                $message = "請登錄再留言";
+                return redirect()->route('member.index')->with('error', $message);
+            }
         }
         $model['id'] = $id;
         return View($view, $model);
@@ -131,9 +141,14 @@ class MsgController extends Controller
         $request->validate([
             'title' => 'required|max:256',
             'content' => 'required|max:5000',
+        ],[
+            'title.required' => '請輸入標題',
+            'title.max' => '標題不能超過256字',
+            'content.required' => '請輸入內容',
+            'content.max' => '內容不能超過5000字',
         ]);
 
-        $user_account = $request->session()->get('account');
+        $user_account = session()->get('account');
         // $title = $request->input('title');
         // $content = $request->input('content');
 
@@ -176,7 +191,7 @@ class MsgController extends Controller
      */
     public function destroy(Request $request, string $id)
     {
-        $user_account = $request->session()->get('account');
+        $user_account = session()->get('account');
         $msg_edit = MessageBoard::find($id);
         if($user_account != $msg_edit->user_account || $msg_edit == null){ // 判斷是否是發佈者進行的修改
             $message = "非法操作";

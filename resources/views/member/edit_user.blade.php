@@ -14,7 +14,9 @@
     <div class="d-flex align-items-center py-4 bg-body-tertiary">
         <div class="container col-xl-10 px-4 py-5">
             <div class="row align-items-center g-lg-5 py-5">
-
+                @php
+                    session()->put('page', 'edit_user');
+                @endphp
                 <h1 class="text-center">編輯{{ Session::get('account') }}的帳號</h1>
                 <div class="col-md-10 mx-auto col-lg-5">
                     <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" id="form_register" action="{{ route('member.update', Session::get('account')) }}" method="post">
@@ -47,7 +49,7 @@
                         <hr class="my-4">
                         <!-- <small class="text-body-secondary">點選「登錄」即表示您同意使用條款。</small> -->
                         <div class="text-center">
-                            <a class="btn btn-outline-dark me-2" href="{{ route('member.space', Session::get('account')) }}">返回個人空間</a>
+                            <a class="btn btn-outline-dark me-2" href="{{ route('member.show', Session::get('account')) }}">返回個人空間</a>
                         </div>
                     </form>
                 </div>

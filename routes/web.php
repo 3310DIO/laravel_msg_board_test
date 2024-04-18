@@ -37,7 +37,7 @@ Route::get('/member/create', [MemberController::class, 'create'])->name('member.
 
 Route::post('/member/login', [MemberController::class, 'login'])->name('member.login');
 Route::get('/member/logout', [MemberController::class, 'logout'])->name('member.logout');
-Route::get('/member/space/{id}', [MemberController::class, 'space'])->name('member.space');
+// Route::get('/member/space/{id}', [MemberController::class, 'space'])->name('member.space');
 Route::get('/member/{id}', [MemberController::class, 'show'])->name('member.show');
 Route::resource('/member', MemberController::class);
 Route::resource('/img', ImageController::class);

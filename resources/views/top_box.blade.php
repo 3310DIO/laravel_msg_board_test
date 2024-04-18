@@ -5,7 +5,7 @@
             @if(Session::has('account'))
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
                     <li class="nav-item">
-                        <a class="btn btn-outline-light me-2" aria-current="page" href="{{ route('member.space', Session::get('account')) }}">{{ Session::get('name') }}</a>
+                        <a class="btn btn-outline-light me-2" aria-current="page" href="{{ route('member.show', Session::get('account')) }}">{{ Session::get('name') }}</a>
                     </li>
                     <li class="nav-item">
                         <span class="nav-link active" aria-current="page">您好</span>
