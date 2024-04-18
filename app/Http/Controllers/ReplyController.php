@@ -88,6 +88,7 @@ class ReplyController extends Controller
         }
         $model['message_content'] = $message_content;
         $message_reply = MsgReply::find_reply($id);
+        // dd(sizeof($message_reply));
         $model['message_reply'] = $message_reply;
         // dd($model_reply);
         // dd($model_content);

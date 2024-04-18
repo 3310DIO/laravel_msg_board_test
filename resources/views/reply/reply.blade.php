@@ -42,9 +42,9 @@
                         <span>建立日期：{{ $message_content->update_at }}</span>
                     </small>
                 @endif
-                <p>
-                    <button class="btn btn-outline-secondary control-all ">全部展開</button>
-                </p>
+                @if(sizeof($message_reply) != 0)
+                    <p><button class="btn btn-outline-secondary control-all ">全部展開</button></p>
+                @endif
                 @foreach($message_reply as $msg_reply)
                     <div class="accordion" id="accordionExample{{ $loop->iteration }}">
                         <div class="accordion-item">
