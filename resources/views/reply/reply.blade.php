@@ -85,7 +85,7 @@
                                                                 $line_count = 3;
                                                         }
                                                     @endphp
-                                                    <textarea id="text_reply_modify{{ $loop->iteration }}" name="reply" rows="{{ $line_count }}" cols="50" hidden>{{ $msg_reply->user_reply }}</textarea>
+                                                    <textarea id="text_reply_modify{{ $loop->iteration }}" style="font-family: 'Courier New', Courier, monospace;" name="reply" rows="{{ $line_count }}" cols="50" hidden>{{ $msg_reply->user_reply }}</textarea>
                                                 </form>
                                                 <button class="btn btn-outline-secondary" type="button" id="btn_delete{{ $loop->iteration }}" onclick="del({{ $loop->iteration }})" hidden>刪除</button>
                                                 <button class="btn btn-outline-secondary" type="button" id="btn_reply_update{{ $loop->iteration }}" onclick="sub({{ $loop->iteration }})" hidden>更新</button>
@@ -112,7 +112,7 @@
             <form class="align-items-center p-3 my-3 rounded shadow-sm" action="{{ route('reply.store') }}" method="post">
                 @csrf
                 <input type="hidden" name="msg_id" value="{{ $message_content->id }}"/>
-                <textarea  class="form-control" type="text" id="reply" name="reply" rows="10" style="resize: none;" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="回覆需在1500字以內" required></textarea><br>
+                <textarea  class="form-control" type="text" id="reply" name="reply" rows="10" style="resize: none; font-family: 'Courier New', Courier, monospace;" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="回覆需在1500字以內" required></textarea><br>
                 <p><button class="btn btn-outline-secondary" type="submit">回覆</button></p>
             </from>
         @endif
