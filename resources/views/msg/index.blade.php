@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-Hant-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    @include('head_use')
     <title>留言板</title>
 </head>
 <body>
@@ -41,7 +38,7 @@
                     </div>
                     <div class="my-3 p-3 bg-body rounded shadow-sm">
                         <a href="{{ route('reply.show', $message_board->id) }}">
-                            <h6 class="border-bottom pb-2 mb-0">標題：{{ $message_board->title }}</h6>
+                            <h6 class="border-bottom pb-2 mb-0">[{{ $message_board->subtitle }}] {{ $message_board->title }}</h6>
                         </a>
                         <div class="d-flex text-body-secondary pt-3">
                             <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false">

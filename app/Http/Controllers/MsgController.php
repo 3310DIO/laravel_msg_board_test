@@ -48,9 +48,12 @@ class MsgController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'subtitle' => 'required|max:2',
             'title' => 'required|max:256',
             'content' => 'required|max:5000',
         ],[
+            'subtitle.required' => '錯誤',
+            'subtitle.max' => '錯誤',
             'title.required' => '請輸入標題',
             'title.max' => '標題不能超過256字',
             'content.required' => '請輸入內容',
@@ -58,6 +61,7 @@ class MsgController extends Controller
         ]);
 
         $msg = new MessageBoard();
+        $subtitle = $request->input("subtitle", '');
         $title = $request->input("title", '');
         $user_account = session()->get('account');
         $content = $request->input("content", '');
@@ -76,7 +80,7 @@ class MsgController extends Controller
         //         $message = "輸入字元超過上限";
         //         return redirect()->route('msg.create')->with('message', $message);
         //     }else{
-
+        $msg->subtitle = $subtitle;
         $msg->title = $title;
         $msg->user_account = $user_account;
         $msg->content = $content;
@@ -139,9 +143,12 @@ class MsgController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
+            'subtitle' => 'required|max:2',
             'title' => 'required|max:256',
             'content' => 'required|max:5000',
         ],[
+            'subtitle.required' => '錯誤',
+            'subtitle.max' => '錯誤',
             'title.required' => '請輸入標題',
             'title.max' => '標題不能超過256字',
             'content.required' => '請輸入內容',
@@ -168,7 +175,7 @@ class MsgController extends Controller
             $message = "非法操作";
             return redirect()->route('msg.index')->with('error', $message);
         }else{
-            
+            $msg_edit->subtitle = $request->input('subtitle');
             $msg_edit->title = $request->input('title');
             $msg_edit->content = $request->input('content');
             // $sql = "UPDATE msg SET title = ? , content = ? WHERE id = ? ";

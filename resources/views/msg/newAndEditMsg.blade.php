@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-Hant-TW">
 <head>
-    <meta charset="UTF-8">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    @include('head_use')
     <title>編輯留言</title>
-
 </head>
 <body>
     @include('top_box')
@@ -39,16 +36,24 @@
                             <div class="col-12">
                                 <p class="form-label">名字：{{ Session::get('name') }}</p>
                                 <label for="title" class="form-label">標題：</label>
-                                <input type="text" class="form-control" id="title" name="title" value="{{ $msg_edit->title }}" required>
+                                <div class="input-group" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="標題需在256字以內">
+                                    <select class="form-select" id="subtitle" name="subtitle" aria-label="Example select with button addon">
+                                        <option value="問題" @if($msg_edit->subtitle == "問題") selected @endif>問題</option>
+                                        <option value="心情" @if($msg_edit->subtitle == "心情") selected @endif>心情</option>
+                                        <option value="攻略" @if($msg_edit->subtitle == "攻略") selected @endif>攻略</option>
+                                        <option value="其他" @if($msg_edit->subtitle == "其他") selected @endif>其他</option>
+                                    </select>
+                                    <input type="text" class="form-control" id="title" name="title" value="{{ $msg_edit->title }}" style="width: 85%" required>
+                                </div>
                                 <div class="invalid-feedback">
                                     請輸入標題
                                 </div>
-                            </div>
+                            </div><br>
 
                             <div class="col-12">
                                 <label for="content" class="form-label">留言：</label><br>
                                 <!-- <input type="text" class="form-control" id="content" placeholder="1234 Main St" required=""> -->
-                                <textarea class="form-control" id="content" name="content" rows="15" required>{{ $msg_edit->content }}</textarea>
+                                <textarea class="form-control" id="content" name="content" rows="15" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="留言需在5000字以內" required>{{ $msg_edit->content }}</textarea>
                                 <div class="invalid-feedback">
                                     請輸入內容
                                 </div>
@@ -75,6 +80,10 @@
         
 </body>
 <script>
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl)
+    })
     function sub(){ // 若刪除則送出表單
         if(!confirm('要發佈嗎？')){
             return false;

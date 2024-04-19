@@ -45,7 +45,7 @@ class ReplyController extends Controller
         ]);
 
         if($user_account == ''){
-            $message = "請登錄再回復";
+            $message = "請登錄再回覆";
 
             return redirect()->route('reply.show', $request->input("msg_id"))->with('message', $message);
         }else{

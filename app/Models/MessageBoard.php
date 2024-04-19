@@ -9,13 +9,13 @@ use Illuminate\Support\Facades\DB;
 class MessageBoard extends Model
 {
     protected $table = 'msg';
-    protected $fillable = ['user_account', 'title', 'content'];
+    protected $fillable = ['user_account', 'title', 'subtitle', 'content'];
     public $primaryKey = 'id';
     public $timestamps = false;
     public static function find_msg($search){
         $msg = DB::table('msg AS m')
                  ->join('member AS mem', 'm.user_account', '=', 'mem.user_account')
-                 ->select('m.id', 'm.user_account', 'm.title', 'm.content', 'm.created_at', 'm.update_at', 'm.is_del', 'mem.user_name');
+                 ->select('m.id', 'm.user_account', 'm.title', 'm.subtitle', 'm.content', 'm.created_at', 'm.update_at', 'm.is_del', 'mem.user_name');
         if(isset($search) && $search != ''){
             $msg = $msg->where('m.title', 'LIKE', "%$search%")
                        ->orderBy('m.update_at', 'DESC');
@@ -39,7 +39,7 @@ class MessageBoard extends Model
     public static function find_edit($id){
         $msg = DB::table('msg AS m')
                  ->join('member AS mem', 'm.user_account', '=', 'mem.user_account')
-                 ->select('m.id', 'm.user_account', 'm.title', 'm.content', 'm.created_at', 'm.update_at', 'm.is_del', 'mem.user_name')
+                 ->select('m.id', 'm.user_account', 'm.title', 'm.subtitle', 'm.content', 'm.created_at', 'm.update_at', 'm.is_del', 'mem.user_name')
                  ->where('m.id', '=', $id)
                 //  ->paginate(10);
                  ->first();

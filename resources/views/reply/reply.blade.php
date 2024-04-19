@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-Hant-TW">
 <head>
-    <meta charset="UTF-8">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    @include('head_use')
     <title>留言</title>
 </head>
 <body>
@@ -21,7 +19,7 @@
             </header>
             <main>
                 @if ($message_content->is_del == 0)
-                    <h1 class="text-body-emphasis">{{ $message_content->title }}</h1><br>
+                    <h3 class="text-body-emphasis">[{{ $message_content->subtitle }}] {{ $message_content->title }}</h3><br>
                     <div style="word-break: break-all;" >
                         <pre style="white-space: pre-wrap;" class="fs-5">{{ $message_content->content }}</pre>
                     </div>
@@ -114,7 +112,7 @@
             <form class="align-items-center p-3 my-3 rounded shadow-sm" action="{{ route('reply.store') }}" method="post">
                 @csrf
                 <input type="hidden" name="msg_id" value="{{ $message_content->id }}"/>
-                <textarea  class="form-control" type="text" id="reply" name="reply" rows="10" style="resize: none;" required></textarea><br>
+                <textarea  class="form-control" type="text" id="reply" name="reply" rows="10" style="resize: none;" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="回覆需在1500字以內" required></textarea><br>
                 <p><button class="btn btn-outline-secondary" type="submit">回覆</button></p>
             </from>
         @endif
@@ -122,6 +120,10 @@
 
 </body>
 <script>
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl)
+    })
     var control_all = document.querySelector("button.control-all");
     control_all.addEventListener("click", function(){
         if(this.getAttribute("data-lastState") === "0"){

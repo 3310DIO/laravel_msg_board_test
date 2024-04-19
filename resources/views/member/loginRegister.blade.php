@@ -1,12 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-Hant-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    @include('head_use')
     <title>註冊</title>
-    
 </head>
 <body>
     @include('message_box')
@@ -25,22 +21,30 @@
                         <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" action="{{ route('member.login') }}" method="post">
                     @endif
                         @csrf
-                        <div class="form-floating mb-3">
+                        @if($user == 0)
+                            <div class="form-floating mb-3" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="帳號僅能輸入8~20字且為英文及數字">
+                        @elseif($user == 1)
+                            <div class="form-floating mb-3">
+                        @endif
                             <input type="text" class="form-control" name="user_account" id="floatingInput" placeholder="帳號" required>
                             <label for="floatingInput">帳號</label>
                         </div>
                         @if($user == 0)
-                            <div class="form-floating mb-3">
+                            <div class="form-floating mb-3" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="暱稱僅能輸入2~20字">
                                 <input type="text" class="form-control" name="user_name" id="floatingName" placeholder="密碼" required>
                                 <label for="floatingName">暱稱</label>
                             </div>
                         @endif
-                        <div class="form-floating mb-3">
+                        @if($user == 0)
+                            <div class="form-floating mb-3" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="密碼需輸入輸入8~25字且包含大小寫英文數字及特殊符號">
+                        @elseif($user == 1)
+                            <div class="form-floating mb-3">
+                        @endif
                             <input type="password" class="form-control" name="user_password" id="floatingPassword" placeholder="密碼" required>
                             <label for="floatingPassword">密碼</label>
                         </div>
                         @if($user == 0)
-                            <div class="form-floating mb-3">
+                            <div class="form-floating mb-3" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="再次輸入密碼">
                                 <input type="password" class="form-control" name="user_password_check" id="floatingPasswordCheck" placeholder="密碼" required>
                                 <label for="floatingPasswordCheck">確認密碼</label>
                             </div>
@@ -73,6 +77,10 @@
 
 </body>
 <script>
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl)
+    })
     // 判斷密碼及確認密碼是否相同
     function check_password(){
         var pw = document.getElementById("floatingPassword").value;

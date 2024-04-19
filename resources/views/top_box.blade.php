@@ -11,7 +11,7 @@
                         <span class="nav-link active" aria-current="page">您好</span>
                     </li>
                 </ul>
-                <a class="btn btn-outline-light me-2" href="{{ route('msg.create') }}">新增留言</a>
+                <a class="btn btn-outline-light me-2" href="{{ route('msg.create') }}"><ion-icon class="fs-5 align-text-bottom" name="add-outline"></ion-icon>新增留言</a>
                 <a class="btn btn-outline-light me-2" href="{{ route('member.logout') }}">登出</a>
             @else
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
