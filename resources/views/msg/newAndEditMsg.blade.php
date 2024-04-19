@@ -53,7 +53,7 @@
                             <div class="col-12">
                                 <label for="content" class="form-label">留言：</label><br>
                                 <!-- <input type="text" class="form-control" id="content" placeholder="1234 Main St" required=""> -->
-                                <textarea class="form-control" id="content" name="content" rows="15" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="留言需在5000字以內" required>{{ $msg_edit->content }}</textarea>
+                                <textarea class="form-control" id="content" name="content" style="font-family: 'Courier New', Courier, monospace;" rows="15" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="留言需在5000字以內" required>{{ $msg_edit->content }}</textarea>
                                 <div class="invalid-feedback">
                                     請輸入內容
                                 </div>

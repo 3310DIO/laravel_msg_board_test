@@ -30,7 +30,7 @@
                                                 $line_count = 10;
                                         }
                                     @endphp
-                                    <textarea class="form-control" type="text" id="text_introduce_modify" name="user_introduce" rows="{{ $line_count }}" style="display: none;">{{ $account->user_introduce }}</textarea><br>
+                                    <textarea class="form-control" type="text" id="text_introduce_modify" name="user_introduce" rows="{{ $line_count }}" style="display: none; font-family: 'Courier New', Courier, monospace;">{{ $account->user_introduce }}</textarea><br>
                                     <p><button class="btn btn-outline-secondary" id="btn_introduce_update" style="display: none;">更新</button></p>
                                 </form>
                             @endif
