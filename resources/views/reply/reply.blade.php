@@ -32,12 +32,12 @@
                     @endif
                     <small class="d-block text-end mt-3">
                         <span>建立日期：{{ $message_content->created_at }}</span> |
-                        <span>修改日期：{{ $message_content->update_at }}</span>
+                        <span>修改日期：{{ $message_content->updated_at }}</span>
                     </small>
                 @else
                     <h1 class="text-body-emphasis">留言已刪除</h1></h1><br>
                     <small class="d-block text-end mt-3">
-                        <span>建立日期：{{ $message_content->update_at }}</span>
+                        <span>建立日期：{{ $message_content->updated_at }}</span>
                     </small>
                 @endif
                 @if(sizeof($message_reply) != 0)
