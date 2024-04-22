@@ -53,7 +53,7 @@
                         </div>
                         <small class="d-block text-end mt-3">
                             <span>建立日期：{{ $message_board->created_at }}</span> |
-                            <span>修改日期：{{ $message_board->updated_at }}</span>
+                            <span>修改日期：{{ $message_board->update_at }}</span>
                         </small>
                     </div>
                 @else
@@ -67,7 +67,7 @@
                             <h6 class="border-bottom pb-2 mb-0">留言已刪除</h6>
                         </a>
                         <small class="d-block text-end mt-3">
-                            <span>刪除日期：{{ $message_board->updated_at }}</span>
+                            <span>刪除日期：{{ $message_board->update_at }}</span>
                         </small>
                     </div>
                 @endif
