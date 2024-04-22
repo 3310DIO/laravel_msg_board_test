@@ -25,9 +25,9 @@ class MsgReply extends Model
     public static function find_reply($id){
         $msg = DB::table('msg_reply AS r')
                  ->join('member AS mem', 'r.user_account', '=', 'mem.user_account')
-                 ->select('r.id', 'r.msg_id', 'r.user_account', 'r.user_reply', 'r.reply_time', 'r.update_time', 'r.is_del', 'mem.user_name')
+                 ->select('r.id', 'r.msg_id', 'r.user_account', 'r.user_reply', 'r.created_at', 'r.updated_at', 'r.is_del', 'mem.user_name')
                  ->where('r.msg_id', '=', $id)
-                 ->orderBy('r.reply_time', 'ASC')
+                 ->orderBy('r.created_at', 'ASC')
                 //  ->paginate(10);
                 ->get();
         return $msg;
@@ -35,7 +35,7 @@ class MsgReply extends Model
     }
     // public static function find_one_reply($id){
     //     $msg = DB::table('msg_reply')
-    //              ->select('id', 'msg_id', 'user_account', 'user_reply', 'reply_time', 'update_time', 'is_del')
+    //              ->select('id', 'msg_id', 'user_account', 'user_reply', 'created_at', 'updated_at', 'is_del')
     //              ->where('id', '=', $id)
     //             //  ->paginate(10);
     //             ->first();

@@ -95,10 +95,10 @@
                                         </div>
                                         <small class="d-block text-end mt-3">
                                             @if(!($msg_reply->is_del))
-                                                <span>回覆日期：{{ $msg_reply->reply_time }}</span> |
-                                                <span>修改日期：{{ $msg_reply->update_time }}</span>
+                                                <span>回覆日期：{{ $msg_reply->created_at }}</span> |
+                                                <span>修改日期：{{ $msg_reply->updated_at }}</span>
                                             @else
-                                                <span>刪除日期：{{ $msg_reply->update_time }}</span>
+                                                <span>刪除日期：{{ $msg_reply->updated_at }}</span>
                                             @endif
                                         </small>
                                     </div>
