@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use App\Models\MessageBoard;
+use App\Models\Subtitle;
 
 class MsgController extends Controller
 {
@@ -18,6 +19,13 @@ class MsgController extends Controller
         $model = array();
         $search = $request->input('search', '');
         $search_sub = $request->input('subtitle', '');
+        $subtitle = Subtitle::find($search_sub);
+        // dd($search_sub);
+        if($search_sub != '' && $subtitle == null){
+            // dd($subtitle);
+            $message = "子標題錯誤";
+            return redirect()->route('msg.index')->with('error', $message);
+        }
 
         $patterns = ['/%/', '/_/'];
         // $patterns[1] = '/_/';
@@ -32,7 +40,7 @@ class MsgController extends Controller
         $model['message_boards'] = $message_boards;
         $model['search'] = $search;
         $model['subtitle'] = $search_sub;
-        // dd($users);
+        // dd($model);
         return View($view, $model);
     }
 
@@ -67,7 +75,11 @@ class MsgController extends Controller
         $title = $request->input("title", '');
         $user_account = session()->get('account');
         $content = $request->input("content", '');
-        
+        $subtitle_data = Subtitle::find($subtitle);
+        if($subtitle_data == null){
+            $message = "錯誤";
+            return redirect()->route('msg.edit', 0)->with('error', $message);
+        }
         // dd($title);
 
         // $validatedData = $request->validate([
@@ -124,16 +136,16 @@ class MsgController extends Controller
                 // dd($users);
             }
         }else{
-            if($user_account != ''){
+            // if($user_account == ''){
+            //     $message = "請登錄再留言";
+            //     return redirect()->route('member.index')->with('error', $message);
+            // }else{
                 $msg_edit = new MessageBoard;
                 $msg_edit->user_account = $user_account;
                 $msg_edit->title = "";
                 $msg_edit->content = "";
                 $model['msg_edit'] = $msg_edit;
-            }else{
-                $message = "請登錄再留言";
-                return redirect()->route('member.index')->with('error', $message);
-            }
+            // }
         }
         $model['id'] = $id;
         return View($view, $model);
@@ -156,7 +168,8 @@ class MsgController extends Controller
             'content.required' => '請輸入內容',
             'content.max' => '內容不能超過5000字',
         ]);
-
+        $subtitle = $request->input('subtitle');
+        $subtitle_data = Subtitle::find($subtitle);
         $user_account = session()->get('account');
         // $title = $request->input('title');
         // $content = $request->input('content');
@@ -177,9 +190,13 @@ class MsgController extends Controller
             $message = "非法操作";
             return redirect()->route('msg.index')->with('error', $message);
         }else{
-            $msg_edit->subtitle = $request->input('subtitle');
+            $msg_edit->subtitle = $subtitle;
             $msg_edit->title = $request->input('title');
             $msg_edit->content = $request->input('content');
+            if($subtitle_data == null){
+                $message = "錯誤";
+                return redirect()->route('msg.edit', 0)->with('error', $message);
+            }
             // $sql = "UPDATE msg SET title = ? , content = ? WHERE id = ? ";
             // $stmt = $pdo->prepare($sql);
             // $stmt->execute(["$title", "$content", "$id"]);

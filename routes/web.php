@@ -5,6 +5,7 @@ use App\Http\Controllers\MsgController;
 use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ImageController;
+use App\Http\Middleware\CheckLogin;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,9 @@ use App\Http\Controllers\ImageController;
 Route::get('/', function () {
     return view('welcome');
 });
+// Route::middleware([CheckLogin::class])->get('msg/create', [MsgController::class, 'create'])->name('member.create');
+Route::middleware('check_account')->get('msg/{id}/edit', [MsgController::class, 'edit'])->name('member.edit');
+
 Route::resource('/msg', MsgController::class);
 // Route::get('/msg', [MsgController::class, 'search'])->name('member.search');
 Route::resource('/reply', ReplyController::class);

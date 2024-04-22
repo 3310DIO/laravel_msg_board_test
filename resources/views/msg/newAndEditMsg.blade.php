@@ -38,10 +38,10 @@
                                 <label for="title" class="form-label">標題：</label>
                                 <div class="input-group" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="標題需在256字以內">
                                     <select class="form-select" id="subtitle" name="subtitle" aria-label="Example select with button addon">
-                                        <option value="問題" @if($msg_edit->subtitle == "問題") selected @endif>問題</option>
-                                        <option value="心情" @if($msg_edit->subtitle == "心情") selected @endif>心情</option>
-                                        <option value="攻略" @if($msg_edit->subtitle == "攻略") selected @endif>攻略</option>
-                                        <option value="其他" @if($msg_edit->subtitle == "其他") selected @endif>其他</option>
+                                        <option value="question" @if($msg_edit->subtitle == "question") selected @endif>問題</option>
+                                        <option value="feeling" @if($msg_edit->subtitle == "feeling") selected @endif>心情</option>
+                                        <option value="walkthrough" @if($msg_edit->subtitle == "walkthrough") selected @endif>攻略</option>
+                                        <option value="other" @if($msg_edit->subtitle == "other") selected @endif>其他</option>
                                     </select>
                                     <input type="text" class="form-control" id="title" name="title" value="{{ $msg_edit->title }}" style="width: 85%" required>
                                 </div>
