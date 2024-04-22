@@ -9,34 +9,39 @@
     @include('message_box')
 
     <main>
-        <section class="py-5 text-center container">
+        <section class="py-5 text-center" style="background-color: #0000001a;">
             <div class="row py-lg-5">
                 <div class="col-lg-6 col-md-8 mx-auto">
-                    <h1 class="fw-light">{{ $account->user_name }}的空間</h1>
-
-                        <div class="align-items-center p-3 my-3" style="word-break: break-all;">
-                            @php
-                                session()->put('page', 'space');
-                            @endphp
-                            @if($account->user_account == Session::get('account'))
-                                <form action="{{ route('member.update', session()->get('account')) }}" method="post">
-                                    @csrf
-                                    @method('PUT')
-                                    <h5 id="title_introduce" style="display: none;">簡介需在500字之間</h5>
-                                    <input type="hidden" name="msg_id" value=""/>
-                                    @php
-                                        $line_count = substr_count($account->user_introduce, "\n")+1;
-                                            if($line_count < 10){
-                                                $line_count = 10;
-                                        }
-                                    @endphp
-                                    <textarea class="form-control" type="text" id="text_introduce_modify" name="user_introduce" rows="{{ $line_count }}" style="display: none; font-family: 'Courier New', Courier, monospace;">{{ $account->user_introduce }}</textarea><br>
-                                    <p><button class="btn btn-outline-secondary" id="btn_introduce_update" style="display: none;">更新</button></p>
-                                </form>
-                            @endif
-                            <pre class="lead text-body-secondary" type="text" id="text_introduce" style="white-space: pre-wrap; display: block;">{{ $account->user_introduce }}</pre>
-                        </div>
-
+                    <h1 class="fw-light">
+                        <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false">
+                            <rect width="100%" height="100%" fill="{{ $account->user_color }}"></rect>
+                        </svg>
+                        {{ $account->user_name }}的空間
+                    </h1>
+                    <div class="align-items-center p-3 my-3" style="word-break: break-all;">
+                        @php
+                            session()->put('page', 'space');
+                        @endphp
+                        @if($account->user_account == Session::get('account'))
+                            <form action="{{ route('member.update', session()->get('account')) }}" method="post">
+                                @csrf
+                                @method('PUT')
+                                <p class="text-center" id="user_color" style="display: flex; align-items: center; display: none;">
+                                    修改個人顏色：<input type="color" name="user_color" value="{{ $account->user_color }}"/>
+                                </p>
+                                <h5 id="title_introduce" style="display: none;">簡介需在500字之間</h5>
+                                @php
+                                    $line_count = substr_count($account->user_introduce, "\n")+1;
+                                        if($line_count < 10){
+                                            $line_count = 10;
+                                    }
+                                @endphp
+                                <textarea class="form-control" type="text" id="text_introduce_modify" name="user_introduce" rows="{{ $line_count }}" style="display: none; font-family: 'Courier New', Courier, monospace;">{{ $account->user_introduce }}</textarea><br>
+                                <p><button class="btn btn-outline-secondary" id="btn_introduce_update" style="display: none;">更新</button></p>
+                            </form>
+                        @endif
+                        <pre class="lead text-body-secondary" type="text" id="text_introduce" style="white-space: pre-wrap; display: block;">{{ $account->user_introduce }}</pre>
+                    </div>
                     <p>
                         @if($account->user_account == Session::get('account'))
                             <a href="{{ route('member.edit', Session::get('account')) }}" class="btn btn-primary my-2">帳號設定</a>
@@ -131,6 +136,7 @@
 <script>
 
     const toggleButton = document.getElementById('modify_introduce');
+    const user_color = document.getElementById('user_color');
     const title_introduce = document.getElementById('title_introduce');
     const text_introduce = document.getElementById('text_introduce');
     const text_introduce_modify = document.getElementById('text_introduce_modify');
@@ -140,11 +146,13 @@
     toggleButton.addEventListener('click', function() {
         // 切换隐藏内容的显示状态
         if (text_introduce.style.display === 'block') {
+            user_color.style.display = 'block';
             title_introduce.style.display = 'block';
             text_introduce.style.display = 'none';
             text_introduce_modify.style.display = 'block';
             btn_introduce_update.style.display = 'block';
         } else {
+            user_color.style.display = 'none';
             title_introduce.style.display = 'none';
             text_introduce.style.display = 'block';
             text_introduce_modify.style.display = 'none';

@@ -12,16 +12,17 @@ class MessageBoard extends Model
     protected $fillable = ['user_account', 'title', 'subtitle', 'content'];
     public $primaryKey = 'id';
     public $timestamps = false;
-    public static function find_msg($search){
+    public static function find_msg($search, $subtitle){
         $msg = DB::table('msg AS m')
                  ->join('member AS mem', 'm.user_account', '=', 'mem.user_account')
-                 ->select('m.id', 'm.user_account', 'm.title', 'm.subtitle', 'm.content', 'm.created_at', 'm.updated_at', 'm.is_del', 'mem.user_name');
+                 ->select('m.id', 'm.user_account', 'm.title', 'm.subtitle', 'm.content', "mem.user_color", 'm.created_at', 'm.updated_at', 'm.is_del', 'mem.user_name');
         if(isset($search) && $search != ''){
-            $msg = $msg->where('m.title', 'LIKE', "%$search%")
-                       ->orderBy('m.updated_at', 'DESC');
-        }else{
-            $msg = $msg->orderBy('m.id', 'DESC');
+            $msg = $msg->where('m.title', 'LIKE', "%$search%");
         }
+        if($subtitle != '' && $subtitle != '全部'){
+            $msg = $msg->where('m.subtitle', '=', $subtitle);
+        }
+        $msg = $msg->orderBy('m.id', 'DESC');
         $msg = $msg->paginate(10);
                 //  ->get();
         return $msg;

@@ -118,6 +118,7 @@ class MemberController extends Controller
         $user_introduce = Member::member_introduce($user_account);
         $model['account'] = $user_introduce;
         $model['img_id'] = 0;
+        // dd($model['user_spaces'][2]);
         // dd($account);
         return View($view, $model);
     }
@@ -199,19 +200,35 @@ class MemberController extends Controller
 
         }elseif(session()->get('page') == 'space'){
             $user_introduce = $request->input("user_introduce", '');
+            $user_color = $request->input("user_color", '');
+            $user_introduce_old = $member_date->user_introduce;
+            $user_color_old = $member_date->user_color;
+            // dd($user_color);
 
-            if($user_introduce != '' && $user_introduce != $member_date->user_introduce){
+            if($user_introduce != '' && $user_introduce != $user_introduce_old){
                 $request->validate([
                     'user_introduce' => 'max:500',
                 ],[
                     'user_introduce.max' => '簡介需在500字之間',
                 ]);
                 $member_date->user_introduce = $user_introduce;
-            }else{
-                $message = "請輸入修改內容";
+            }
 
+            if($user_color != '' && $user_color != $user_color_old){
+                $request->validate([
+                    'user_color' => 'hex_color:#RRGGBB',
+                ],[
+                    'user_color.hex_color' => '不符合色碼標準',
+                ]);
+                $member_date->user_color = $user_color;
+            }
+
+            if(($user_introduce == '' || $user_introduce == $user_introduce_old) && ($user_color == '' || $user_color == $user_color_old)){
+                $message = "請輸入修改內容";
+                dd($member_date->user_color);
                 return redirect()->route('member.show', session()->get('account'))->with('error', $message);
             }
+
             $message = "修改成功";
             $member_date->save();
             return redirect()->route('member.show', session()->get('account'))->with('message', $message);

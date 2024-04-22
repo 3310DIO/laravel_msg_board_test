@@ -34,7 +34,7 @@ class Member extends Model
     }
     public static function member_introduce($user_account){
         $img = DB::table('member')
-                 ->select('user_id', 'user_account', 'user_name', 'user_introduce')
+                 ->select('user_id', 'user_account', 'user_name', 'user_introduce', 'user_color')
                  ->where('user_account', '=', $user_account)
                  ->first();
         return $img;

@@ -17,6 +17,7 @@ class MsgController extends Controller
         $view = 'msg/index';
         $model = array();
         $search = $request->input('search', '');
+        $search_sub = $request->input('subtitle', '');
 
         $patterns = ['/%/', '/_/'];
         // $patterns[1] = '/_/';
@@ -26,10 +27,11 @@ class MsgController extends Controller
         $search_term_replace = preg_replace($patterns, $replacements, $search);
         
         // $users = DB::select('select * from message_board ');
-        $message_boards = MessageBoard::find_msg($search_term_replace);
+        $message_boards = MessageBoard::find_msg($search_term_replace, $search_sub);
         $message_boards->appends($request->all());
         $model['message_boards'] = $message_boards;
         $model['search'] = $search;
+        $model['subtitle'] = $search_sub;
         // dd($users);
         return View($view, $model);
     }
