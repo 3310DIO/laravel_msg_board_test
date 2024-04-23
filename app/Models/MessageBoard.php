@@ -15,7 +15,7 @@ class MessageBoard extends Model
     public static function find_msg($search, $subtitle){
         $msg = DB::table('msg AS m')
                  ->join('member AS mem', 'm.user_account', '=', 'mem.user_account')
-                 ->join('msg_subtitle AS sub', 'm.subtitle', '=', 'sub.id_name')
+                 ->join('msg_subtitle AS sub', 'm.subtitle', '=', 'sub.id')
                  ->select('m.id', 'm.user_account', 'm.title', 'sub.sub_name', 'm.subtitle', 'm.content', "mem.user_color", 'm.created_at', 'm.updated_at', 'm.is_del', 'mem.user_name');
         if(isset($search) && $search != ''){
             $msg = $msg->where('m.title', 'LIKE', "%$search%");

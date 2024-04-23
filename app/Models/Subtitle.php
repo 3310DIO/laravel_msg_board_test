@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\DB;
 class Subtitle extends Model
 {
     protected $table = 'msg_subtitle';
-    protected $fillable = ['id_name', 'sub_name'];
-    public $primaryKey = 'id_name';
+    protected $fillable = ['id', 'sub_name'];
+    public $primaryKey = 'id';
     public $timestamps = false;
     // public static function find_img($id)
     // {

@@ -22,11 +22,9 @@
                         <div class="input-group">
                             <input class="form-control" type="text" id="site-search" name="search" placeholder="輸入標題" style="width: 75%" value="{{ $search }}"/>
                             <select class="form-select" id="subtitle" name="subtitle" aria-label="Example select with button addon">
-                                <option value="all" selected>全部</option>
-                                <option value="question" @if($subtitle == "question") selected @endif>問題</option>
-                                <option value="feeling" @if($subtitle == "feeling") selected @endif>心情</option>
-                                <option value="walkthrough" @if($subtitle == "walkthrough") selected @endif>攻略</option>
-                                <option value="other" @if($subtitle == "other") selected @endif>其他</option>
+                                @foreach($subtitle_bars as $subtitle_bar)
+                                    <option value="{{ $subtitle_bar->id }}" @if($subtitle == $subtitle_bar->id) selected @endif>{{ $subtitle_bar->sub_name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <button class="btn btn-primary my-2">Search</button>

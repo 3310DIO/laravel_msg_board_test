@@ -15,7 +15,7 @@ class MsgReply extends Model
     public static function find_content($id){
         $msg = DB::table('msg AS m')
                  ->join('member AS mem', 'm.user_account', '=', 'mem.user_account')
-                 ->join('msg_subtitle AS sub', 'm.subtitle', '=', 'sub.id_name')
+                 ->join('msg_subtitle AS sub', 'm.subtitle', '=', 'sub.id')
                  ->select('m.id', 'm.user_account', 'm.title', 'm.subtitle', 'sub.sub_name', 'm.content', 'm.created_at', 'm.updated_at', 'm.is_del', 'mem.user_name')
                  ->where('m.id', $id)
                  //  ->paginate(10);

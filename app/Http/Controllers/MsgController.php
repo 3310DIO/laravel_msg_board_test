@@ -38,9 +38,10 @@ class MsgController extends Controller
         $message_boards = MessageBoard::find_msg($search_term_replace, $search_sub);
         $message_boards->appends($request->all());
         $model['message_boards'] = $message_boards;
+        $model['subtitle_bars'] = Subtitle::all();
         $model['search'] = $search;
         $model['subtitle'] = $search_sub;
-        // dd($model);
+        dd($model['subtitle_bars'][1]->id);
         return View($view, $model);
     }
 
@@ -147,6 +148,8 @@ class MsgController extends Controller
                 $model['msg_edit'] = $msg_edit;
             // }
         }
+        $model['subtitle_bars'] = Subtitle::get()->slice(1);
+        // dd($model);
         $model['id'] = $id;
         return View($view, $model);
     }
