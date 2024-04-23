@@ -51,7 +51,7 @@ class ReplyController extends Controller
         }else{
             $msg_content = MessageBoard::find($msg_id);
             // dd($msg_id);
-            if($msg_content->is_del){ // 判斷輸入值是否超過上限
+            if($msg_content->is_del){
                 $message = "該文章已刪除";
 
                 return redirect()->route('msg.index')->with('error', $message);
@@ -127,7 +127,7 @@ class ReplyController extends Controller
         // }else{
         $reply_data = MsgReply::find($id);
         // dd($reply_data);
-        if($user_account != $reply_data->user_account){ // 判斷是否為發布者進行的修改
+        if($user_account != $reply_data->user_account){
             $message = "非法操作";
 
             return redirect()->route('reply.show', $request->input("msg_id"))->with('error', $message);
@@ -149,7 +149,7 @@ class ReplyController extends Controller
     {
         $user_account = session()->get('account');
         $reply_data = MsgReply::find($id);
-        if($user_account != $reply_data->user_account || $reply_data == null){ // 判斷是否是發佈者進行的修改
+        if($user_account != $reply_data->user_account || $reply_data == null){
             $message = "非法操作";
             return redirect()->route('msg.index')->with('error', $message);
         }else{

@@ -142,9 +142,9 @@
     const text_introduce_modify = document.getElementById('text_introduce_modify');
     const btn_introduce_update = document.getElementById('btn_introduce_update');
 
-    // 添加按钮的点击事件监听器
+
     toggleButton.addEventListener('click', function() {
-        // 切换隐藏内容的显示状态
+
         if (text_introduce.style.display === 'block') {
             user_color.style.display = 'block';
             title_introduce.style.display = 'block';
@@ -164,14 +164,11 @@
     exampleModal.addEventListener('show.bs.modal', function(event){
         // Button that triggered the modal
         var button = event.relatedTarget;
-        // Extract info from data-bs-* attributes
+
         var img_no = button.getAttribute('data-bs-imgNo');
         var recipient = button.getAttribute('data-bs-whatever');
         var content = button.getAttribute('data-bs-content');
-        // If necessary, you could initiate an AJAX request here
-        // and then do the updating in a callback.
-        //
-        // Update the modal's content.
+
         var modalTitle = exampleModal.querySelector('.modal-title');
         var modalBodyInput = exampleModal.querySelector('.modal-id_use input');
         var modalBodyInputContent = exampleModal.querySelector('.modal-content_use input');

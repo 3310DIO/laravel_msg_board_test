@@ -127,7 +127,7 @@ class MsgController extends Controller
         // dd($msg_edit);
         if(isset($id) && $id != 0){
             $msg_edit = MessageBoard::find_edit($id);
-            if($msg_edit == '' || $msg_edit == null || $user_account != $msg_edit->user_account || $msg_edit->is_del){ // 判斷是否有輸入值輸入，沒有則返回首頁
+            if($msg_edit == '' || $msg_edit == null || $user_account != $msg_edit->user_account || $msg_edit->is_del){
                 $message = "非法操作";
                 return redirect()->route('msg.index')->with('error', $message);
             }else{
@@ -186,7 +186,7 @@ class MsgController extends Controller
         $msg_edit = MessageBoard::find($id);
         // dd($msg_edit);
 
-        if($user_account != $msg_edit->user_account || $msg_edit == null){ // 判斷是否是發佈者進行的修改
+        if($user_account != $msg_edit->user_account || $msg_edit == null){
             $message = "非法操作";
             return redirect()->route('msg.index')->with('error', $message);
         }else{
@@ -219,7 +219,7 @@ class MsgController extends Controller
     {
         $user_account = session()->get('account');
         $msg_edit = MessageBoard::find($id);
-        if($user_account != $msg_edit->user_account || $msg_edit == null){ // 判斷是否是發佈者進行的修改
+        if($user_account != $msg_edit->user_account || $msg_edit == null){
             $message = "非法操作";
             return redirect()->route('msg.index')->with('error', $message);
         }else{

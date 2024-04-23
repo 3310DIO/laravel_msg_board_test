@@ -77,7 +77,7 @@ class MemberController extends Controller
         if($sql != null && $sql->user_account != ''){
             $message = '該帳號已存在';
             return redirect()->route('member.index')->with('message', $message);
-        }else{ // 將輸入的密碼加密後與帳號跟暱稱從入資料庫
+        }else{
             $password_hash = password_hash($user_password, PASSWORD_DEFAULT);
             $member->user_account = $user_account;
             $member->user_name = $user_name;
