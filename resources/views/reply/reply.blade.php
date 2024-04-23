@@ -19,7 +19,7 @@
             </header>
             <main>
                 @if ($message_content->is_del == 0)
-                    <h3 class="text-body-emphasis">[{{ $message_content->subtitle }}] {{ $message_content->title }}</h3><br>
+                    <h3 class="text-body-emphasis">[{{ $message_content->sub_name }}] {{ $message_content->title }}</h3><br>
                     <div style="word-break: break-all;" >
                         <pre style="white-space: pre-wrap;" class="fs-5">{{ $message_content->content }}</pre>
                     </div>

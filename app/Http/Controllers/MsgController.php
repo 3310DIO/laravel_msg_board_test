@@ -58,7 +58,7 @@ class MsgController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'subtitle' => 'required|max:2',
+            'subtitle' => 'required|max:16',
             'title' => 'required|max:256',
             'content' => 'required|max:5000',
         ],[
@@ -157,7 +157,7 @@ class MsgController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'subtitle' => 'required|max:2',
+            'subtitle' => 'required|max:16',
             'title' => 'required|max:256',
             'content' => 'required|max:5000',
         ],[
