@@ -12,10 +12,10 @@ class MsgReply extends Model
     protected $fillable = ['user_account', 'msg_id', 'user_reply'];
     public $primaryKey = 'id';
     public $timestamps = false;
-    public static function find_content($id){
+    public static function findContent($id){
         $msg = DB::table('msg AS m')
                  ->join('member AS mem', 'm.user_account', '=', 'mem.user_account')
-                 ->join('msg_subtitle AS sub', 'm.subtitle', '=', 'sub.id')
+                 ->join('msg_subtitle AS sub', 'm.subtitle', '=', 'sub.subtitle')
                  ->select('m.id', 'm.user_account', 'm.title', 'm.subtitle', 'sub.sub_name', 'm.content', 'm.created_at', 'm.updated_at', 'm.is_del', 'mem.user_name')
                  ->where('m.id', $id)
                  //  ->paginate(10);
@@ -23,7 +23,7 @@ class MsgReply extends Model
         return $msg;
                  
     }
-    public static function find_reply($id){
+    public static function findReply($id){
         $msg = DB::table('msg_reply AS r')
                  ->join('member AS mem', 'r.user_account', '=', 'mem.user_account')
                  ->select('r.id', 'r.msg_id', 'r.user_account', 'r.user_reply', 'r.created_at', 'r.updated_at', 'r.is_del', 'mem.user_name')

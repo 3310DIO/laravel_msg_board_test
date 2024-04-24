@@ -16,7 +16,7 @@ class checkLogin
     public function handle(Request $request, Closure $next): Response
     {
         if(!($request->session()->has('account'))){
-            $message = "請先登錄";
+            $message = "請先登入";
             return redirect()->route('msg.index')->with('error', $message);
         }
         return $next($request);

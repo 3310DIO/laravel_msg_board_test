@@ -12,7 +12,7 @@ class MessageBoard extends Model
     protected $fillable = ['user_account', 'title', 'subtitle', 'content'];
     public $primaryKey = 'id';
     public $timestamps = false;
-    public static function find_msg($search, $subtitle){
+    public static function findMsg($search, $subtitle){
         $msg = DB::table('msg AS m')
                  ->join('member AS mem', 'm.user_account', '=', 'mem.user_account')
                  ->join('msg_subtitle AS sub', 'm.subtitle', '=', 'sub.subtitle')
@@ -38,7 +38,7 @@ class MessageBoard extends Model
     //             //  ->get();
     //     return $msg;
     // }
-    public static function find_edit($id){
+    public static function findEdit($id){
         $msg = DB::table('msg AS m')
                  ->join('member AS mem', 'm.user_account', '=', 'mem.user_account')
                  ->select('m.id', 'm.user_account', 'm.title', 'm.subtitle', 'm.content', 'm.created_at', 'm.updated_at', 'm.is_del', 'mem.user_name')

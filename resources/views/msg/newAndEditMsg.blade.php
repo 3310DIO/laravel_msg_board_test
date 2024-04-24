@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="zh-Hant-TW">
-<head>
-    @include('head_use')
-    <title>編輯留言</title>
-</head>
-<body>
+@extends('layout.app')
+
+@section('title', '編輯留言')
+
+@section('content')
+
     @include('top_box')
     @include('message_box')
     <div class="my-3 p-3 bg-body rounded shadow-sm">
@@ -76,42 +75,45 @@
             </main>
         </div>
     </div>
-        
-</body>
-<script>
-    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-    var popoverList = popoverTriggerList.map(function(popoverTriggerEl){
-        return new bootstrap.Popover(popoverTriggerEl)
-    })
-    function sub(){ // 若刪除則送出表單
-        if(!confirm('要發佈嗎？')){
-            return false;
-        }else{
+
+@endsection
+
+@section('script')
+    <script>
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function(popoverTriggerEl){
+            return new bootstrap.Popover(popoverTriggerEl)
+        })
+        function sub(){ // 若刪除則送出表單
+            if(!confirm('要發佈嗎？')){
+                return false;
+            }else{
+                document.getElementById("form_sub").submit();
+            }
+        }
+        function edit(){
             document.getElementById("form_sub").submit();
         }
-    }
-    function edit(){
-        document.getElementById("form_sub").submit();
-    }
-    function del(){ // 若刪除則送出表單
-        if(!confirm('要刪除嗎？')){
-            return false;
-        }else{
-            document.getElementById("form_del").submit();
+        function del(){ // 若刪除則送出表單
+            if(!confirm('要刪除嗎？')){
+                return false;
+            }else{
+                document.getElementById("form_del").submit();
+            }
         }
-    }
-    // 判斷輸入內若超過文字框則加大文字框範圍
-    const textarea_size = document.getElementById('content');
-    const max_characters = 70;
-    textarea_size.addEventListener('input', function(){
-        const characters_rows = (this.value.length)/max_characters;
-        const rows = this.value.split('\n').length;
-        const rows_sum = rows+characters_rows;
-        if(rows_sum > 15){
-            this.rows = rows_sum;
-        }else{
-            this.rows = 15;
-        }
-    });
-</script>
+        // 判斷輸入內若超過文字框則加大文字框範圍
+        const textarea_size = document.getElementById('content');
+        const max_characters = 70;
+        textarea_size.addEventListener('input', function(){
+            const characters_rows = (this.value.length)/max_characters;
+            const rows = this.value.split('\n').length;
+            const rows_sum = rows+characters_rows;
+            if(rows_sum > 15){
+                this.rows = rows_sum;
+            }else{
+                this.rows = 15;
+            }
+        });
+    </script>
+@endsection
 </html>

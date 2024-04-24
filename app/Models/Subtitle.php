@@ -13,7 +13,7 @@ class Subtitle extends Model
     protected $fillable = ['id', 'subtitle', 'sub_name'];
     public $primaryKey = 'id';
     public $timestamps = false;
-    public static function get_all()
+    public static function getAll()
     {
         $sub = DB::table('msg_subtitle')
                  ->select('id', 'subtitle', 'sub_name')
@@ -21,7 +21,7 @@ class Subtitle extends Model
                  ->get();
         return $sub;
     }
-    public static function find_sub($subtitle)
+    public static function findSub($subtitle)
     {
         $sub = DB::table('msg_subtitle')
                  ->select('id', 'subtitle', 'sub_name')

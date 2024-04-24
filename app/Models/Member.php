@@ -18,21 +18,21 @@ class Member extends Model
     //                 ->get();
     //     return $member;
     // }
-    public static function find_member($user_account){
+    public static function findMember($user_account){
         $member = DB::table('member')
                     ->select('user_id', 'user_account', 'user_name', 'user_password')
                     ->where('user_account', '=', $user_account)
                     ->first();
         return $member;
     }
-    public static function member_space($user_account){
+    public static function memberSpace($user_account){
         $img = DB::table('img_upload')
                  ->select('id', 'img_url', 'img_content', 'width_height', 'is_del', 'created_at')
                  ->where('user_account', '=', $user_account)
                  ->get();
         return $img;
     }
-    public static function member_introduce($user_account){
+    public static function memberIntroduce($user_account){
         $img = DB::table('member')
                  ->select('user_id', 'user_account', 'user_name', 'user_introduce', 'user_color')
                  ->where('user_account', '=', $user_account)

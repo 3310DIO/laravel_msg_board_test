@@ -22,20 +22,4 @@ class Image extends Model
     //              ->first();
     //     return $msg;
     // }
-    // public static function img_update($id, $content)
-    // {
-    //     $msg = DB::table('img_upload')
-    //              ->where('id', '=' , $id)
-    //              ->update(['img_content' => $content]);
-    //             //  ->get();
-    //     return $msg;
-    // }
-    // public static function img_del($id)
-    // {
-    //     $msg = DB::table('img_upload')
-    //              ->where('id', '=' , $id)
-    //              ->update(['is_del' => 1]);
-    //             //  ->get();
-    //     return $msg;
-    // }
 }

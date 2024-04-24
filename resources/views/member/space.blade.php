@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="zh-Hant-TW">
-<head>
-    @include('head_use') 
-    <title>{{ $account->user_account }}的個人空間</title>
-</head>
-<body>
+@extends('layout.app')
+
+@section('title', ($account->user_account . '的個人空間'))
+
+@section('content')
+
     @include('top_box')
     @include('message_box')
 
@@ -19,35 +18,11 @@
                         {{ $account->user_name }}的空間
                     </h1>
                     <div class="align-items-center p-3 my-3" style="word-break: break-all;">
-                        @php
-                            session()->put('page', 'space');
-                        @endphp
-                        @if($account->user_account == Session::get('account'))
-                            <form action="{{ route('member.update', session()->get('account')) }}" method="post">
-                                @csrf
-                                @method('PUT')
-                                <p class="text-center" id="user_color" style="display: flex; align-items: center; display: none;">
-                                    修改個人顏色：<input type="color" name="user_color" value="{{ $account->user_color }}"/>
-                                </p>
-                                <h5 id="title_introduce" style="display: none;">簡介需在500字之間</h5>
-                                @php
-                                    $line_count = substr_count($account->user_introduce, "\n")+1;
-                                        if($line_count < 10){
-                                            $line_count = 10;
-                                    }
-                                @endphp
-                                <textarea class="form-control" type="text" id="text_introduce_modify" name="user_introduce" rows="{{ $line_count }}" style="display: none; font-family: 'Courier New', Courier, monospace;">{{ $account->user_introduce }}</textarea><br>
-                                <p><button class="btn btn-outline-secondary" id="btn_introduce_update" style="display: none;">更新</button></p>
-                            </form>
-                        @endif
                         <pre class="lead text-body-secondary" type="text" id="text_introduce" style="white-space: pre-wrap; display: block;">{{ $account->user_introduce }}</pre>
                     </div>
-                    <p>
-                        @if($account->user_account == Session::get('account'))
-                            <a href="{{ route('member.edit', Session::get('account')) }}" class="btn btn-primary my-2">帳號設定</a>
-                            <button type="button" id="modify_introduce" class="btn btn-secondary my-2">修改簡介</button>
-                        @endif
-                    </p>
+                    @if($account->user_account == Session::get('account'))
+                        <a class="btn btn-primary my-2" href="{{ route('member.edit', Session::get('account')) }}">帳號設定</a>
+                    @endif
                 </div>
             </div>
         </section>
@@ -132,33 +107,11 @@
         </div>
     </main>
 
-</body>
+@endsection
+
+@section('script')
+
 <script>
-
-    const toggleButton = document.getElementById('modify_introduce');
-    const user_color = document.getElementById('user_color');
-    const title_introduce = document.getElementById('title_introduce');
-    const text_introduce = document.getElementById('text_introduce');
-    const text_introduce_modify = document.getElementById('text_introduce_modify');
-    const btn_introduce_update = document.getElementById('btn_introduce_update');
-
-
-    toggleButton.addEventListener('click', function() {
-
-        if (text_introduce.style.display === 'block') {
-            user_color.style.display = 'block';
-            title_introduce.style.display = 'block';
-            text_introduce.style.display = 'none';
-            text_introduce_modify.style.display = 'block';
-            btn_introduce_update.style.display = 'block';
-        } else {
-            user_color.style.display = 'none';
-            title_introduce.style.display = 'none';
-            text_introduce.style.display = 'block';
-            text_introduce_modify.style.display = 'none';
-            btn_introduce_update.style.display = 'none';
-        }
-    });
 
     var exampleModal = document.getElementById('exampleModal');
     exampleModal.addEventListener('show.bs.modal', function(event){
@@ -189,17 +142,6 @@
     function sub(){
         document.getElementById("form_sub").submit();
     }
-    const textarea_size = document.getElementById('text_introduce_modify');
-    const max_characters = 70;
-    textarea_size.addEventListener('input', function(){
-        const characters_rows = (this.value.length)/max_characters;
-        const rows = this.value.split('\n').length;
-        const rows_sum = rows+characters_rows;
-        if(rows_sum > 10){
-            this.rows = rows_sum;
-        }else{
-            this.rows = 10;
-        }
-    });
 </script>
-</html>
+
+@endsection

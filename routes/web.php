@@ -32,7 +32,7 @@ Route::resource('/reply', ReplyController::class);
 
 // Route::resource('/member', MemberController::class);
 // Route::get('/member', [MemberController::class, 'index'])->name('member.index');
-Route::get('/member/create', [MemberController::class, 'create'])->name('member.create');
+// Route::get('/member/create', [MemberController::class, 'create'])->name('member.create');
 // Route::post('/member', [MemberController::class, 'store'])->name('member.store');
 // Route::get('/member/{id}', [MemberController::class, 'show'])->name('member.show');
 // Route::get('/member/{id}/edit', [MemberController::class, 'edit'])->name('member.edit');
@@ -40,8 +40,9 @@ Route::get('/member/create', [MemberController::class, 'create'])->name('member.
 // Route::delete('/member/{id}', [MemberController::class, 'destroy'])->name('member.destroy');
 
 Route::post('/member/login', [MemberController::class, 'login'])->name('member.login');
+Route::post('/member/register', [MemberController::class, 'register'])->name('member.register');
 Route::get('/member/logout', [MemberController::class, 'logout'])->name('member.logout');
 // Route::get('/member/space/{id}', [MemberController::class, 'space'])->name('member.space');
-Route::get('/member/{id}', [MemberController::class, 'show'])->name('member.show');
+// Route::get('/member/{id}', [MemberController::class, 'show'])->name('member.show');
 Route::resource('/member', MemberController::class);
 Route::resource('/img', ImageController::class);

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use App\Models\MsgReply;
 use App\Models\MessageBoard;
+use App\Http\Requests\RequestReply;
 
 class ReplyController extends Controller
 {
@@ -29,23 +30,14 @@ class ReplyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(RequestReply $request)
     {
         $msg = new MsgReply();
         $user_account = session()->get('account','');
         $msg_id = $request->input('msg_id');
-        
-        $request->validate([
-            'reply' => 'required|max:1500',
-            'msg_id' => 'required',
-        ],[
-            'reply.required' => '請輸入回覆內容',
-            'reply.max' => '回覆內容不能超過1500字',
-            'msg_id.required' => '請登錄',
-        ]);
 
         if($user_account == ''){
-            $message = "請登錄再回覆";
+            $message = "請登入再回覆";
 
             return redirect()->route('reply.show', $request->input("msg_id"))->with('message', $message);
         }else{
@@ -80,22 +72,19 @@ class ReplyController extends Controller
         $model = array();
         
         // $users = DB::select('select * from message_board ');
-        $message_content = MsgReply::find_content($id);
+        $message_content = MsgReply::findContent($id);
+        // dd($message_content);
         if($message_content == null){
             $message = "留言不存在";
 
             return redirect()->route('msg.index')->with('error', $message);
         }
         $model['message_content'] = $message_content;
-        $message_reply = MsgReply::find_reply($id);
+        $message_reply = MsgReply::findReply($id);
         // dd(sizeof($message_reply));
         $model['message_reply'] = $message_reply;
         // dd($model_reply);
-        // dd($model_content);
-        // dd($model_reply);
-        // dd($id);
-        // dd($users);
-        return View($view, $model);
+        return view($view, $model);
     }
 
     /**
@@ -111,20 +100,8 @@ class ReplyController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $request->validate([
-            'reply' => 'required|max:1500',
-        ],[
-            'reply.required' => '請輸入回覆內容',
-            'reply.max' => '回覆內容不能超過1500字',
-        ]);
-
         $reply = $request->input('reply');
         $user_account = session()->get('account');
-        // if(mb_strlen($reply) > 1500){ // 判斷輸入值是否超過上限
-        //     $message = "輸入字元超過上限";
-
-        //     return redirect()->route('reply.show', $request->input("msg_id"))->with('message', $message);
-        // }else{
         $reply_data = MsgReply::find($id);
         // dd($reply_data);
         if($user_account != $reply_data->user_account){
@@ -134,12 +111,10 @@ class ReplyController extends Controller
         }else{
             $reply_data->user_reply = $reply;
             $reply_data->save();
-            // MsgReply::find_update($msg_id, $reply);
             $message = "修改成功";
 
             return redirect()->route('reply.show', $request->input("msg_id"))->with('message', $message);
         }
-        // }
     }
 
     /**
@@ -149,16 +124,12 @@ class ReplyController extends Controller
     {
         $user_account = session()->get('account');
         $reply_data = MsgReply::find($id);
-        if($user_account != $reply_data->user_account || $reply_data == null){
+        if($reply_data == null || $user_account != $reply_data->user_account){
             $message = "非法操作";
             return redirect()->route('msg.index')->with('error', $message);
         }else{
-            // $sql = "UPDATE msg SET title = ? , content = ? WHERE id = ? ";
-            // $stmt = $pdo->prepare($sql);
-            // $stmt->execute(["$title", "$content", "$id"]);
             $reply_data->is_del = 1;
             $reply_data->save();
-            // MsgReply::del_reply($id);
             $message = "刪除成功";
 
             return redirect()->route('reply.show', $request->input("msg_id"))->with('message', $message);

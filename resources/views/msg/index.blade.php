@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="zh-Hant-TW">
-<head>
-    @include('head_use')
-    <title>留言板</title>
-</head>
-<body>
+@extends('layout.app')
+
+@section('title', '留言板')
+
+@section('content')
+
     @include('top_box')
     @include('message_box')
 
@@ -23,7 +22,7 @@
                             <input class="form-control" type="text" id="site-search" name="search" placeholder="輸入標題" style="width: 75%" value="{{ $search }}"/>
                             <select class="form-select" id="subtitle" name="subtitle" aria-label="Example select with button addon">
                                 @foreach($subtitle_bars as $subtitle_bar)
-                                    <option value="{{ $subtitle_bar->subtitle }}" @if($subtitle == $subtitle_bar->subtitle) selected @endif>{{ $subtitle_bar->sub_name }}</option>
+                                    <option value="{{ $subtitle_bar->id }}" @if($subtitle == $subtitle_bar->id) selected @endif>{{ $subtitle_bar->sub_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -83,5 +82,5 @@
             @endforeach
         {{ $message_boards->onEachSide(2)->links('vendor.pagination.bootstrap-5') }}
     </main>
-</body>
-</html>
+
+@endsection
