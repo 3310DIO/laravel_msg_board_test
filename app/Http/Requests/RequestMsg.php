@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use App\Models\Subtitle;
 
 class RequestMsg extends FormRequest
 {
@@ -21,8 +23,10 @@ class RequestMsg extends FormRequest
      */
     public function rules(): array
     {
+        $subtitle = Subtitle::pluck('subtitle')->slice(1)->toArray();
+
         return [
-            'subtitle' => 'required|max:16',
+            'subtitle' => ['required', Rule::in($subtitle)],
             'title' => 'required|max:256',
             'content' => 'required|max:5000',
         ];
@@ -31,7 +35,7 @@ class RequestMsg extends FormRequest
     {
         return [
             'subtitle.required' => '錯誤',
-            'subtitle.max' => '錯誤',
+            'subtitle.in' => '錯誤',
             'title.required' => '請輸入標題',
             'title.max' => '標題不能超過256字',
             'content.required' => '請輸入內容',

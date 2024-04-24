@@ -117,10 +117,6 @@
         @endif
     </div>
 
-@endsection
-
-@section('script')
-
     <script>
         var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
         var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {

@@ -107,10 +107,6 @@
         </div>
     </main>
 
-@endsection
-
-@section('script')
-
     <script>
 
         var exampleModal = document.getElementById('exampleModal');

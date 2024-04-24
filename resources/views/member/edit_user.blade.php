@@ -59,12 +59,7 @@
                 </form>
             </div>
         </div>
-
     </div>
-
-@endsection
-
-@section('script')
 
     <script>
         const textarea_size = document.getElementById('text_introduce_modify');

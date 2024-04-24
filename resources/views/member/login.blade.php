@@ -40,10 +40,6 @@
         </div>
     </div>
 
-@endsection
-
-@section('script')
-
     <script>
         // 顯示密碼
         const check_box = document.getElementById("check_box");

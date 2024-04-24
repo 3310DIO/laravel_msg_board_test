@@ -22,7 +22,7 @@
                             <input class="form-control" type="text" id="site-search" name="search" placeholder="輸入標題" style="width: 75%" value="{{ $search }}"/>
                             <select class="form-select" id="subtitle" name="subtitle" aria-label="Example select with button addon">
                                 @foreach($subtitle_bars as $subtitle_bar)
-                                    <option value="{{ $subtitle_bar->subtitle }}" @if($subtitle == $subtitle_bar->subtitle) selected @endif>{{ $subtitle_bar->sub_name }}</option>
+                                    <option value="{{ $subtitle_bar->subtitle }}" {{ $subtitle == $subtitle_bar->subtitle ? 'selected' : '' }}>{{ $subtitle_bar->sub_name }}</option>
                                 @endforeach
                             </select>
                         </div>

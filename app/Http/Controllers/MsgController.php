@@ -16,6 +16,8 @@ class MsgController extends Controller
      */
     public function index(Request $request)
     {
+        // $subtitle = Subtitle::pluck('subtitle')->toArray();
+        // dd(array_values($subtitle));
         $view = 'msg/index';
         $model = array();
         $search = $request->input('search', '');
@@ -36,10 +38,10 @@ class MsgController extends Controller
         $message_boards = MessageBoard::findMsg($search_term_replace, $search_sub);
         $message_boards->appends($request->all());
         $model['message_boards'] = $message_boards;
-        $model['subtitle_bars'] = Subtitle::getAll();
+        $model['subtitle_bars'] = Subtitle::all();
         $model['search'] = $search;
         $model['subtitle'] = $search_sub;
-        // dd($message_boards);
+        // dd($model);
         return view($view, $model);
     }
 
@@ -62,10 +64,10 @@ class MsgController extends Controller
         $user_account = session()->get('account');
         $content = $request->input("content", '');
         $subtitle_data = Subtitle::findSub($subtitle);
-        if($subtitle_data == null){
-            $message = "錯誤";
-            return redirect()->route('msg.edit', 0)->with('error', $message);
-        }
+        // if($subtitle_data == null){
+        //     $message = "錯誤";
+        //     return redirect()->route('msg.edit', 0)->with('error', $message);
+        // }
         // dd($title);
 
         $msg->subtitle = $subtitle;

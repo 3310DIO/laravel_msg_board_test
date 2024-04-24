@@ -46,12 +46,7 @@
                 </div>
             </div>
         </div>
-
     </div>
-
-@endsection
-
-@section('script')
 
     <script>
         var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
