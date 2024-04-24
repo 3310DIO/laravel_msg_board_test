@@ -12,12 +12,6 @@ class Member extends Model
     protected $fillable = ['user_account', 'user_name', 'user_password'];
     public $primaryKey = 'user_id';
     public $timestamps = false;
-    // public static function new_member(){
-    //     $member = DB::table('member')
-    //                 ->select('user_account', 'user_name', 'user_password')
-    //                 ->get();
-    //     return $member;
-    // }
     public static function findMember($user_account){
         $member = DB::table('member')
                     ->select('user_id', 'user_account', 'user_name', 'user_password')
@@ -43,12 +37,6 @@ class Member extends Model
     //     $member = DB::table('member')
     //                 ->where('user_account', '=', $user_account)
     //                 ->update(['user_name' => $user_name]);
-    //     return $member;
-    // }
-    // public static function password_update($user_account, $user_password){
-    //     $member = DB::table('member')
-    //                 ->where('user_account', '=', $user_account)
-    //                 ->update(['user_password' => $user_password]);
     //     return $member;
     // }
 }

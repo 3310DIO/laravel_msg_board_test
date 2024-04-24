@@ -33,17 +33,9 @@ class ImageController extends Controller
         $user_account = session()->get('account');
         $img_name = $img_data->getClientOriginalName();
         $img_size = $img_data->getSize();
-        $img_tmp_name = $img_data->getPathname();
+        // $img_tmp_name = $img_data->getPathname();
         $img_error = $img_data->getError();
-        $img_w_h = getimagesize($img_tmp_name);
-        // dd($request->my_img);
-        $width = $img_w_h[0]; // 獲得寬度
-        $height = $img_w_h[1]; // 獲得高度
-        if($width > $height){ // 判斷高還是寬比較大
-            $w_h = 1;
-        }else{
-            $w_h = 0;
-        }
+
         if(!($request->hasFile('my_img'))){
             $message = '非法操作';
             return redirect()->route('member.show', $user_account)->with('error', $message);
@@ -61,7 +53,7 @@ class ImageController extends Controller
 
                     $allow_img = array("jpg", "jpeg", "png"); // 允許的圖片格式
                     if(!(in_array($img_ex_lc, $allow_img))){ // 判斷格式是否符合預設條件
-                        $message = '不支援的影像格式';
+                        $message = '僅支援jpg、jpeg、png格式';
                         return redirect()->route('member.show', $user_account)->with('error', $message);
                     }else{
                         $new_img_name = uniqid("IMG-", true).'.'.$img_ex_lc; // 產生一個隨機名稱加上原本的副檔名
@@ -71,7 +63,7 @@ class ImageController extends Controller
                         $new_img = new Image;
                         $new_img->user_account = $user_account;
                         $new_img->img_url = $new_img_name;
-                        $new_img->width_height = $w_h;
+                        // $new_img->width_height = $w_h;
                         // dd($msg);
                         $new_img->save();
                         $message = '上傳成功';

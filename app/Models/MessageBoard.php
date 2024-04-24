@@ -28,16 +28,6 @@ class MessageBoard extends Model
                 //  ->get();
         return $msg;
     }
-    // public static function search_msg($search){
-    //     $msg = DB::table('msg AS m')
-    //              ->join('member AS mem', 'm.user_account', '=', 'mem.user_account')
-    //              ->select('m.id', 'm.user_account', 'm.title', 'm.content', 'm.created_at', 'm.updated_at', 'm.is_del', 'mem.user_name')
-    //              ->where('m.title', 'like', "%$search%")
-    //              ->orderBy('m.updated_at', 'DESC')
-    //              ->paginate(10);
-    //             //  ->get();
-    //     return $msg;
-    // }
     public static function findEdit($id){
         $msg = DB::table('msg AS m')
                  ->join('member AS mem', 'm.user_account', '=', 'mem.user_account')
@@ -47,15 +37,6 @@ class MessageBoard extends Model
                  ->first();
         return $msg;
     }
-    // public static function find_update($id, $title, $content){
-    //     $msg = DB::table('msg')
-    //             //  ->select('title', 'content')
-    //              ->where('id', '=', $id)
-                 
-    //             //  ->paginate(10);
-    //              ->update(['title' => $title, 'content' => $content]);
-    //     return $msg;
-    // }
     // public static function del_msg($id){
     //     $msg = DB::table('msg')
     //             //  ->select('id')

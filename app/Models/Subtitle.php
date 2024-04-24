@@ -3,7 +3,6 @@
 namespace App\Models;
 
 // use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -31,7 +30,7 @@ class Subtitle extends Model
     }
     // public static function img_del($id)
     // {
-    //     $msg = DB::table('img_upload')
+    //     $msg = DB::table('msg_subtitle')
     //              ->where('id', '=' , $id)
     //              ->update(['is_del' => 1]);
     //             //  ->get();

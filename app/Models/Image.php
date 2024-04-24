@@ -3,14 +3,13 @@
 namespace App\Models;
 
 // use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
+// use Illuminate\Support\Facades\DB;
 
 class Image extends Model
 {
     protected $table = 'img_upload';
-    protected $fillable = ['user_account', 'img_url', 'width_height'];
+    protected $fillable = ['user_account', 'img_url'];
     public $primaryKey = 'id';
     public $timestamps = false;
     // public static function find_img($id)
