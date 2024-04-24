@@ -38,7 +38,7 @@
                                 <div class="input-group" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="標題需在256字以內">
                                     <select class="form-select" id="subtitle" name="subtitle" aria-label="Example select with button addon">
                                         @foreach($subtitle_bars as $subtitle_bar)
-                                            <option value="{{ $subtitle_bar->id }}" @if($msg_edit->subtitle == $subtitle_bar->id) selected @endif>{{ $subtitle_bar->sub_name }}</option>
+                                            <option value="{{ $subtitle_bar->subtitle }}" @if($msg_edit->subtitle == $subtitle_bar->subtitle) selected @endif>{{ $subtitle_bar->sub_name }}</option>
                                         @endforeach
                                     </select>
                                     <input type="text" class="form-control" id="title" name="title" value="{{ $msg_edit->title }}" style="width: 85%" required>

@@ -22,7 +22,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 // Route::middleware([CheckLogin::class])->get('msg/create', [MsgController::class, 'create'])->name('member.create');
-Route::middleware('check_account')->get('msg/{id}/edit', [MsgController::class, 'edit'])->name('member.edit');
+Route::middleware('checkAccount')->get('msg/{id}/edit', [MsgController::class, 'edit'])->name('member.edit');
 
 Route::resource('/msg', MsgController::class);
 // Route::get('/msg', [MsgController::class, 'search'])->name('member.search');
