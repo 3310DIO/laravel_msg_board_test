@@ -10,26 +10,25 @@ use Illuminate\Support\Facades\DB;
 class Subtitle extends Model
 {
     protected $table = 'msg_subtitle';
-    protected $fillable = ['id', 'sub_name'];
+    protected $fillable = ['id', 'subtitle', 'sub_name'];
     public $primaryKey = 'id';
     public $timestamps = false;
-    // public static function find_img($id)
-    // {
-    //     $msg = DB::table('img_upload')
-    //              ->select('user_account', 'img_url', 'img_content', 'is_del')
-    //              ->where('id', '=' , $id)
-    //             //  ->update(['is_del' => 1]);
-    //              ->first();
-    //     return $msg;
-    // }
-    // public static function img_update($id, $content)
-    // {
-    //     $msg = DB::table('img_upload')
-    //              ->where('id', '=' , $id)
-    //              ->update(['img_content' => $content]);
-    //             //  ->get();
-    //     return $msg;
-    // }
+    public static function get_all()
+    {
+        $sub = DB::table('msg_subtitle')
+                 ->select('id', 'subtitle', 'sub_name')
+                //  ->update(['is_del' => 1]);
+                 ->get();
+        return $sub;
+    }
+    public static function find_sub($subtitle)
+    {
+        $sub = DB::table('msg_subtitle')
+                 ->select('id', 'subtitle', 'sub_name')
+                 ->where('subtitle', '=' , $subtitle)
+                 ->first();
+        return $sub;
+    }
     // public static function img_del($id)
     // {
     //     $msg = DB::table('img_upload')

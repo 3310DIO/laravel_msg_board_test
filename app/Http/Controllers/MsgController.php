@@ -19,7 +19,7 @@ class MsgController extends Controller
         $model = array();
         $search = $request->input('search', '');
         $search_sub = $request->input('subtitle', '');
-        $subtitle = Subtitle::find($search_sub);
+        $subtitle = Subtitle::find_sub($search_sub);
         // dd($search_sub);
         if($search_sub != '' && $subtitle == null){
             // dd($subtitle);
@@ -38,10 +38,10 @@ class MsgController extends Controller
         $message_boards = MessageBoard::find_msg($search_term_replace, $search_sub);
         $message_boards->appends($request->all());
         $model['message_boards'] = $message_boards;
-        $model['subtitle_bars'] = Subtitle::all();
+        $model['subtitle_bars'] = Subtitle::get_all();
         $model['search'] = $search;
         $model['subtitle'] = $search_sub;
-        dd($model['subtitle_bars'][1]->id);
+        // dd($message_boards);
         return View($view, $model);
     }
 
@@ -76,7 +76,7 @@ class MsgController extends Controller
         $title = $request->input("title", '');
         $user_account = session()->get('account');
         $content = $request->input("content", '');
-        $subtitle_data = Subtitle::find($subtitle);
+        $subtitle_data = Subtitle::find_sub($subtitle);
         if($subtitle_data == null){
             $message = "錯誤";
             return redirect()->route('msg.edit', 0)->with('error', $message);
@@ -148,7 +148,7 @@ class MsgController extends Controller
                 $model['msg_edit'] = $msg_edit;
             // }
         }
-        $model['subtitle_bars'] = Subtitle::get()->slice(1);
+        $model['subtitle_bars'] = Subtitle::get_all()->slice(1);
         // dd($model);
         $model['id'] = $id;
         return View($view, $model);
@@ -172,7 +172,7 @@ class MsgController extends Controller
             'content.max' => '內容不能超過5000字',
         ]);
         $subtitle = $request->input('subtitle');
-        $subtitle_data = Subtitle::find($subtitle);
+        $subtitle_data = Subtitle::find_sub($subtitle);
         $user_account = session()->get('account');
         // $title = $request->input('title');
         // $content = $request->input('content');
