@@ -21,7 +21,7 @@ class Member extends Model
     }
     public static function memberSpace($user_account){
         $img = DB::table('img_upload')
-                 ->select('id', 'img_url', 'img_content', 'width_height', 'is_del', 'created_at')
+                 ->select('id', 'img_url', 'img_content', 'is_del', 'created_at')
                  ->where('user_account', '=', $user_account)
                  ->get();
         return $img;
