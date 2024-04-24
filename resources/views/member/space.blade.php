@@ -111,37 +111,37 @@
 
 @section('script')
 
-<script>
+    <script>
 
-    var exampleModal = document.getElementById('exampleModal');
-    exampleModal.addEventListener('show.bs.modal', function(event){
-        // Button that triggered the modal
-        var button = event.relatedTarget;
+        var exampleModal = document.getElementById('exampleModal');
+        exampleModal.addEventListener('show.bs.modal', function(event){
+            // Button that triggered the modal
+            var button = event.relatedTarget;
 
-        var img_no = button.getAttribute('data-bs-imgNo');
-        var recipient = button.getAttribute('data-bs-whatever');
-        var content = button.getAttribute('data-bs-content');
+            var img_no = button.getAttribute('data-bs-imgNo');
+            var recipient = button.getAttribute('data-bs-whatever');
+            var content = button.getAttribute('data-bs-content');
 
-        var modalTitle = exampleModal.querySelector('.modal-title');
-        var modalBodyInput = exampleModal.querySelector('.modal-id_use input');
-        var modalBodyInputContent = exampleModal.querySelector('.modal-content_use input');
-        var modalBodyImg = exampleModal.querySelector('.modal-footer img');
+            var modalTitle = exampleModal.querySelector('.modal-title');
+            var modalBodyInput = exampleModal.querySelector('.modal-id_use input');
+            var modalBodyInputContent = exampleModal.querySelector('.modal-content_use input');
+            var modalBodyImg = exampleModal.querySelector('.modal-footer img');
 
-        modalTitle.textContent = '修改圖片 ' + img_no;
-        modalBodyInput.value = recipient;
-        modalBodyInputContent.value = content;
-    });
-    // 確認刪除圖片
-    function del(id){
-        if(!confirm('要刪除圖片嗎？')){
-            return false;
-        }else{
-            document.getElementById("form_del_"+id).submit();
+            modalTitle.textContent = '修改圖片 ' + img_no;
+            modalBodyInput.value = recipient;
+            modalBodyInputContent.value = content;
+        });
+        // 確認刪除圖片
+        function del(id){
+            if(!confirm('要刪除圖片嗎？')){
+                return false;
+            }else{
+                document.getElementById("form_del_"+id).submit();
+            }
         }
-    }
-    function sub(){
-        document.getElementById("form_sub").submit();
-    }
-</script>
+        function sub(){
+            document.getElementById("form_sub").submit();
+        }
+    </script>
 
 @endsection

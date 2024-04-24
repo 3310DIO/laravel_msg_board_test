@@ -53,34 +53,34 @@
 
 @section('script')
 
-<script>
-    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-        return new bootstrap.Popover(popoverTriggerEl)
-    })
-    // 判斷密碼及確認密碼是否相同
-    function check_password(){
-        var pw = document.getElementById("floatingPassword").value;
-        var pwc = document.getElementById("floatingPasswordCheck").value;
-        if(pw != pwc){
-            alert('密碼不同');
-        }else{
-            document.getElementById("form_register").submit();
+    <script>
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl)
+        })
+        // 判斷密碼及確認密碼是否相同
+        function check_password(){
+            var pw = document.getElementById("floatingPassword").value;
+            var pwc = document.getElementById("floatingPasswordCheck").value;
+            if(pw != pwc){
+                alert('密碼不同');
+            }else{
+                document.getElementById("form_register").submit();
+            }
         }
-    }
-    // 顯示密碼
-    const check_box = document.getElementById("check_box");
-    const user_password = document.getElementById("floatingPassword");
-    const user_password_confirm = document.getElementById("floatingPasswordCheck");
-    check_box.addEventListener("change", function(){
-        if(this.checked){
-            user_password.type = "text";
-            user_password_confirm.type = "text";
-        }else{
-            user_password.type = "password";
-            user_password_confirm.type = "password";
-        }
-    });
-</script>
+        // 顯示密碼
+        const check_box = document.getElementById("check_box");
+        const user_password = document.getElementById("floatingPassword");
+        const user_password_confirm = document.getElementById("floatingPasswordCheck");
+        check_box.addEventListener("change", function(){
+            if(this.checked){
+                user_password.type = "text";
+                user_password_confirm.type = "text";
+            }else{
+                user_password.type = "password";
+                user_password_confirm.type = "password";
+            }
+        });
+    </script>
 
 @endsection

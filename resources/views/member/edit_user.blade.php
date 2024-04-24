@@ -66,49 +66,49 @@
 
 @section('script')
 
-<script>
-    const textarea_size = document.getElementById('text_introduce_modify');
-    const max_characters = 70;
-    textarea_size.addEventListener('input', function(){
-        const characters_rows = (this.value.length)/max_characters;
-        const rows = this.value.split('\n').length;
-        const rows_sum = rows+characters_rows;
-        if(rows_sum > 10){
-            this.rows = rows_sum;
-        }else{
-            this.rows = 10;
+    <script>
+        const textarea_size = document.getElementById('text_introduce_modify');
+        const max_characters = 70;
+        textarea_size.addEventListener('input', function(){
+            const characters_rows = (this.value.length)/max_characters;
+            const rows = this.value.split('\n').length;
+            const rows_sum = rows+characters_rows;
+            if(rows_sum > 10){
+                this.rows = rows_sum;
+            }else{
+                this.rows = 10;
+            }
+        });
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl)
+        })
+        // 判斷密碼及確認密碼是否相同
+        function check_password(){
+            var pw = document.getElementById("floatingPasswordNew").value;
+            var pwc = document.getElementById("floatingPasswordCheck").value;
+            if(pw != pwc){
+                alert('密碼與確認密碼不同');
+            }else{
+                document.getElementById("form_register").submit();
+            }
         }
-    });
-    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-        return new bootstrap.Popover(popoverTriggerEl)
-    })
-    // 判斷密碼及確認密碼是否相同
-    function check_password(){
-        var pw = document.getElementById("floatingPasswordNew").value;
-        var pwc = document.getElementById("floatingPasswordCheck").value;
-        if(pw != pwc){
-            alert('密碼與確認密碼不同');
-        }else{
-            document.getElementById("form_register").submit();
-        }
-    }
-    // 顯示密碼
-    const check_box = document.getElementById("check_box");
-    const user_password_old = document.getElementById("floatingPasswordOld");
-    const user_password_new = document.getElementById("floatingPasswordNew");
-    const user_password_confirm = document.getElementById("floatingPasswordCheck");
-    check_box.addEventListener("change", function(){
-        if(this.checked){
-            user_password_old.type = "text";
-            user_password_new.type = "text";
-            user_password_confirm.type = "text";
-        }else{
-            user_password_old.type = "password";
-            user_password_new.type = "password";
-            user_password_confirm.type = "password";
-        }
-    });
-</script>
+        // 顯示密碼
+        const check_box = document.getElementById("check_box");
+        const user_password_old = document.getElementById("floatingPasswordOld");
+        const user_password_new = document.getElementById("floatingPasswordNew");
+        const user_password_confirm = document.getElementById("floatingPasswordCheck");
+        check_box.addEventListener("change", function(){
+            if(this.checked){
+                user_password_old.type = "text";
+                user_password_new.type = "text";
+                user_password_confirm.type = "text";
+            }else{
+                user_password_old.type = "password";
+                user_password_new.type = "password";
+                user_password_confirm.type = "password";
+            }
+        });
+    </script>
 
 @endsection

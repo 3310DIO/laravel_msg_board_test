@@ -44,17 +44,17 @@
 
 @section('script')
 
-<script>
-    // 顯示密碼
-    const check_box = document.getElementById("check_box");
-    const user_password = document.getElementById("floatingPassword");
-    check_box.addEventListener("change", function(){
-        if(this.checked){
-            user_password.type = "text";
-        }else{
-            user_password.type = "password";
-        }
-    });
-</script>
+    <script>
+        // 顯示密碼
+        const check_box = document.getElementById("check_box");
+        const user_password = document.getElementById("floatingPassword");
+        check_box.addEventListener("change", function(){
+            if(this.checked){
+                user_password.type = "text";
+            }else{
+                user_password.type = "password";
+            }
+        });
+    </script>
 
 @endsection
