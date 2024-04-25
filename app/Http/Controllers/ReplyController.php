@@ -33,14 +33,15 @@ class ReplyController extends Controller
     public function store(RequestReply $request)
     {
         $msg = new MsgReply();
-        $user_account = session()->get('account','');
+        // $user_account = session()->get('account','');
         $msg_id = $request->input('msg_id');
 
-        if($user_account == ''){
+        if(!(session()->has('account'))){
             $message = "請登入再回覆";
 
             return redirect()->route('reply.show', $request->input("msg_id"))->with('message', $message);
         }else{
+            $user_account = session()->get('account');
             $msg_content = MessageBoard::find($msg_id);
             // dd($msg_id);
             if($msg_content->is_del){

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\MessageBoard;
 use App\Models\Subtitle;
 use App\Http\Requests\RequestMsg;
+use Illuminate\Validation\Rule;
 
 class MsgController extends Controller
 {
@@ -20,16 +21,15 @@ class MsgController extends Controller
         // dd(array_values($subtitle));
         $view = 'msg/index';
         $model = array();
+        $subtitle = Subtitle::pluck('subtitle')->toArray();
+        $request->validate([
+            'subtitle' => [Rule::in($subtitle)],
+        ],[
+            'subtitle.in' => '子標題錯誤',
+        ]);
+
         $search = $request->input('search', '');
         $search_sub = $request->input('subtitle', '');
-        $subtitle = Subtitle::findSub($search_sub);
-        // dd($search_sub);
-        if($search_sub != '' && $subtitle == null){
-            // dd($subtitle);
-            $message = "子標題錯誤";
-            return redirect()->route('msg.index')->with('error', $message);
-        }
-
         $patterns = ['/%/', '/_/'];
         $replacements = ['\%', '\_'];
         $search_term_replace = preg_replace($patterns, $replacements, $search);
@@ -63,7 +63,7 @@ class MsgController extends Controller
         $title = $request->input("title", '');
         $user_account = session()->get('account');
         $content = $request->input("content", '');
-        $subtitle_data = Subtitle::findSub($subtitle);
+        // $subtitle_data = Subtitle::findSub($subtitle);
         // if($subtitle_data == null){
         //     $message = "錯誤";
         //     return redirect()->route('msg.edit', 0)->with('error', $message);
