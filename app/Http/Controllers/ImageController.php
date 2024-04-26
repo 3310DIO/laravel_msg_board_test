@@ -59,7 +59,7 @@ class ImageController extends Controller
                         $img_upload_path = $request->getSchemeAndHttpHost() . '/upload/img/'.$new_img_name; 
                         $img_data->move(public_path('/storage/upload/img/'), $img_upload_path); // 將上傳檔案複製進指定資料夾
 
-                        $new_img = new Image;
+                        $new_img = new Image();
                         $new_img->user_account = $user_account;
                         $new_img->img_url = $new_img_name;
                         // $new_img->width_height = $w_h;

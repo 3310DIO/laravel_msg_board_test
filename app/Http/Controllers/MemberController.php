@@ -135,7 +135,7 @@ class MemberController extends Controller
         if(($user_name == '' || $user_name == $user_name_old) && $user_password_old == '' && $user_password_new == '' && $user_password_check == '' && ($user_introduce == '' || $user_introduce == $user_introduce_old) && ($user_color == '' || $user_color == $user_color_old)){
             $message = "請輸入修改內容";
 
-            return redirect()->route('member.edit', session()->get('account'))->with('error', $message);
+            return redirect()->route('member.edit', session()->get('account'))->withInput()->with('error', $message);
         }
 
         if($user_name != '' && $user_name != $user_name_old){
@@ -150,7 +150,7 @@ class MemberController extends Controller
         if($user_password_old != '' && $user_password_new != '' && $user_password_check != ''){
             if(!password_verify($user_password_old, $member_data->user_password)){
                 $message = '舊密碼錯誤，請重新輸入';
-                return redirect()->route('member.edit', session()->get('account'))->with('error', $message);
+                return redirect()->route('member.edit', session()->get('account'))->withInput()->with('error', $message);
             }else{
                 $request->validate([
                     'user_password_new' => 'regex:/^(?=.*\d)(?=.*[a-zA-Z])(?=.*\W).{8,25}$/',
@@ -165,7 +165,7 @@ class MemberController extends Controller
             $member_data->user_password = $password_hash;
         }elseif($user_password_old != '' || $user_password_new != '' || $user_password_check != ''){
             $message = '請輸入完整修改內容';
-            return redirect()->route('member.edit', session()->get('account'))->with('error', $message);
+            return redirect()->route('member.edit', session()->get('account'))->withInput()->with('error', $message);
         }
         // dd($user_color);
         if($user_introduce != '' && $user_introduce != $user_introduce_old){
@@ -216,7 +216,7 @@ class MemberController extends Controller
         
         if(!(password_verify($user_password, $account->user_password))){
             $message = '密碼錯誤，請重新輸入';
-            return redirect()->route('member.index')->with('error', $message);
+            return redirect()->route('member.index')->withInput()->with('error', $message);
         }else{
             session()->put('account', $account->user_account);
             session()->put('name', $account->user_name);

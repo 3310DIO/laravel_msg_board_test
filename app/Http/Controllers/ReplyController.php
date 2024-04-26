@@ -95,7 +95,7 @@ class ReplyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(RequestReply $request, string $id)
     {
         $reply = $request->input('reply');
         $user_account = session()->get('account');
