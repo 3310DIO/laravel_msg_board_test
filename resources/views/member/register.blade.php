@@ -13,11 +13,11 @@
                     <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" action="{{ route('member.store') }}" method="post">
                         @csrf
                         <div class="form-floating mb-3" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="帳號僅能輸入8~20字且為英文及數字">
-                            <input type="text" class="form-control" name="user_account" id="floatingInput" placeholder="帳號" required>
+                            <input type="text" class="form-control" name="user_account" id="floatingInput" placeholder="帳號" value="{{ old("user_account") }}" required>
                             <label for="floatingInput">帳號</label>
                         </div>
                         <div class="form-floating mb-3" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="暱稱僅能輸入2~20字">
-                            <input type="text" class="form-control" name="user_name" id="floatingName" placeholder="密碼" required>
+                            <input type="text" class="form-control" name="user_name" id="floatingName" placeholder="暱稱" value="{{ old("user_name") }}" required>
                             <label for="floatingName">暱稱</label>
                         </div>
                         <div class="form-floating mb-3" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="密碼需輸入輸入8~25字且包含大小寫英文數字及特殊符號">
@@ -25,7 +25,7 @@
                             <label for="floatingPassword">密碼</label>
                         </div>
                         <div class="form-floating mb-3" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="再次輸入密碼">
-                            <input type="password" class="form-control" name="user_password_check" id="floatingPasswordCheck" placeholder="密碼" required>
+                            <input type="password" class="form-control" name="user_password_check" id="floatingPasswordCheck" placeholder="密碼確認" required>
                             <label for="floatingPasswordCheck">確認密碼</label>
                         </div>
                         <div class="checkbox mb-3">

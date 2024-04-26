@@ -133,7 +133,7 @@ class MsgController extends Controller
             // dd($subtitle_data);
             if($subtitle_data == null){
                 $message = "錯誤";
-                return redirect()->route('msg.edit', 0)->with('error', $message);
+                return redirect()->route('msg.edit', 0)->withInput()->with('error', $message);
             }
             $msg_edit->save();
 

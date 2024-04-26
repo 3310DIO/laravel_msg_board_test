@@ -13,7 +13,7 @@
                     <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" action="{{ route('member.login') }}" method="post">
                         @csrf
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" name="user_account" id="floatingInput" placeholder="帳號" required>
+                            <input type="text" class="form-control" name="user_account" id="floatingInput" placeholder="帳號" value="{{ old("user_account") }}" required>
                             <label for="floatingInput">帳號</label>
                         </div>
                         <div class="form-floating mb-3">

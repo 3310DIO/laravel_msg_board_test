@@ -41,7 +41,7 @@
                                             <option value="{{ $subtitle_bar->subtitle }}" @if($msg_edit->subtitle == $subtitle_bar->subtitle) selected @endif>{{ $subtitle_bar->sub_name }}</option>
                                         @endforeach
                                     </select>
-                                    <input type="text" class="form-control" id="title" name="title" value="{{ $msg_edit->title }}" style="width: 85%" required>
+                                    <input type="text" class="form-control" id="title" name="title" value="{{ old("title") ?? $msg_edit->title }}" style="width: 85%" required>
                                 </div>
                                 <div class="invalid-feedback">
                                     請輸入標題
@@ -51,7 +51,7 @@
                             <div class="col-12">
                                 <label for="content" class="form-label">留言：</label><br>
                                 <!-- <input type="text" class="form-control" id="content" placeholder="1234 Main St" required=""> -->
-                                <textarea class="form-control" id="content" name="content" style="font-family: 'Courier New', Courier, monospace;" rows="15" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="留言需在5000字以內" required>{{ $msg_edit->content }}</textarea>
+                                <textarea class="form-control" id="content" name="content" style="font-family: 'Courier New', Courier, monospace;" rows="15" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="留言需在5000字以內" required>{{ old("content") ?? $msg_edit->content }}</textarea>
                                 <div class="invalid-feedback">
                                     請輸入內容
                                 </div>
@@ -77,6 +77,19 @@
     </div>
 
     <script>
+        // 判斷輸入內若超過文字框則加大文字框範圍
+        const textarea_size = document.getElementById('content');
+        const max_characters = 70;
+        textarea_size.addEventListener('input', function(){
+            const characters_rows = (this.value.length)/max_characters;
+            const rows = this.value.split('\n').length;
+            const rows_sum = rows+characters_rows;
+            if(rows_sum > 15){
+                this.rows = rows_sum;
+            }else{
+                this.rows = 15;
+            }
+        });
         var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
         var popoverList = popoverTriggerList.map(function(popoverTriggerEl){
             return new bootstrap.Popover(popoverTriggerEl)
@@ -98,19 +111,6 @@
                 document.getElementById("form_del").submit();
             }
         }
-        // 判斷輸入內若超過文字框則加大文字框範圍
-        const textarea_size = document.getElementById('content');
-        const max_characters = 70;
-        textarea_size.addEventListener('input', function(){
-            const characters_rows = (this.value.length)/max_characters;
-            const rows = this.value.split('\n').length;
-            const rows_sum = rows+characters_rows;
-            if(rows_sum > 15){
-                this.rows = rows_sum;
-            }else{
-                this.rows = 15;
-            }
-        });
     </script>
 
 @endsection

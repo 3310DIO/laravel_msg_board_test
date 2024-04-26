@@ -111,13 +111,25 @@
             <form class="align-items-center p-3 my-3 rounded shadow-sm" action="{{ route('reply.store') }}" method="post">
                 @csrf
                 <input type="hidden" name="msg_id" value="{{ $message_content->id }}"/>
-                <textarea  class="form-control" type="text" id="reply" name="reply" rows="10" style="resize: none; font-family: 'Courier New', Courier, monospace;" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="回覆需在1500字以內" required></textarea><br>
+                <textarea  class="form-control" type="text" id="reply" name="reply" rows="10" style="resize: none; font-family: 'Courier New', Courier, monospace;" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="回覆需在1500字以內" required>{{ old("reply") }}</textarea><br>
                 <p><button class="btn btn-outline-secondary" type="submit">回覆</button></p>
             </from>
         @endif
     </div>
 
     <script>
+        const textarea_size = document.getElementById('reply');
+        const max_characters = 70;
+        textarea_size.addEventListener('input', function(){
+            const characters_rows = (this.value.length)/max_characters;
+            const rows = this.value.split('\n').length;
+            const rows_sum = rows+characters_rows;
+            if(rows_sum > 10){
+                this.rows = rows_sum;
+            }else{
+                this.rows = 10;
+            }
+        });
         var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
         var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
             return new bootstrap.Popover(popoverTriggerEl)
@@ -186,18 +198,6 @@
                 document.getElementById("form_del"+id).submit();
             }
         }
-        const textarea_size = document.getElementById('reply');
-        const max_characters = 70;
-        textarea_size.addEventListener('input', function(){
-            const characters_rows = (this.value.length)/max_characters;
-            const rows = this.value.split('\n').length;
-            const rows_sum = rows+characters_rows;
-            if(rows_sum > 10){
-                this.rows = rows_sum;
-            }else{
-                this.rows = 10;
-            }
-        });
     </script>
 
 @endsection

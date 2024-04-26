@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 // use Illuminate\View\View;
 use App\Models\Member;
 use Illuminate\Validation\Rule;
+use App\Http\Requests\RequestMember;
 
 class MemberController extends Controller
 {
@@ -30,27 +31,8 @@ class MemberController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(RequestMember $request)
     {
-        $member_list = Member::pluck('user_account')->toArray();
-        $request->validate([
-            'user_account' => ['required', 'between:8,20', 'alpha_num', Rule::notIn($member_list)],
-            'user_name' => 'required|between:2,20',
-            'user_password' => 'required|regex:/^(?=.*\d)(?=.*[a-zA-Z])(?=.*\W).{8,25}$/',
-            'user_password_check' => 'required|same:user_password',
-        ],[
-            'user_account.required' => '請輸入帳號',
-            'user_account.between' => '帳號需在8~20字間',
-            'user_account.alpha_num' => '帳號需由字母或數字構成',
-            'user_account.not_in' => '帳號已存在，請重新輸入',
-            'user_name.required' => '請輸入暱稱',
-            'user_name.between' => '暱稱需在2~20字間',
-            'user_password.required' => '請輸入密碼',
-            'user_password.regex' => '密碼須在8~25字之間，並包含大小寫字母及特殊符號',
-            'user_password_check.required' => '請輸入確認密碼',
-            'user_password_check.same' => '密碼與確認密碼不同',
-        ]);
-
         $member = new Member();
         $user_account = $request->input("user_account");
         $user_name = $request->input("user_name");
@@ -234,24 +216,4 @@ class MemberController extends Controller
 
         return redirect()->route('msg.index')->with('message', $message);
     }
-    // public function space(Request $request, string $user_account) // string $account
-    // {
-    //     $account = Member::findMember($user_account);
-    //     if($account == null){
-    //         $message = "錯誤";
-
-    //         return redirect()->route('msg.index')->with('error', $message);
-    //     }
-        
-    //     $model = array();
-
-    //     $view = 'member/space';
-    //     $img = Member::memberSpace($user_account);
-    //     $model['user_spaces'] = $img;
-    //     $user_introduce = Member::memberIntroduce($user_account);
-    //     $model['account'] = $user_introduce;
-    //     $model['img_id'] = 0;
-    //     // dd($account);
-    //     return view($view, $model);
-    // }
 }

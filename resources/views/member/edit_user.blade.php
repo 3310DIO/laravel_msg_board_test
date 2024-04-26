@@ -15,7 +15,7 @@
                     @method('PUT')
                     <div class="my-3 p-3 bg-body rounded shadow-sm">
                         <p class="text-center" id="user_color" style="display: flex; justify-content: center; align-items: center;">
-                            修改代表色：<input type="color" name="user_color" value="{{ $account->user_color }}"/>
+                            修改代表色：<input type="color" name="user_color" value="{{ old("user_color") ?? $account->user_color }}"/>
                         </p>
                         @php
                             $line_count = substr_count($account->user_introduce, "\n")+1;
@@ -23,11 +23,11 @@
                                     $line_count = 10;
                             }
                         @endphp
-                        <textarea class="form-control" type="text" id="text_introduce_modify" name="user_introduce" rows="{{ $line_count }}" style="font-family: 'Courier New', Courier, monospace;" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="僅能輸入500字">{{ $account->user_introduce }}</textarea>
+                        <textarea class="form-control" type="text" id="text_introduce_modify" name="user_introduce" rows="{{ $line_count }}" style="font-family: 'Courier New', Courier, monospace;" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="僅能輸入500字">{{ old("user_introduce") ?? $account->user_introduce }}</textarea>
                     </div>
                     <!-- <div class="col-md-10 mx-auto col-lg-5"> -->
                         <div class="form-floating mb-3" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="暱稱僅能輸入2~20字">
-                            <input type="text" class="form-control"  name="user_name" id="user_name" value="{{ Session::get('name') }}" placeholder="輸入暱稱">
+                            <input type="text" class="form-control"  name="user_name" id="user_name" value="{{ old("user_name") ?? Session::get('name') }}" placeholder="輸入暱稱">
                             <label for="user_name">暱稱</label>
                         </div>
                         <div class="form-floating mb-3" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="輸入舊密碼">
