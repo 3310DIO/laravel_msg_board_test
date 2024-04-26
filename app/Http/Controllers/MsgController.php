@@ -63,12 +63,6 @@ class MsgController extends Controller
         $title = $request->input("title", '');
         $user_account = session()->get('account');
         $content = $request->input("content", '');
-        // $subtitle_data = Subtitle::findSub($subtitle);
-        // if($subtitle_data == null){
-        //     $message = "錯誤";
-        //     return redirect()->route('msg.edit', 0)->with('error', $message);
-        // }
-        // dd($title);
 
         $msg->subtitle = $subtitle;
         $msg->title = $title;
@@ -105,14 +99,13 @@ class MsgController extends Controller
                 return redirect()->route('msg.index')->with('error', $message);
             }else{
                 $model['msg_edit'] = $msg_edit;
-                // dd($users);
             }
         }else{
-                $msg_edit = new MessageBoard;
-                $msg_edit->user_account = $user_account;
-                $msg_edit->title = "";
-                $msg_edit->content = "";
-                $model['msg_edit'] = $msg_edit;
+            $msg_edit = new MessageBoard;
+            $msg_edit->user_account = $user_account;
+            $msg_edit->title = "";
+            $msg_edit->content = "";
+            $model['msg_edit'] = $msg_edit;
         }
         $model['subtitle_bars'] = Subtitle::getAll()->slice(1);
         // dd($model);
@@ -130,7 +123,6 @@ class MsgController extends Controller
         $user_account = session()->get('account');
         $msg_edit = MessageBoard::find($id);
         // dd($msg_edit);
-
         if($msg_edit == null || $user_account != $msg_edit->user_account){
             $message = "非法操作";
             return redirect()->route('msg.index')->with('error', $message);
@@ -163,7 +155,6 @@ class MsgController extends Controller
         }else{
             $msg_edit->is_del = 1;
             $msg_edit->save();
-
             $message = "刪除成功";
 
             return redirect()->route('msg.index')->with('message', $message);

@@ -35,7 +35,6 @@ class ImageController extends Controller
         $img_size = $img_data->getSize();
         // $img_tmp_name = $img_data->getPathname();
         $img_error = $img_data->getError();
-
         if(!($request->hasFile('my_img'))){
             $message = '非法操作';
             return redirect()->route('member.show', $user_account)->with('error', $message);

@@ -33,7 +33,6 @@ class ReplyController extends Controller
     public function store(RequestReply $request)
     {
         $msg = new MsgReply();
-        // $user_account = session()->get('account','');
         $msg_id = $request->input('msg_id');
 
         if(!(session()->has('account'))){
@@ -49,7 +48,6 @@ class ReplyController extends Controller
 
                 return redirect()->route('msg.index')->with('error', $message);
             }else{
-                // $msg_id = $request->input("msg_id");
                 $user_reply = $request->input("reply");
 
                 $msg->user_account = $user_account;
@@ -71,7 +69,6 @@ class ReplyController extends Controller
     {
         $view = 'reply/reply';
         $model = array();
-        
         // $users = DB::select('select * from message_board ');
         $message_content = MsgReply::findContent($id);
         // dd($message_content);
@@ -84,7 +81,6 @@ class ReplyController extends Controller
         $message_reply = MsgReply::findReply($id);
         // dd(sizeof($message_reply));
         $model['message_reply'] = $message_reply;
-        // dd($model_reply);
         return view($view, $model);
     }
 

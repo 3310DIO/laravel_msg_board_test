@@ -199,19 +199,16 @@ class MemberController extends Controller
     {
         $member = Member::pluck('user_account')->toArray();
         $request->validate([
-            'user_account' => [Rule::in($member)],
+            'user_account' => ['required', Rule::in($member)],
+            'user_password' => 'required',
         ],[
+            'user_account.required' => '請輸入帳號',
             'user_account.in' => '帳號不存在，請重新輸入',
+            'user_password.required' => '請輸入密碼',
         ]);
         $user_account = $request->input("user_account", '');
         $user_password = $request->input("user_password", '');
-        // global $pdo;
-        if($user_account == '' || $user_password == ''){
-            $message = '請輸入帳號及密碼';
-            return redirect()->route('member.index')->with('error', $message);
-        }else{
-            $account = Member::findMember($user_account);
-        }
+        $account = Member::findMember($user_account);
         // dd($sql);
         
         if(!(password_verify($user_password, $account->user_password))){
@@ -236,7 +233,6 @@ class MemberController extends Controller
     }
     public function space(Request $request, string $user_account) // string $account
     {
-
         $account = Member::findMember($user_account);
         if($account == null){
             $message = "錯誤";
