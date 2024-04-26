@@ -12,6 +12,9 @@ class Member extends Model
     protected $fillable = ['user_account', 'user_name', 'user_password'];
     public $primaryKey = 'user_id';
     public $timestamps = false;
+    /**
+     * 搜尋帳號資訊
+     */
     public static function findMember($user_account){
         $member = DB::table('member')
                     ->select('user_id', 'user_account', 'user_name', 'user_password')

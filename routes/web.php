@@ -40,7 +40,7 @@ Route::resource('/reply', ReplyController::class);
 // Route::delete('/member/{id}', [MemberController::class, 'destroy'])->name('member.destroy');
 
 Route::post('/member/login', [MemberController::class, 'login'])->name('member.login');
-Route::post('/member/register', [MemberController::class, 'register'])->name('member.register');
+// Route::post('/member/register', [MemberController::class, 'register'])->name('member.register');
 Route::get('/member/logout', [MemberController::class, 'logout'])->name('member.logout');
 // Route::get('/member/space/{id}', [MemberController::class, 'space'])->name('member.space');
 // Route::get('/member/{id}', [MemberController::class, 'show'])->name('member.show');

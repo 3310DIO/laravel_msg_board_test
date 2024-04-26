@@ -32,9 +32,9 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        $member = Member::pluck('user_account')->toArray();
+        $member_list = Member::pluck('user_account')->toArray();
         $request->validate([
-            'user_account' => ['required', 'between:8,20', 'alpha_num', Rule::notIn($member)],
+            'user_account' => ['required', 'between:8,20', 'alpha_num', Rule::notIn($member_list)],
             'user_name' => 'required|between:2,20',
             'user_password' => 'required|regex:/^(?=.*\d)(?=.*[a-zA-Z])(?=.*\W).{8,25}$/',
             'user_password_check' => 'required|same:user_password',
@@ -42,7 +42,7 @@ class MemberController extends Controller
             'user_account.required' => '請輸入帳號',
             'user_account.between' => '帳號需在8~20字間',
             'user_account.alpha_num' => '帳號需由字母或數字構成',
-            'user_account.notIn' => '帳號已存在，請重新輸入',
+            'user_account.not_in' => '帳號已存在，請重新輸入',
             'user_name.required' => '請輸入暱稱',
             'user_name.between' => '暱稱需在2~20字間',
             'user_password.required' => '請輸入密碼',
@@ -163,6 +163,9 @@ class MemberController extends Controller
 
             $password_hash = password_hash($user_password_new, PASSWORD_DEFAULT);
             $member_data->user_password = $password_hash;
+        }elseif($user_password_old != '' || $user_password_new != '' || $user_password_check != ''){
+            $message = '請輸入完整修改內容';
+            return redirect()->route('member.edit', session()->get('account'))->with('error', $message);
         }
         // dd($user_color);
         if($user_introduce != '' && $user_introduce != $user_introduce_old){
@@ -231,24 +234,24 @@ class MemberController extends Controller
 
         return redirect()->route('msg.index')->with('message', $message);
     }
-    public function space(Request $request, string $user_account) // string $account
-    {
-        $account = Member::findMember($user_account);
-        if($account == null){
-            $message = "錯誤";
+    // public function space(Request $request, string $user_account) // string $account
+    // {
+    //     $account = Member::findMember($user_account);
+    //     if($account == null){
+    //         $message = "錯誤";
 
-            return redirect()->route('msg.index')->with('error', $message);
-        }
+    //         return redirect()->route('msg.index')->with('error', $message);
+    //     }
         
-        $model = array();
+    //     $model = array();
 
-        $view = 'member/space';
-        $img = Member::memberSpace($user_account);
-        $model['user_spaces'] = $img;
-        $user_introduce = Member::memberIntroduce($user_account);
-        $model['account'] = $user_introduce;
-        $model['img_id'] = 0;
-        // dd($account);
-        return view($view, $model);
-    }
+    //     $view = 'member/space';
+    //     $img = Member::memberSpace($user_account);
+    //     $model['user_spaces'] = $img;
+    //     $user_introduce = Member::memberIntroduce($user_account);
+    //     $model['account'] = $user_introduce;
+    //     $model['img_id'] = 0;
+    //     // dd($account);
+    //     return view($view, $model);
+    // }
 }
