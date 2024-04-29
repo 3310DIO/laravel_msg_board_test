@@ -25,7 +25,7 @@ class ImageController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * 儲存圖片資料
      */
     public function store(Request $request)
     {
@@ -90,7 +90,7 @@ class ImageController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * 更新圖片資料
      */
     public function update(Request $request, string $id)
     {
@@ -122,7 +122,7 @@ class ImageController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * 移除圖片
      */
     public function destroy(Request $request, string $id)
     {

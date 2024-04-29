@@ -13,7 +13,7 @@ use Illuminate\Validation\Rule;
 class MsgController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * 留言板首頁
      */
     public function index(Request $request)
     {
@@ -46,7 +46,7 @@ class MsgController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * 新增留言板
      */
     public function create()
     {
@@ -54,7 +54,7 @@ class MsgController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * 儲存留言內容
      */
     public function store(RequestMsg $request)
     {
@@ -84,7 +84,7 @@ class MsgController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * 修改留言內容
      */
     public function edit(Request $request, string $id)
     {
@@ -114,7 +114,7 @@ class MsgController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * 更新留言內容
      */
     public function update(RequestMsg $request, string $id)
     {
@@ -143,7 +143,7 @@ class MsgController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * 移除留言
      */
     public function destroy(Request $request, string $id)
     {

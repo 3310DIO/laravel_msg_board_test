@@ -12,6 +12,10 @@ class Subtitle extends Model
     protected $fillable = ['id', 'subtitle', 'sub_name'];
     public $primaryKey = 'id';
     public $timestamps = false;
+
+    /**
+     * 抓取子標題資料
+     */
     public static function getAll()
     {
         $sub = DB::table('msg_subtitle')
@@ -20,6 +24,10 @@ class Subtitle extends Model
                  ->get();
         return $sub;
     }
+
+    /**
+     * 尋找子標題
+     */
     public static function findSub($subtitle)
     {
         $sub = DB::table('msg_subtitle')

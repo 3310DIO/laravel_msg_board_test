@@ -12,6 +12,10 @@ class MessageBoard extends Model
     protected $fillable = ['user_account', 'title', 'subtitle', 'content'];
     public $primaryKey = 'id';
     public $timestamps = false;
+
+    /**
+     * 尋找留言
+     */
     public static function findMsg($search, $subtitle){
         $msg = DB::table('msg AS m')
                  ->join('member AS mem', 'm.user_account', '=', 'mem.user_account')
@@ -28,6 +32,10 @@ class MessageBoard extends Model
                 //  ->get();
         return $msg;
     }
+
+    /**
+     * 尋找需修改的留言
+     */
     public static function findEdit($id){
         $msg = DB::table('msg AS m')
                  ->join('member AS mem', 'm.user_account', '=', 'mem.user_account')

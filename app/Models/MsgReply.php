@@ -12,6 +12,10 @@ class MsgReply extends Model
     protected $fillable = ['user_account', 'msg_id', 'user_reply'];
     public $primaryKey = 'id';
     public $timestamps = false;
+
+    /**
+     * 尋找單一留言及該留言回覆
+     */
     public static function findContent($id){
         $msg = DB::table('msg AS m')
                  ->join('member AS mem', 'm.user_account', '=', 'mem.user_account')
@@ -23,6 +27,10 @@ class MsgReply extends Model
         return $msg;
                  
     }
+
+    /**
+     * 尋找目標回覆內容
+     */
     public static function findReply($id){
         $msg = DB::table('msg_reply AS r')
                  ->join('member AS mem', 'r.user_account', '=', 'mem.user_account')

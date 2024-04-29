@@ -13,7 +13,7 @@ use App\Http\Requests\RequestMember;
 class MemberController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * 登入頁面
      */
     public function index()
     {
@@ -21,7 +21,7 @@ class MemberController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * 註冊頁面
      */
     public function create()
     {
@@ -29,7 +29,7 @@ class MemberController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * 新增用戶
      */
     public function store(RequestMember $request)
     {
@@ -51,7 +51,7 @@ class MemberController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * 顯示用戶空間
      */
     public function show(string $user_account)
     {
@@ -65,7 +65,7 @@ class MemberController extends Controller
         $model = array();
 
         $view = 'member/space';
-        $img = Member::memberSpace($user_account);
+        $img = Member::memberSpaceImage($user_account);
         $model['user_spaces'] = $img;
         $user_introduce = Member::memberIntroduce($user_account);
         $model['account'] = $user_introduce;
@@ -75,7 +75,7 @@ class MemberController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * 修改用戶資料
      */
     public function edit(string $id)
     {
@@ -91,7 +91,7 @@ class MemberController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * 供新用戶資料
      */
     public function update(Request $request, string $id)
     {
@@ -114,12 +114,6 @@ class MemberController extends Controller
         $user_introduce_old = $member_data->user_introduce;
         $user_color_old = $member_data->user_color;
         // dd($request->all());
-        if(($user_name == '' || $user_name == $user_name_old) && $user_password_old == '' && $user_password_new == '' && $user_password_check == '' && ($user_introduce == '' || $user_introduce == $user_introduce_old) && ($user_color == '' || $user_color == $user_color_old)){
-            $message = "請輸入修改內容";
-
-            return redirect()->route('member.edit', session()->get('account'))->withInput()->with('error', $message);
-        }
-
         if($user_name != '' && $user_name != $user_name_old){
             $request->validate([
                 'user_name' => 'between:2,20',
@@ -133,20 +127,23 @@ class MemberController extends Controller
             if(!password_verify($user_password_old, $member_data->user_password)){
                 $message = '舊密碼錯誤，請重新輸入';
                 return redirect()->route('member.edit', session()->get('account'))->withInput()->with('error', $message);
-            }else{
-                $request->validate([
-                    'user_password_new' => 'regex:/^(?=.*\d)(?=.*[a-zA-Z])(?=.*\W).{8,25}$/',
-                    'user_password_check' => 'same:user_password_new',
-                ],[
-                    'user_password_new.regex' => '密碼須在8~25字之間，並包含大小寫字母及特殊符號',
-                    'user_password_check.regex' => '密碼與確認密碼不同',
-                ]);
             }
+            if(password_verify($user_password_new, $member_data->user_password)){
+                $message = '新密碼不可與舊密碼相同';
+                return redirect()->route('member.edit', session()->get('account'))->withInput()->with('error', $message);
+            }
+            $request->validate([
+                'user_password_new' => 'regex:/^(?=.*\d)(?=.*[a-zA-Z])(?=.*\W).{8,25}$/',
+                'user_password_check' => 'same:user_password_new',
+            ],[
+                'user_password_new.regex' => '密碼須在8~25字之間，並包含大小寫字母及特殊符號',
+                'user_password_check.regex' => '密碼與確認密碼不同',
+            ]);
 
             $password_hash = password_hash($user_password_new, PASSWORD_DEFAULT);
             $member_data->user_password = $password_hash;
         }elseif($user_password_old != '' || $user_password_new != '' || $user_password_check != ''){
-            $message = '請輸入完整修改內容';
+            $message = '修改密碼需填寫完整內容';
             return redirect()->route('member.edit', session()->get('account'))->withInput()->with('error', $message);
         }
         // dd($user_color);
@@ -180,6 +177,10 @@ class MemberController extends Controller
     {
         //
     }
+
+    /**
+     * 登入
+     */
     public function login(Request $request)
     {
         $member = Member::pluck('user_account')->toArray();
@@ -208,6 +209,10 @@ class MemberController extends Controller
         }
         
     }
+
+    /**
+     * 登出
+     */
     public function logout(Request $request)
     {
         session()->flush();

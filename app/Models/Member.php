@@ -12,6 +12,7 @@ class Member extends Model
     protected $fillable = ['user_account', 'user_name', 'user_password'];
     public $primaryKey = 'user_id';
     public $timestamps = false;
+
     /**
      * 搜尋帳號資訊
      */
@@ -22,13 +23,21 @@ class Member extends Model
                     ->first();
         return $member;
     }
-    public static function memberSpace($user_account){
+
+    /**
+     * 個人空間圖片資訊
+     */
+    public static function memberSpaceImage($user_account){
         $img = DB::table('img_upload')
                  ->select('id', 'img_url', 'img_content', 'is_del', 'created_at')
                  ->where('user_account', '=', $user_account)
                  ->get();
         return $img;
     }
+
+    /**
+     * 個人空間內容
+     */
     public static function memberIntroduce($user_account){
         $img = DB::table('member')
                  ->select('user_id', 'user_account', 'user_name', 'user_introduce', 'user_color')

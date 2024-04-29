@@ -28,7 +28,7 @@ class ReplyController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * 儲存回覆
      */
     public function store(RequestReply $request)
     {
@@ -63,7 +63,7 @@ class ReplyController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * 顯示回覆
      */
     public function show(Request $request, string $id)
     {
@@ -93,7 +93,7 @@ class ReplyController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * 更新回覆
      */
     public function update(RequestReply $request, string $id)
     {
@@ -115,7 +115,7 @@ class ReplyController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * 移除回覆
      */
     public function destroy(Request $request, string $id)
     {
