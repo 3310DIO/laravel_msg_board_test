@@ -34,7 +34,7 @@
                         <form class="text-center" action="{{ route('img.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="input-group">
-                                <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="my_img">
+                                <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="my_img" required>
                                 <button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon04">上傳</button>
                             </div>
                         </form>
