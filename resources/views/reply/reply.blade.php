@@ -207,14 +207,14 @@
                 content = content.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
                 
                 // Embed images
-                content = content.replace(/<a href="(https?:\/\/.*\.(?:png|jpeg|jpg|gif))" target="_blank">.*<\/a>/g, '<img style="text-align: center;" src="$1" />');
+                content = content.replace(/<a href="(https?:\/\/.*\.(?:png|jpeg|jpg|gif))" target="_blank">.*<\/a>/g, '<p class="text-center"><img style="text-align: center;" src="$1" /></p>');
 
                 // Embed Discord images
-                content = content.replace(/<a href="(https?:\/\/cdn\.discordapp\.com\/attachments\/[^\s]+)" target="_blank">.*<\/a>/g, '<img style="text-align: center;" width="560" src="$1" />');
+                content = content.replace(/<a href="(https?:\/\/cdn\.discordapp\.com\/attachments\/[^\s]+)" target="_blank">.*<\/a>/g, '<p class="text-center"><img style="text-align: center;" width="560" src="$1" /></p>');
                 
                 // Embed videos (YouTube example)
                 // content = content.replace(/<a href="(https?:\/\/www\.youtube\.com\/watch\?v=[^&]+)" target="_blank">.*<\/a>/g, '<iframe width="560" height="315" src="//www.youtube.com/embed/$1.split("=")[1]" frameborder="0" allowfullscreen></iframe>');
-                content = content.replace(/<a href="https?:\/\/www\.youtube\.com\/watch\?v=([^\&]+)" target="_blank">.*<\/a>/g, '<iframe style="text-align: center;" width="560" height="315" src="https://www.youtube.com/embed/$1" frameborder="0" allowfullscreen></iframe>');
+                content = content.replace(/<a href="https?:\/\/www\.youtube\.com\/watch\?v=([^\&]+)" target="_blank">.*<\/a>/g, '<p class="text-center"><iframe style="text-align: center;" width="560" height="315" src="https://www.youtube.com/embed/$1" frameborder="0" allowfullscreen></iframe></p>');
                 
                 comment.innerHTML = content;
             }
