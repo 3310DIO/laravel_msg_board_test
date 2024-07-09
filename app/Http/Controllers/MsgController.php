@@ -63,6 +63,8 @@ class MsgController extends Controller
         $title = $request->input("title", '');
         $user_account = session()->get('account');
         $content = $request->input("content", '');
+        // $content = htmlspecialchars($content);
+        // $content = $this->convertUrlsToLinks($content);
 
         $msg->subtitle = $subtitle;
         $msg->title = $title;
@@ -129,7 +131,10 @@ class MsgController extends Controller
         }else{
             $msg_edit->subtitle = $subtitle;
             $msg_edit->title = $request->input('title');
-            $msg_edit->content = $request->input('content');
+            $content = $request->input('content');
+            // $content = htmlspecialchars($content);
+            // $content = $this->convertUrlsToLinks($content);
+            $msg_edit->content = $content;
             // dd($subtitle_data);
             if($subtitle_data == null){
                 $message = "錯誤";
@@ -160,4 +165,9 @@ class MsgController extends Controller
             return redirect()->route('msg.index')->with('message', $message);
         }
     }
+    // private function convertUrlsToLinks($message)
+    // {
+    //     $pattern = '/(http:\/\/|https:\/\/|www\.)[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|\/))/';
+    //     return preg_replace($pattern, '<a href="$0" target="_blank">$0</a>', $message);
+    // }
 }

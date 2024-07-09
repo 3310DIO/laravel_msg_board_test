@@ -40,37 +40,36 @@
                         </form>
                     </div>
                 @endif
+                {{ $user_spaces->onEachSide(2)->links('vendor.pagination.bootstrap-5') }}
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                     @php
                         $img_id = 0;
                     @endphp
                     @foreach($user_spaces as $user_space)
-                        @if(!($user_space->is_del))
-                            <div class="col">
-                                <div class="card shadow-sm">
-                                    <!-- <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg> -->
-                                    <img class="bd-placeholder-img card-img-top" width="100%" height="225" alt="Thumbnail" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false" id="img_id_{{ ++$img_id }}" src="{{ URL('/storage/upload/img/' . $user_space->img_url) }}"></img>
-                                    <div class="card-body">
-                                        <p class="card-text">圖片{{ $img_id }}</p>
-                                        <p class="card-text fw-bold">{{ $user_space->img_content }}</p>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="btn-group">
-                                                <a class="btn btn-sm btn-outline-secondary" target="_blank" href="{{ URL('/storage/upload/img/' . $user_space->img_url) }}">查看</a>
-                                                @if($account->user_account == Session::get('account'))
-                                                    <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-imgNo="{{ $img_id }}" data-bs-whatever="{{ $user_space->id }}" data-bs-content="{{ $user_space->img_content }}">修改介紹</button>
-                                                    <form class="msg" id="form_del_{{ $img_id }}" action="{{ route('img.destroy', $user_space->id) }}" method="post">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                    </form>
-                                                    <button type="button" class="btn btn-sm btn-outline-secondary" id="btn_delete" onclick="del({{ $img_id }})">刪除</button>
-                                                @endif
-                                            </div>
-                                            <small class="text-body-secondary">上傳時間：{{ date("Y-m-d", strtotime($user_space->created_at)) }}</small>
+                        <div class="col">
+                            <div class="card shadow-sm">
+                                <!-- <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg> -->
+                                <img class="bd-placeholder-img card-img-top" width="100%" height="225" alt="Thumbnail" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false" id="img_id_{{ ++$img_id }}" src="{{ URL('/storage/upload/img/' . $user_space->img_url) }}"></img>
+                                <div class="card-body">
+                                    <p class="card-text">圖片{{ $img_id }}</p>
+                                    <p class="card-text fw-bold">{{ $user_space->img_content }}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="btn-group">
+                                            <a class="btn btn-sm btn-outline-secondary" target="_blank" href="{{ URL('/storage/upload/img/' . $user_space->img_url) }}">查看</a>
+                                            @if($account->user_account == Session::get('account'))
+                                                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-imgNo="{{ $img_id }}" data-bs-whatever="{{ $user_space->id }}" data-bs-content="{{ $user_space->img_content }}">修改介紹</button>
+                                                <form class="msg" id="form_del_{{ $img_id }}" action="{{ route('img.destroy', $user_space->id) }}" method="post">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                </form>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary" id="btn_delete" onclick="del({{ $img_id }})">刪除</button>
+                                            @endif
                                         </div>
+                                        <small class="text-body-secondary">上傳時間：{{ date("Y-m-d", strtotime($user_space->created_at)) }}</small>
                                     </div>
                                 </div>
                             </div>
-                        @endif
+                        </div>
                     @endforeach
                     @if($account->user_account == Session::get('account'))
                         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -103,6 +102,7 @@
                         </div>
                     @endif
                 </div>
+                {{ $user_spaces->onEachSide(2)->links('vendor.pagination.bootstrap-5') }}
             </div>
         </div>
     </main>

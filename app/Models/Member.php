@@ -31,7 +31,9 @@ class Member extends Model
         $img = DB::table('img_upload')
                  ->select('id', 'img_url', 'img_content', 'is_del', 'created_at')
                  ->where('user_account', '=', $user_account)
-                 ->get();
+                 ->where('is_del', '=', '0')
+                 ->paginate(15);
+                //  ->get();
         return $img;
     }
 

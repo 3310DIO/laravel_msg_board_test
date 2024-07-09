@@ -20,7 +20,7 @@
             @if ($message_content->is_del == 0)
                 <h3 class="text-body-emphasis">[{{ $message_content->sub_name }}] {{ $message_content->title }}</h3><br>
                 <div style="word-break: break-all;" >
-                    <pre style="white-space: pre-wrap;" class="fs-5">{{ $message_content->content }}</pre>
+                    <pre class="comment fs-5" style="white-space: pre-wrap;">{{ $message_content->content }}</pre>
                 </div>
                 @if(Session::has('account'))
                     @if(Session::get('account') == $message_content->user_account)
@@ -68,7 +68,7 @@
                                     @endif
                                     <div  style="word-break: break-all;">
                                         @if(!($msg_reply->is_del))
-                                            <pre type="text" id="text_reply{{ $loop->iteration }}" style="white-space: pre-wrap;">{{ $msg_reply->user_reply }}</pre>
+                                            <pre class="comment" type="text" id="text_reply{{ $loop->iteration }}" style="white-space: pre-wrap;">{{ $msg_reply->user_reply }}</pre>
                                             <form style="width: 250px;" id="form_del{{ $loop->iteration }}" action="{{ route('reply.destroy', $msg_reply->id) }}" method="post">
                                                 @csrf
                                                 @method('DELETE')
@@ -198,6 +198,27 @@
                 document.getElementById("form_del"+id).submit();
             }
         }
+        document.addEventListener('DOMContentLoaded', (event) => {
+            let comments = document.getElementsByClassName('comment');
+            for (let comment of comments) {
+                let content = comment.innerHTML;
+                
+                // Convert URLs to links
+                content = content.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
+                
+                // Embed images
+                content = content.replace(/<a href="(https?:\/\/.*\.(?:png|jpeg|jpg|gif))" target="_blank">.*<\/a>/g, '<img style="text-align: center;" src="$1" />');
+
+                // Embed Discord images
+                content = content.replace(/<a href="(https?:\/\/cdn\.discordapp\.com\/attachments\/[^\s]+)" target="_blank">.*<\/a>/g, '<img style="text-align: center;" width="560" src="$1" />');
+                
+                // Embed videos (YouTube example)
+                // content = content.replace(/<a href="(https?:\/\/www\.youtube\.com\/watch\?v=[^&]+)" target="_blank">.*<\/a>/g, '<iframe width="560" height="315" src="//www.youtube.com/embed/$1.split("=")[1]" frameborder="0" allowfullscreen></iframe>');
+                content = content.replace(/<a href="https?:\/\/www\.youtube\.com\/watch\?v=([^\&]+)" target="_blank">.*<\/a>/g, '<iframe style="text-align: center;" width="560" height="315" src="https://www.youtube.com/embed/$1" frameborder="0" allowfullscreen></iframe>');
+                
+                comment.innerHTML = content;
+            }
+        });
     </script>
 
 @endsection

@@ -53,7 +53,7 @@ class MemberController extends Controller
     /**
      * 顯示用戶空間
      */
-    public function show(string $user_account)
+    public function show(Request $request, string $user_account)
     {
         $account = Member::findMember($user_account);
         if($account == null){
@@ -66,6 +66,7 @@ class MemberController extends Controller
 
         $view = 'member/space';
         $img = Member::memberSpaceImage($user_account);
+        $img->appends($request->all());
         $model['user_spaces'] = $img;
         $user_introduce = Member::memberIntroduce($user_account);
         $model['account'] = $user_introduce;
